@@ -236,6 +236,81 @@ def load_config_from_env() -> SimplyMCPConfig:
     return SimplyMCPConfig()
 
 
+def _merge_env_vars(config_data: Dict[str, Any]) -> Dict[str, Any]:
+    """Merge environment variables into config data.
+
+    Environment variables with SIMPLY_MCP_ prefix override config values.
+    Uses double underscore (__) as delimiter for nested keys.
+
+    Args:
+        config_data: Base configuration dictionary from file
+
+    Returns:
+        Merged configuration dictionary with env vars applied
+
+    Example:
+        >>> # With env: SIMPLY_MCP_TRANSPORT__PORT=9999
+        >>> config = {"transport": {"port": 3000}}
+        >>> merged = _merge_env_vars(config)
+        >>> merged["transport"]["port"]
+        9999
+    """
+    import copy
+
+    # Create a deep copy to avoid modifying the original
+    merged = copy.deepcopy(config_data)
+
+    # Parse environment variables with SIMPLY_MCP_ prefix
+    prefix = "SIMPLY_MCP_"
+
+    for env_key, env_value in os.environ.items():
+        if not env_key.startswith(prefix):
+            continue
+
+        # Remove prefix and split by delimiter
+        key_path = env_key[len(prefix):].lower().split("__")
+
+        # Navigate/create nested structure
+        current = merged
+        for key_part in key_path[:-1]:
+            if key_part not in current:
+                current[key_part] = {}
+            current = current[key_part]
+
+        # Set the final value with type conversion
+        final_key = key_path[-1]
+
+        # Find reference type from original config to preserve types
+        ref_value = merged
+        for key_part in key_path[:-1]:
+            if isinstance(ref_value, dict) and key_part in ref_value:
+                ref_value = ref_value[key_part]
+            else:
+                ref_value = None
+                break
+
+        # Convert based on reference type if available
+        if isinstance(ref_value, dict) and final_key in ref_value:
+            original_value = ref_value[final_key]
+
+            if isinstance(original_value, bool):
+                current[final_key] = env_value.lower() in ("true", "1", "yes", "on")
+            elif isinstance(original_value, int):
+                current[final_key] = int(env_value)
+            elif isinstance(original_value, float):
+                current[final_key] = float(env_value)
+            else:
+                current[final_key] = env_value
+        else:
+            # No reference type - try smart conversion
+            try:
+                current[final_key] = int(env_value)
+            except ValueError:
+                current[final_key] = env_value
+
+    return merged
+
+
 def load_config(
     file_path: Optional[Union[str, Path]] = None,
     env_override: bool = True,
@@ -287,9 +362,10 @@ def load_config(
 
     # Merge with environment variables if enabled
     if env_override:
-        # Environment variables will automatically override
-        # when we construct the config
-        config = SimplyMCPConfig(**config_data)
+        # Manually merge environment variables into config_data
+        # Environment variables should override file values
+        merged_data = _merge_env_vars(config_data)
+        config = SimplyMCPConfig.model_validate(merged_data)
     else:
         # Construct without env override
         config = SimplyMCPConfig.model_validate(config_data)
