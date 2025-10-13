@@ -1,0 +1,3575 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A modern, Pythonic framework for building MCP servers">
+      
+      
+      
+        <link rel="canonical" href="https://simply-mcp-py.readthedocs.io/TECHNICAL_SPEC/">
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.21">
+    
+    
+      
+        <title>Simply-MCP-PY: Technical Specification - Simply-MCP-PY Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2a3383ac.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#simply-mcp-py-technical-specification" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Simply-MCP-PY Documentation" class="md-header__button md-logo" aria-label="Simply-MCP-PY Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Simply-MCP-PY Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Simply-MCP-PY: Technical Specification
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Clockwork-Innovations/simply-mcp-py" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Clockwork-Innovations/simply-mcp-py
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../getting-started/installation/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api/core/server/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../examples/" class="md-tabs__link">
+          
+  
+  
+  Examples
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guide/configuration/" class="md-tabs__link">
+          
+  
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Simply-MCP-PY Documentation" class="md-nav__button md-logo" aria-label="Simply-MCP-PY Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Simply-MCP-PY Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Clockwork-Innovations/simply-mcp-py" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Clockwork-Innovations/simply-mcp-py
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/first-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    First Server
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Core
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Core
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Server
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Types
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Config
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Registry
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Errors
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/logger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Logger
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Styles
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            API Styles
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/decorators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Decorators
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Builder
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Transports
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Transports
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/transports/http/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    HTTP
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/transports/sse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SSE
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/transports/middleware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Middleware
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/transports/stdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    STDIO
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/transports/factory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Factory
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Features
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Features
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/features/progress/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Progress
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/features/binary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Binary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Security
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Security
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/security/auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Auth
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/security/rate_limiter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Rate Limiter
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    CLI
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            CLI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/main/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Main
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Run
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Config
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/dev/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dev
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/watch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Watch
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/bundle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bundle
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/list_cmd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    List
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Validation
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            Validation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/validation/schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Schema
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Examples
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Deployment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-project-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Project Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Project Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-project-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.1 Project Information
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-design-philosophy" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.2 Design Philosophy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-relationship-to-simply-mcp-ts" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.3 Relationship to simply-mcp-ts
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-core-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Core Features
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Core Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-multiple-api-styles" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1 Multiple API Styles
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 Multiple API Styles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#211-decorator-api-primary" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1.1 Decorator API (Primary)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#212-functional-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1.2 Functional API
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#213-interface-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1.3 Interface API
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#214-builder-api-future-phase" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1.4 Builder API (Future Phase)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-transport-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2 Transport Support
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 Transport Support">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#221-stdio-standard-inputoutput" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2.1 Stdio (Standard Input/Output)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#222-http-stateful-stateless" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2.2 HTTP (Stateful &amp; Stateless)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#223-sse-server-sent-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2.3 SSE (Server-Sent Events)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-cli-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3 CLI Features
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3 CLI Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#231-run-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.1 Run Command
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#232-bundle-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.2 Bundle Command
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#233-list-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.3 List Command
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#234-config-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.4 Config Command
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-advanced-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4 Advanced Features
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.4 Advanced Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#241-auto-api-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4.1 Auto API Detection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#242-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4.2 Validation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#243-error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4.3 Error Handling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#244-session-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4.4 Session Management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#245-binary-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4.5 Binary Content
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#246-progress-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4.6 Progress Reporting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#247-handler-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4.7 Handler System
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#248-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4.8 Security
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-python-project-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Python Project Structure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-key-modules-responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Key Modules &amp; Responsibilities
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Key Modules &amp; Responsibilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-api-layer-srcsimply_mcpapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.1 API Layer (src/simply_mcp/api/)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.1 API Layer (src/simply_mcp/api/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#decoratorpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      decorator.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#functionalpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      functional.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interfacepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      interface.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#builderpy-future" class="md-nav__link">
+    <span class="md-ellipsis">
+      builder.py (Future)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-cli-layer-srcsimply_mcpcli" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.2 CLI Layer (src/simply_mcp/cli/)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 CLI Layer (src/simply_mcp/cli/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mainpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      main.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      run.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bundlepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      bundle.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#watchpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      watch.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config_cmdpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      config_cmd.py
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-core-layer-srcsimply_mcpcore" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.3 Core Layer (src/simply_mcp/core/)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 Core Layer (src/simply_mcp/core/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#serverpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      server.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      config.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#errorspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      errors.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loggerpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      logger.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typespy" class="md-nav__link">
+    <span class="md-ellipsis">
+      types.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registrypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      registry.py
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-transport-layer-srcsimply_mcptransports" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.4 Transport Layer (src/simply_mcp/transports/)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.4 Transport Layer (src/simply_mcp/transports/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      base.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stdiopy" class="md-nav__link">
+    <span class="md-ellipsis">
+      stdio.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#httppy" class="md-nav__link">
+    <span class="md-ellipsis">
+      http.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      sse.py
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-configuration-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Configuration Schema
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Configuration Schema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-simplymcpconfigtoml" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.1 simplymcp.config.toml
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.2 Environment Variables
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-pydantic-config-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.3 Pydantic Config Models
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-api-comparison-typescript-vs-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. API Comparison: TypeScript vs Python
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. API Comparison: TypeScript vs Python">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-decorator-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.1 Decorator API
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.1 Decorator API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typescript" class="md-nav__link">
+    <span class="md-ellipsis">
+      TypeScript
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    <span class="md-ellipsis">
+      Python
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-functional-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.2 Functional API
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.2 Functional API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typescript_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      TypeScript
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Python
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-schema-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.3 Schema Validation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.3 Schema Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typescript-zod" class="md-nav__link">
+    <span class="md-ellipsis">
+      TypeScript (Zod)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-pydantic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Python (Pydantic)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Dependencies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-core-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.1 Core Dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-development-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.2 Development Dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-minimum-python-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.3 Minimum Python Version
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-pyprojecttoml-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. pyproject.toml Structure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-success-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Success Metrics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Success Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-feature-completeness" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.1 Feature Completeness
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-quality-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.2 Quality Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-performance-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.3 Performance Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-documentation-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.4 Documentation Metrics
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-a-glossary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Appendix A: Glossary
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-b-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      Appendix B: References
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="simply-mcp-py-technical-specification">Simply-MCP-PY: Technical Specification</h1>
+<p><strong>Version:</strong> 0.1.0
+<strong>Last Updated:</strong> 2025-10-12
+<strong>Status:</strong> Planning Phase</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#1-project-overview">Project Overview</a></li>
+<li><a href="#2-core-features">Core Features</a></li>
+<li><a href="#3-python-project-structure">Python Project Structure</a></li>
+<li><a href="#4-key-modules--responsibilities">Key Modules &amp; Responsibilities</a></li>
+<li><a href="#5-configuration-schema">Configuration Schema</a></li>
+<li><a href="#6-api-comparison-typescript-vs-python">API Comparison: TypeScript vs Python</a></li>
+<li><a href="#7-dependencies">Dependencies</a></li>
+<li><a href="#8-pyprojecttoml-structure">pyproject.toml Structure</a></li>
+</ol>
+<hr />
+<h2 id="1-project-overview">1. Project Overview</h2>
+<h3 id="11-project-information">1.1 Project Information</h3>
+<ul>
+<li><strong>Name:</strong> simply-mcp-py</li>
+<li><strong>Purpose:</strong> A modern, Pythonic framework for building Model Context Protocol (MCP) servers with multiple API styles and transport options</li>
+<li><strong>Base SDK:</strong> Anthropic MCP Python SDK (<code>mcp</code>)</li>
+<li><strong>License:</strong> MIT</li>
+<li><strong>Python Version:</strong> &gt;=3.10</li>
+<li><strong>Author:</strong> Clockwork Innovations</li>
+<li><strong>Repository:</strong> https://github.com/Clockwork-Innovations/simply-mcp-py</li>
+</ul>
+<h3 id="12-design-philosophy">1.2 Design Philosophy</h3>
+<p>Simply-MCP-PY brings the flexibility and ease-of-use of simply-mcp-ts to the Python ecosystem, providing:</p>
+<ul>
+<li><strong>Zero Boilerplate:</strong> Start building MCP servers with minimal setup</li>
+<li><strong>Type Safety:</strong> Full type hints and Pydantic validation</li>
+<li><strong>Flexibility:</strong> Multiple API styles to match your coding preferences</li>
+<li><strong>Pythonic:</strong> Follows Python best practices and idioms</li>
+<li><strong>Modern:</strong> Uses src layout, pyproject.toml, and current Python standards</li>
+</ul>
+<h3 id="13-relationship-to-simply-mcp-ts">1.3 Relationship to simply-mcp-ts</h3>
+<p>This project is a Python port of <a href="https://github.com/Clockwork-Innovations/simply-mcp-ts">simply-mcp-ts</a>, maintaining feature parity while adapting to Python conventions and ecosystem.</p>
+<hr />
+<h2 id="2-core-features">2. Core Features</h2>
+<h3 id="21-multiple-api-styles">2.1 Multiple API Styles</h3>
+<h4 id="211-decorator-api-primary">2.1.1 Decorator API (Primary)</h4>
+<p>Class-based approach using Python decorators for clean, declarative syntax.</p>
+<p><strong>Features:</strong>
+- <code>@mcp_server()</code> class decorator for server configuration
+- <code>@tool()</code> method decorator for tool registration
+- <code>@prompt()</code> method decorator for prompt templates
+- <code>@resource()</code> method decorator for resource exposure
+- Automatic metadata extraction
+- Type-safe parameter validation</p>
+<h4 id="212-functional-api">2.1.2 Functional API</h4>
+<p>Programmatic server building with method chaining for maximum control.</p>
+<p><strong>Features:</strong>
+- <code>SimplyMCP</code> builder class
+- <code>.add_tool()</code>, <code>.add_prompt()</code>, <code>.add_resource()</code> methods
+- Fluent interface with method chaining
+- Dynamic tool registration
+- Runtime configuration</p>
+<h4 id="213-interface-api">2.1.3 Interface API</h4>
+<p>Type-annotated pure Python interfaces using Protocol and TypedDict.</p>
+<p><strong>Features:</strong>
+- Zero decorators approach
+- Pure type annotations
+- Protocol-based interfaces
+- Automatic schema generation from types
+- Static type checking friendly</p>
+<h4 id="214-builder-api-future-phase">2.1.4 Builder API (Future Phase)</h4>
+<p>AI-powered tool development using MCP itself.</p>
+<p><strong>Features:</strong>
+- Build MCP tools using MCP
+- AI-assisted validation
+- Schema generation
+- Template library</p>
+<h3 id="22-transport-support">2.2 Transport Support</h3>
+<h4 id="221-stdio-standard-inputoutput">2.2.1 Stdio (Standard Input/Output)</h4>
+<p>Default transport for command-line usage and process-based communication.</p>
+<p><strong>Features:</strong>
+- Zero configuration
+- Process-based isolation
+- Standard streams communication
+- Compatible with all MCP clients</p>
+<h4 id="222-http-stateful-stateless">2.2.2 HTTP (Stateful &amp; Stateless)</h4>
+<p>Full-featured HTTP server with session management.</p>
+<p><strong>Features:</strong>
+- RESTful endpoint exposure
+- Session management for stateful mode
+- CORS support
+- Middleware support
+- WebSocket upgrade path (future)</p>
+<h4 id="223-sse-server-sent-events">2.2.3 SSE (Server-Sent Events)</h4>
+<p>Real-time event streaming for live updates.</p>
+<p><strong>Features:</strong>
+- Real-time communication
+- Automatic reconnection
+- Event streaming
+- Progress updates
+- Long-running operation support</p>
+<h3 id="23-cli-features">2.3 CLI Features</h3>
+<h4 id="231-run-command">2.3.1 Run Command</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>simply-mcp<span class="w"> </span>run<span class="w"> </span>server.py<span class="w">                    </span><span class="c1"># Run with stdio</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>simply-mcp<span class="w"> </span>run<span class="w"> </span>server.py<span class="w"> </span>--http<span class="w">             </span><span class="c1"># Run with HTTP on default port</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>simply-mcp<span class="w"> </span>run<span class="w"> </span>server.py<span class="w"> </span>--http<span class="w"> </span>--port<span class="w"> </span><span class="m">3000</span><span class="w"> </span><span class="c1"># Run with HTTP on port 3000</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>simply-mcp<span class="w"> </span>run<span class="w"> </span>server.py<span class="w"> </span>--sse<span class="w">              </span><span class="c1"># Run with SSE</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>simply-mcp<span class="w"> </span>run<span class="w"> </span>server.py<span class="w"> </span>--watch<span class="w">            </span><span class="c1"># Watch mode with auto-reload</span>
+</code></pre></div>
+<h4 id="232-bundle-command">2.3.2 Bundle Command</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>simply-mcp<span class="w"> </span>bundle<span class="w"> </span>server.py<span class="w">                 </span><span class="c1"># Create standalone executable</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>simply-mcp<span class="w"> </span>bundle<span class="w"> </span>server.py<span class="w"> </span>--output<span class="w"> </span>dist/<span class="w">  </span><span class="c1"># Specify output directory</span>
+</code></pre></div>
+<h4 id="233-list-command">2.3.3 List Command</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>simply-mcp<span class="w"> </span>list<span class="w">                             </span><span class="c1"># List all available servers</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>simply-mcp<span class="w"> </span>list<span class="w"> </span>--json<span class="w">                      </span><span class="c1"># Output as JSON</span>
+</code></pre></div>
+<h4 id="234-config-command">2.3.4 Config Command</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>simply-mcp<span class="w"> </span>config<span class="w"> </span>init<span class="w">                      </span><span class="c1"># Initialize configuration</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>simply-mcp<span class="w"> </span>config<span class="w"> </span>validate<span class="w">                  </span><span class="c1"># Validate configuration</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>simply-mcp<span class="w"> </span>config<span class="w"> </span>show<span class="w">                      </span><span class="c1"># Display current configuration</span>
+</code></pre></div>
+<h3 id="24-advanced-features">2.4 Advanced Features</h3>
+<h4 id="241-auto-api-detection">2.4.1 Auto API Detection</h4>
+<p>Automatically detects which API style is being used:
+- Scans for class decorators → Decorator API
+- Detects SimplyMCP instance → Functional API
+- Analyzes type annotations → Interface API</p>
+<h4 id="242-validation">2.4.2 Validation</h4>
+<ul>
+<li>Pydantic-based schema validation</li>
+<li>Automatic schema generation from type hints</li>
+<li>Runtime type checking</li>
+<li>Custom validators support</li>
+</ul>
+<h4 id="243-error-handling">2.4.3 Error Handling</h4>
+<ul>
+<li>Comprehensive error messages</li>
+<li>Error context and stack traces</li>
+<li>Custom exception hierarchy</li>
+<li>Graceful degradation</li>
+</ul>
+<h4 id="244-session-management">2.4.4 Session Management</h4>
+<ul>
+<li>Stateful HTTP sessions</li>
+<li>Session storage backends (memory, redis)</li>
+<li>Session timeout management</li>
+<li>Session data encryption</li>
+</ul>
+<h4 id="245-binary-content">2.4.5 Binary Content</h4>
+<ul>
+<li>Binary resource support</li>
+<li>MIME type detection</li>
+<li>Streaming support</li>
+<li>Efficient memory handling</li>
+</ul>
+<h4 id="246-progress-reporting">2.4.6 Progress Reporting</h4>
+<ul>
+<li>Real-time progress updates</li>
+<li>Percentage and message-based progress</li>
+<li>Async progress reporting</li>
+<li>Progress event streaming</li>
+</ul>
+<h4 id="247-handler-system">2.4.7 Handler System</h4>
+<ul>
+<li>Extensible handler architecture</li>
+<li>Handler lifecycle management</li>
+<li>Middleware support</li>
+<li>Error recovery</li>
+</ul>
+<h4 id="248-security">2.4.8 Security</h4>
+<ul>
+<li>Rate limiting (token bucket algorithm)</li>
+<li>Authentication (OAuth 2.1, API keys, JWT)</li>
+<li>CORS configuration</li>
+<li>Input sanitization</li>
+<li>SQL injection prevention</li>
+</ul>
+<hr />
+<h2 id="3-python-project-structure">3. Python Project Structure</h2>
+<p>Following Python best practices with <strong>src layout</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>simply-mcp-py/
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>├── .github/
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>│   └── workflows/
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>│       ├── ci.yml                  # CI pipeline
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>│       ├── release.yml             # Release automation
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>│       └── docs.yml                # Documentation build
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>├── docs/
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>│   ├── TECHNICAL_SPEC.md           # This file
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>│   ├── ARCHITECTURE.md             # Architecture document
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>│   ├── ROADMAP.md                  # Implementation roadmap
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>│   ├── getting-started.md          # Getting started guide
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>│   ├── api-reference.md            # API reference
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>│   ├── examples.md                 # Examples documentation
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>│   └── configuration.md            # Configuration guide
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>├── examples/
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>│   ├── simple_server.py            # Simplest possible server
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>│   ├── decorator_basic.py          # Basic decorator API
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>│   ├── decorator_advanced.py       # Advanced decorator features
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>│   ├── functional_api.py           # Functional API example
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>│   ├── interface_api.py            # Interface API example
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>│   ├── http_server.py              # HTTP transport example
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>│   ├── sse_server.py               # SSE transport example
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>│   └── advanced_features.py        # Progress, binary, etc.
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>├── src/
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>│   └── simply_mcp/
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>│       ├── __init__.py             # Public API exports
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>│       ├── py.typed                # PEP 561 marker
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>│       │
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>│       ├── api/                    # API Styles
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a>│       │   ├── __init__.py
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a>│       │   ├── decorator.py        # Decorator API implementation
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a>│       │   ├── functional.py       # Functional API implementation
+<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a>│       │   ├── interface.py        # Interface API implementation
+<a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a>│       │   └── builder.py          # Builder API (future)
+<a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a>│       │
+<a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a>│       ├── cli/                    # CLI Commands
+<a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a>│       │   ├── __init__.py
+<a id="__codelineno-4-38" name="__codelineno-4-38" href="#__codelineno-4-38"></a>│       │   ├── main.py             # CLI entry point
+<a id="__codelineno-4-39" name="__codelineno-4-39" href="#__codelineno-4-39"></a>│       │   ├── run.py              # Run command
+<a id="__codelineno-4-40" name="__codelineno-4-40" href="#__codelineno-4-40"></a>│       │   ├── bundle.py           # Bundle command
+<a id="__codelineno-4-41" name="__codelineno-4-41" href="#__codelineno-4-41"></a>│       │   ├── list.py             # List command
+<a id="__codelineno-4-42" name="__codelineno-4-42" href="#__codelineno-4-42"></a>│       │   ├── watch.py            # Watch mode implementation
+<a id="__codelineno-4-43" name="__codelineno-4-43" href="#__codelineno-4-43"></a>│       │   └── config_cmd.py       # Config management commands
+<a id="__codelineno-4-44" name="__codelineno-4-44" href="#__codelineno-4-44"></a>│       │
+<a id="__codelineno-4-45" name="__codelineno-4-45" href="#__codelineno-4-45"></a>│       ├── core/                   # Core Infrastructure
+<a id="__codelineno-4-46" name="__codelineno-4-46" href="#__codelineno-4-46"></a>│       │   ├── __init__.py
+<a id="__codelineno-4-47" name="__codelineno-4-47" href="#__codelineno-4-47"></a>│       │   ├── server.py           # SimplyMCPServer core class
+<a id="__codelineno-4-48" name="__codelineno-4-48" href="#__codelineno-4-48"></a>│       │   ├── config.py           # Configuration loader &amp; schemas
+<a id="__codelineno-4-49" name="__codelineno-4-49" href="#__codelineno-4-49"></a>│       │   ├── errors.py           # Error classes &amp; handlers
+<a id="__codelineno-4-50" name="__codelineno-4-50" href="#__codelineno-4-50"></a>│       │   ├── logger.py           # Logging utilities
+<a id="__codelineno-4-51" name="__codelineno-4-51" href="#__codelineno-4-51"></a>│       │   ├── types.py            # Core type definitions
+<a id="__codelineno-4-52" name="__codelineno-4-52" href="#__codelineno-4-52"></a>│       │   └── registry.py         # Tool/prompt/resource registry
+<a id="__codelineno-4-53" name="__codelineno-4-53" href="#__codelineno-4-53"></a>│       │
+<a id="__codelineno-4-54" name="__codelineno-4-54" href="#__codelineno-4-54"></a>│       ├── transports/             # Transport Implementations
+<a id="__codelineno-4-55" name="__codelineno-4-55" href="#__codelineno-4-55"></a>│       │   ├── __init__.py
+<a id="__codelineno-4-56" name="__codelineno-4-56" href="#__codelineno-4-56"></a>│       │   ├── base.py             # Base transport class
+<a id="__codelineno-4-57" name="__codelineno-4-57" href="#__codelineno-4-57"></a>│       │   ├── stdio.py            # Stdio transport adapter
+<a id="__codelineno-4-58" name="__codelineno-4-58" href="#__codelineno-4-58"></a>│       │   ├── http.py             # HTTP transport adapter
+<a id="__codelineno-4-59" name="__codelineno-4-59" href="#__codelineno-4-59"></a>│       │   └── sse.py              # SSE transport adapter
+<a id="__codelineno-4-60" name="__codelineno-4-60" href="#__codelineno-4-60"></a>│       │
+<a id="__codelineno-4-61" name="__codelineno-4-61" href="#__codelineno-4-61"></a>│       ├── handlers/               # Handler Management
+<a id="__codelineno-4-62" name="__codelineno-4-62" href="#__codelineno-4-62"></a>│       │   ├── __init__.py
+<a id="__codelineno-4-63" name="__codelineno-4-63" href="#__codelineno-4-63"></a>│       │   ├── manager.py          # Handler lifecycle manager
+<a id="__codelineno-4-64" name="__codelineno-4-64" href="#__codelineno-4-64"></a>│       │   └── middleware.py       # Middleware system
+<a id="__codelineno-4-65" name="__codelineno-4-65" href="#__codelineno-4-65"></a>│       │
+<a id="__codelineno-4-66" name="__codelineno-4-66" href="#__codelineno-4-66"></a>│       ├── validation/             # Validation &amp; Schemas
+<a id="__codelineno-4-67" name="__codelineno-4-67" href="#__codelineno-4-67"></a>│       │   ├── __init__.py
+<a id="__codelineno-4-68" name="__codelineno-4-68" href="#__codelineno-4-68"></a>│       │   ├── schema.py           # Pydantic schemas
+<a id="__codelineno-4-69" name="__codelineno-4-69" href="#__codelineno-4-69"></a>│       │   └── validators.py       # Custom validators
+<a id="__codelineno-4-70" name="__codelineno-4-70" href="#__codelineno-4-70"></a>│       │
+<a id="__codelineno-4-71" name="__codelineno-4-71" href="#__codelineno-4-71"></a>│       └── security/               # Security Features
+<a id="__codelineno-4-72" name="__codelineno-4-72" href="#__codelineno-4-72"></a>│           ├── __init__.py
+<a id="__codelineno-4-73" name="__codelineno-4-73" href="#__codelineno-4-73"></a>│           ├── rate_limit.py       # Rate limiting
+<a id="__codelineno-4-74" name="__codelineno-4-74" href="#__codelineno-4-74"></a>│           ├── auth.py             # Authentication
+<a id="__codelineno-4-75" name="__codelineno-4-75" href="#__codelineno-4-75"></a>│           └── cors.py             # CORS handling
+<a id="__codelineno-4-76" name="__codelineno-4-76" href="#__codelineno-4-76"></a>├── tests/
+<a id="__codelineno-4-77" name="__codelineno-4-77" href="#__codelineno-4-77"></a>│   ├── unit/
+<a id="__codelineno-4-78" name="__codelineno-4-78" href="#__codelineno-4-78"></a>│   │   ├── test_api/
+<a id="__codelineno-4-79" name="__codelineno-4-79" href="#__codelineno-4-79"></a>│   │   ├── test_core/
+<a id="__codelineno-4-80" name="__codelineno-4-80" href="#__codelineno-4-80"></a>│   │   ├── test_transports/
+<a id="__codelineno-4-81" name="__codelineno-4-81" href="#__codelineno-4-81"></a>│   │   └── test_validation/
+<a id="__codelineno-4-82" name="__codelineno-4-82" href="#__codelineno-4-82"></a>│   ├── integration/
+<a id="__codelineno-4-83" name="__codelineno-4-83" href="#__codelineno-4-83"></a>│   │   ├── test_decorator_api.py
+<a id="__codelineno-4-84" name="__codelineno-4-84" href="#__codelineno-4-84"></a>│   │   ├── test_functional_api.py
+<a id="__codelineno-4-85" name="__codelineno-4-85" href="#__codelineno-4-85"></a>│   │   └── test_transports.py
+<a id="__codelineno-4-86" name="__codelineno-4-86" href="#__codelineno-4-86"></a>│   └── fixtures/
+<a id="__codelineno-4-87" name="__codelineno-4-87" href="#__codelineno-4-87"></a>│       ├── servers.py
+<a id="__codelineno-4-88" name="__codelineno-4-88" href="#__codelineno-4-88"></a>│       └── configs.py
+<a id="__codelineno-4-89" name="__codelineno-4-89" href="#__codelineno-4-89"></a>├── scripts/
+<a id="__codelineno-4-90" name="__codelineno-4-90" href="#__codelineno-4-90"></a>│   ├── dev_setup.sh                # Development environment setup
+<a id="__codelineno-4-91" name="__codelineno-4-91" href="#__codelineno-4-91"></a>│   └── build.sh                    # Build script
+<a id="__codelineno-4-92" name="__codelineno-4-92" href="#__codelineno-4-92"></a>├── .gitignore
+<a id="__codelineno-4-93" name="__codelineno-4-93" href="#__codelineno-4-93"></a>├── .python-version                  # Python version (3.10)
+<a id="__codelineno-4-94" name="__codelineno-4-94" href="#__codelineno-4-94"></a>├── .pre-commit-config.yaml          # Pre-commit hooks
+<a id="__codelineno-4-95" name="__codelineno-4-95" href="#__codelineno-4-95"></a>├── CHANGELOG.md
+<a id="__codelineno-4-96" name="__codelineno-4-96" href="#__codelineno-4-96"></a>├── CODE_OF_CONDUCT.md
+<a id="__codelineno-4-97" name="__codelineno-4-97" href="#__codelineno-4-97"></a>├── CONTRIBUTING.md
+<a id="__codelineno-4-98" name="__codelineno-4-98" href="#__codelineno-4-98"></a>├── LICENSE
+<a id="__codelineno-4-99" name="__codelineno-4-99" href="#__codelineno-4-99"></a>├── README.md
+<a id="__codelineno-4-100" name="__codelineno-4-100" href="#__codelineno-4-100"></a>├── pyproject.toml                   # Modern Python project config
+<a id="__codelineno-4-101" name="__codelineno-4-101" href="#__codelineno-4-101"></a>└── simplymcp.config.example.toml    # Example configuration
+</code></pre></div>
+<hr />
+<h2 id="4-key-modules-responsibilities">4. Key Modules &amp; Responsibilities</h2>
+<h3 id="41-api-layer-srcsimply_mcpapi">4.1 API Layer (<code>src/simply_mcp/api/</code>)</h3>
+<h4 id="decoratorpy">decorator.py</h4>
+<p><strong>Responsibility:</strong> Implements decorator-based API</p>
+<p><strong>Key Components:</strong>
+- <code>@mcp_server()</code> - Class decorator for server configuration
+- <code>@tool()</code> - Method decorator for tool registration
+- <code>@prompt()</code> - Method decorator for prompt templates
+- <code>@resource()</code> - Method decorator for resource exposure
+- Metadata extraction and validation
+- Automatic schema generation from type hints</p>
+<p><strong>Example:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">simply_mcp</span><span class="w"> </span><span class="kn">import</span> <span class="n">mcp_server</span><span class="p">,</span> <span class="n">tool</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nd">@mcp_server</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-server&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0.0&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyServer</span><span class="p">:</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="nd">@tool</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Add two numbers&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</code></pre></div></p>
+<h4 id="functionalpy">functional.py</h4>
+<p><strong>Responsibility:</strong> Implements functional/builder API</p>
+<p><strong>Key Components:</strong>
+- <code>SimplyMCP</code> - Main builder class
+- <code>.add_tool()</code> - Dynamic tool registration
+- <code>.add_prompt()</code> - Dynamic prompt registration
+- <code>.add_resource()</code> - Dynamic resource registration
+- <code>.configure()</code> - Configuration method
+- <code>.run()</code> - Server execution</p>
+<p><strong>Example:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">simply_mcp</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimplyMCP</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">mcp</span> <span class="o">=</span> <span class="n">SimplyMCP</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-server&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0.0&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nd">@mcp</span><span class="o">.</span><span class="n">add_tool</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Add two numbers&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="n">mcp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div></p>
+<h4 id="interfacepy">interface.py</h4>
+<p><strong>Responsibility:</strong> Implements interface-based API</p>
+<p><strong>Key Components:</strong>
+- <code>MCPServerProtocol</code> - Protocol for type checking
+- Type-based schema generation
+- Automatic tool discovery from type annotations
+- Zero-decorator approach</p>
+<p><strong>Example:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">simply_mcp.api.interface</span><span class="w"> </span><span class="kn">import</span> <span class="n">MCPServerProtocol</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyServer</span><span class="p">(</span><span class="n">MCPServerProtocol</span><span class="p">):</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Add two numbers&quot;&quot;&quot;</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</code></pre></div></p>
+<h4 id="builderpy-future">builder.py (Future)</h4>
+<p><strong>Responsibility:</strong> AI-powered tool builder</p>
+<p><strong>Key Components:</strong>
+- <code>MCPBuilder</code> - Builder class
+- AI-assisted schema generation
+- Template library
+- Validation tools</p>
+<h3 id="42-cli-layer-srcsimply_mcpcli">4.2 CLI Layer (<code>src/simply_mcp/cli/</code>)</h3>
+<h4 id="mainpy">main.py</h4>
+<p><strong>Responsibility:</strong> CLI entry point and router</p>
+<p><strong>Key Components:</strong>
+- Click-based CLI application
+- Command routing
+- Global options handling
+- Help text and documentation</p>
+<h4 id="runpy">run.py</h4>
+<p><strong>Responsibility:</strong> Server execution</p>
+<p><strong>Key Components:</strong>
+- API style auto-detection
+- Transport selection
+- Configuration loading
+- Server lifecycle management
+- Error handling and reporting</p>
+<h4 id="bundlepy">bundle.py</h4>
+<p><strong>Responsibility:</strong> Create standalone executables</p>
+<p><strong>Key Components:</strong>
+- PyInstaller integration
+- Nuitka support
+- Dependency bundling
+- Platform-specific builds</p>
+<h4 id="watchpy">watch.py</h4>
+<p><strong>Responsibility:</strong> File watching and auto-reload</p>
+<p><strong>Key Components:</strong>
+- Watchdog integration
+- File change detection
+- Server restart logic
+- Debouncing</p>
+<h4 id="config_cmdpy">config_cmd.py</h4>
+<p><strong>Responsibility:</strong> Configuration management</p>
+<p><strong>Key Components:</strong>
+- Config initialization
+- Config validation
+- Config display
+- Schema generation</p>
+<h3 id="43-core-layer-srcsimply_mcpcore">4.3 Core Layer (<code>src/simply_mcp/core/</code>)</h3>
+<h4 id="serverpy">server.py</h4>
+<p><strong>Responsibility:</strong> Core server implementation</p>
+<p><strong>Key Components:</strong>
+- <code>SimplyMCPServer</code> - Main server class
+- MCP SDK integration
+- Tool/prompt/resource registry
+- Lifecycle management
+- Event handling</p>
+<h4 id="configpy">config.py</h4>
+<p><strong>Responsibility:</strong> Configuration management</p>
+<p><strong>Key Components:</strong>
+- <code>ServerConfig</code> - Pydantic model for server config
+- <code>TransportConfig</code> - Transport configuration
+- <code>SecurityConfig</code> - Security configuration
+- Config file loading (TOML/JSON)
+- Environment variable support
+- Config validation</p>
+<h4 id="errorspy">errors.py</h4>
+<p><strong>Responsibility:</strong> Error handling</p>
+<p><strong>Key Components:</strong>
+- <code>SimplyMCPError</code> - Base exception class
+- <code>ConfigurationError</code> - Config-related errors
+- <code>ValidationError</code> - Validation errors
+- <code>TransportError</code> - Transport errors
+- Error formatting
+- Error logging</p>
+<h4 id="loggerpy">logger.py</h4>
+<p><strong>Responsibility:</strong> Logging infrastructure</p>
+<p><strong>Key Components:</strong>
+- Structured logging
+- Log level configuration
+- JSON/text formatters
+- Context injection
+- Performance logging</p>
+<h4 id="typespy">types.py</h4>
+<p><strong>Responsibility:</strong> Type definitions</p>
+<p><strong>Key Components:</strong>
+- <code>ToolConfig</code> - TypedDict for tool config
+- <code>PromptConfig</code> - TypedDict for prompt config
+- <code>ResourceConfig</code> - TypedDict for resource config
+- Protocol definitions
+- Type aliases</p>
+<h4 id="registrypy">registry.py</h4>
+<p><strong>Responsibility:</strong> Component registry</p>
+<p><strong>Key Components:</strong>
+- Tool registry
+- Prompt registry
+- Resource registry
+- Component lookup
+- Metadata storage</p>
+<h3 id="44-transport-layer-srcsimply_mcptransports">4.4 Transport Layer (<code>src/simply_mcp/transports/</code>)</h3>
+<h4 id="basepy">base.py</h4>
+<p><strong>Responsibility:</strong> Base transport interface</p>
+<p><strong>Key Components:</strong>
+- <code>Transport</code> - Abstract base class
+- Transport lifecycle hooks
+- Request/response handling
+- Error handling</p>
+<h4 id="stdiopy">stdio.py</h4>
+<p><strong>Responsibility:</strong> Stdio transport</p>
+<p><strong>Key Components:</strong>
+- Standard input/output handling
+- Process communication
+- Message framing
+- Error stream handling</p>
+<h4 id="httppy">http.py</h4>
+<p><strong>Responsibility:</strong> HTTP transport</p>
+<p><strong>Key Components:</strong>
+- aiohttp server
+- RESTful endpoints
+- Session management
+- CORS handling
+- Middleware support</p>
+<h4 id="ssepy">sse.py</h4>
+<p><strong>Responsibility:</strong> SSE transport</p>
+<p><strong>Key Components:</strong>
+- Server-Sent Events implementation
+- Event streaming
+- Connection management
+- Heartbeat/keepalive</p>
+<hr />
+<h2 id="5-configuration-schema">5. Configuration Schema</h2>
+<h3 id="51-simplymcpconfigtoml">5.1 simplymcp.config.toml</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">[server]</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;my-mcp-server&quot;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;My MCP server&quot;</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="k">[transport]</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;stdio&quot;</span><span class="w">      </span><span class="c1"># Options: &quot;stdio&quot;, &quot;http&quot;, &quot;sse&quot;</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3000</span><span class="w">         </span><span class="c1"># For HTTP/SSE transports</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="n">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span><span class="w">    </span><span class="c1"># Bind address</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="k">[transport.http]</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="n">enable_stateful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="n">session_timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3600</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="n">cors_enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="n">cors_origins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">]</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="k">[logging]</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;INFO&quot;</span><span class="w">      </span><span class="c1"># Options: &quot;DEBUG&quot;, &quot;INFO&quot;, &quot;WARNING&quot;, &quot;ERROR&quot;</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;json&quot;</span><span class="w">     </span><span class="c1"># Options: &quot;json&quot;, &quot;text&quot;</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;server.log&quot;</span><span class="w"> </span><span class="c1"># Optional log file</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="k">[security]</span>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="n">enable_rate_limiting</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="n">rate_limit_per_minute</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="n">rate_limit_burst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a>
+<a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="k">[security.auth]</span>
+<a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;api_key&quot;</span><span class="w">    </span><span class="c1"># Options: &quot;api_key&quot;, &quot;oauth&quot;, &quot;jwt&quot;</span>
+<a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a><span class="n">api_keys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span>
+<a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a>
+<a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a><span class="k">[features]</span>
+<a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a><span class="n">enable_progress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a><span class="n">enable_binary_content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-8-35" name="__codelineno-8-35" href="#__codelineno-8-35"></a><span class="n">max_request_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10485760</span><span class="w">  </span><span class="c1"># 10MB</span>
+<a id="__codelineno-8-36" name="__codelineno-8-36" href="#__codelineno-8-36"></a>
+<a id="__codelineno-8-37" name="__codelineno-8-37" href="#__codelineno-8-37"></a><span class="k">[development]</span>
+<a id="__codelineno-8-38" name="__codelineno-8-38" href="#__codelineno-8-38"></a><span class="n">debug</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<a id="__codelineno-8-39" name="__codelineno-8-39" href="#__codelineno-8-39"></a><span class="n">auto_reload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+</code></pre></div>
+<h3 id="52-environment-variables">5.2 Environment Variables</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nv">SIMPLY_MCP_CONFIG_FILE</span><span class="o">=</span>./simplymcp.config.toml
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nv">SIMPLY_MCP_LOG_LEVEL</span><span class="o">=</span>INFO
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nv">SIMPLY_MCP_PORT</span><span class="o">=</span><span class="m">3000</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="nv">SIMPLY_MCP_TRANSPORT</span><span class="o">=</span>stdio
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="nv">SIMPLY_MCP_DEBUG</span><span class="o">=</span><span class="nb">false</span>
+</code></pre></div>
+<h3 id="53-pydantic-config-models">5.3 Pydantic Config Models</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">ServerConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Server name&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Server version&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="k">class</span><span class="w"> </span><span class="nc">TransportConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;stdio&quot;</span><span class="p">,</span> <span class="s2">&quot;http&quot;</span><span class="p">,</span> <span class="s2">&quot;sse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;stdio&quot;</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>    <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">65535</span><span class="p">)</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>    <span class="n">host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;0.0.0.0&quot;</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="k">class</span><span class="w"> </span><span class="nc">LoggingConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>    <span class="n">level</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;INFO&quot;</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>    <span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;json&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>    <span class="n">file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecurityConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>    <span class="n">enable_rate_limiting</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>    <span class="n">rate_limit_per_minute</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>    <span class="n">rate_limit_burst</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="k">class</span><span class="w"> </span><span class="nc">SimplyMCPConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>    <span class="n">server</span><span class="p">:</span> <span class="n">ServerConfig</span>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>    <span class="n">transport</span><span class="p">:</span> <span class="n">TransportConfig</span>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>    <span class="n">logging</span><span class="p">:</span> <span class="n">LoggingConfig</span> <span class="o">=</span> <span class="n">LoggingConfig</span><span class="p">()</span>
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>    <span class="n">security</span><span class="p">:</span> <span class="n">SecurityConfig</span> <span class="o">=</span> <span class="n">SecurityConfig</span><span class="p">()</span>
+</code></pre></div>
+<hr />
+<h2 id="6-api-comparison-typescript-vs-python">6. API Comparison: TypeScript vs Python</h2>
+<h3 id="61-decorator-api">6.1 Decorator API</h3>
+<h4 id="typescript">TypeScript</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">MCPServer</span><span class="p">,</span><span class="w"> </span><span class="nx">tool</span><span class="p">,</span><span class="w"> </span><span class="nx">prompt</span><span class="p">,</span><span class="w"> </span><span class="nx">resource</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;simply-mcp&#39;</span><span class="p">;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kd">@MCPServer</span><span class="p">({</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;my-server&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">version</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1.0.0&#39;</span><span class="w"> </span><span class="p">})</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">MyServer</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span><span class="kd">@tool</span><span class="p">(</span><span class="s1">&#39;Add two numbers&#39;</span><span class="p">)</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">  </span><span class="nx">add</span><span class="p">(</span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">b</span><span class="p">;</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">  </span><span class="kd">@prompt</span><span class="p">(</span><span class="s1">&#39;Generate greeting&#39;</span><span class="p">)</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">  </span><span class="nx">greet</span><span class="p">(</span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="sb">`Hello, </span><span class="si">${</span><span class="nx">name</span><span class="si">}</span><span class="sb">!`</span><span class="p">;</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="w">  </span><span class="kd">@resource</span><span class="p">(</span><span class="s1">&#39;config://server&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">mimeType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="w"> </span><span class="p">})</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="w">  </span><span class="nx">config</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">status</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;running&#39;</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="p">}</span>
+</code></pre></div>
+<h4 id="python">Python</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">simply_mcp</span><span class="w"> </span><span class="kn">import</span> <span class="n">mcp_server</span><span class="p">,</span> <span class="n">tool</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">resource</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="nd">@mcp_server</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;my-server&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.0.0&#39;</span><span class="p">)</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyServer</span><span class="p">:</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    <span class="nd">@tool</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Add two numbers&#39;</span><span class="p">)</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>    <span class="nd">@prompt</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Generate greeting&#39;</span><span class="p">)</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">greet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>    <span class="nd">@resource</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="s1">&#39;config://server&#39;</span><span class="p">,</span> <span class="n">mime_type</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;running&quot;</span><span class="p">}</span>
+</code></pre></div>
+<h3 id="62-functional-api">6.2 Functional API</h3>
+<h4 id="typescript_1">TypeScript</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">BuildMCPServer</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;simply-mcp&#39;</span><span class="p">;</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">mcp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">BuildMCPServer</span><span class="p">({</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;my-server&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">version</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1.0.0&#39;</span><span class="w"> </span><span class="p">});</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="nx">mcp</span><span class="p">.</span><span class="nx">addTool</span><span class="p">({</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">  </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;add&#39;</span><span class="p">,</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">  </span><span class="nx">description</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Add two numbers&#39;</span><span class="p">,</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">  </span><span class="nx">execute</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">b</span><span class="p">,</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="p">});</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="nx">mcp</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span>
+</code></pre></div>
+<h4 id="python_1">Python</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">simply_mcp</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimplyMCP</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">mcp</span> <span class="o">=</span> <span class="n">SimplyMCP</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;my-server&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.0.0&#39;</span><span class="p">)</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="nd">@mcp</span><span class="o">.</span><span class="n">add_tool</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Add two numbers&#39;</span><span class="p">)</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="n">mcp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="63-schema-validation">6.3 Schema Validation</h3>
+<h4 id="typescript-zod">TypeScript (Zod)</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">z</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;zod&#39;</span><span class="p">;</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="kd">@tool</span><span class="p">(</span><span class="s1">&#39;Add numbers&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span><span class="nx">schema</span><span class="o">:</span><span class="w"> </span><span class="kt">z.object</span><span class="p">({</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">    </span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="kt">z.number</span><span class="p">(),</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="kt">z.number</span><span class="p">(),</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">  </span><span class="p">}),</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="p">})</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="nx">add</span><span class="p">(</span><span class="nx">params</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">params</span><span class="p">.</span><span class="nx">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">params</span><span class="p">.</span><span class="nx">b</span><span class="p">;</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="p">}</span>
+</code></pre></div>
+<h4 id="python-pydantic">Python (Pydantic)</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">AddParams</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="nd">@tool</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Add numbers&#39;</span><span class="p">)</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">AddParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>    <span class="k">return</span> <span class="n">params</span><span class="o">.</span><span class="n">a</span> <span class="o">+</span> <span class="n">params</span><span class="o">.</span><span class="n">b</span>
+</code></pre></div>
+<hr />
+<h2 id="7-dependencies">7. Dependencies</h2>
+<h3 id="71-core-dependencies">7.1 Core Dependencies</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">[project.dependencies]</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="c1"># MCP SDK</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="s2">&quot;mcp&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=0.1.0&quot;</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="c1"># Validation &amp; Serialization</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="s2">&quot;pydantic&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=2.0.0&quot;</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="s2">&quot;pydantic-settings&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=2.0.0&quot;</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="c1"># CLI Framework</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="s2">&quot;click&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=8.0.0&quot;</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="s2">&quot;rich&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=13.0.0&quot;</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="c1"># File Watching</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="s2">&quot;watchdog&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=3.0.0&quot;</span>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="c1"># HTTP Server</span>
+<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="s2">&quot;aiohttp&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=3.9.0&quot;</span>
+<a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="s2">&quot;aiohttp-cors&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=0.7.0&quot;</span>
+<a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a>
+<a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a><span class="c1"># Configuration</span>
+<a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a><span class="s2">&quot;tomli&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=2.0.0; python_version &lt; &#39;3.11&#39;&quot;</span><span class="w">  </span><span class="c1"># TOML parsing</span>
+<a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a><span class="s2">&quot;python-dotenv&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=1.0.0&quot;</span>
+<a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a>
+<a id="__codelineno-17-24" name="__codelineno-17-24" href="#__codelineno-17-24"></a><span class="c1"># Utilities</span>
+<a id="__codelineno-17-25" name="__codelineno-17-25" href="#__codelineno-17-25"></a><span class="s2">&quot;typing-extensions&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=4.0.0&quot;</span>
+</code></pre></div>
+<h3 id="72-development-dependencies">7.2 Development Dependencies</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">[project.optional-dependencies]</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">dev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="c1"># Testing</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="s2">&quot;pytest&gt;=7.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">    </span><span class="s2">&quot;pytest-asyncio&gt;=0.21.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">    </span><span class="s2">&quot;pytest-cov&gt;=4.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="w">    </span><span class="s2">&quot;pytest-mock&gt;=3.10.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="w">    </span><span class="s2">&quot;httpx&gt;=0.24.0&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># For testing HTTP transport</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="w">    </span><span class="c1"># Code Quality</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="w">    </span><span class="s2">&quot;black&gt;=23.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="w">    </span><span class="s2">&quot;ruff&gt;=0.1.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="w">    </span><span class="s2">&quot;mypy&gt;=1.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="w">    </span><span class="s2">&quot;pre-commit&gt;=3.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="w">    </span><span class="c1"># Documentation</span>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="w">    </span><span class="s2">&quot;mkdocs&gt;=1.5.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a><span class="w">    </span><span class="s2">&quot;mkdocs-material&gt;=9.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a><span class="w">    </span><span class="s2">&quot;mkdocstrings[python]&gt;=0.24.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="w">    </span><span class="c1"># Build</span>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="w">    </span><span class="s2">&quot;build&gt;=1.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a><span class="w">    </span><span class="s2">&quot;twine&gt;=4.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a><span class="p">]</span>
+<a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a>
+<a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a><span class="n">bundling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-18-27" name="__codelineno-18-27" href="#__codelineno-18-27"></a><span class="w">    </span><span class="s2">&quot;pyinstaller&gt;=5.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-28" name="__codelineno-18-28" href="#__codelineno-18-28"></a><span class="w">    </span><span class="s2">&quot;nuitka&gt;=1.8.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-29" name="__codelineno-18-29" href="#__codelineno-18-29"></a><span class="p">]</span>
+</code></pre></div>
+<h3 id="73-minimum-python-version">7.3 Minimum Python Version</h3>
+<ul>
+<li><strong>Python 3.10+</strong> (for modern type hints, pattern matching, better asyncio)</li>
+</ul>
+<hr />
+<h2 id="8-pyprojecttoml-structure">8. pyproject.toml Structure</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">[build-system]</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;hatchling&quot;</span><span class="p">]</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="n">build-backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;hatchling.build&quot;</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="k">[project]</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;simply-mcp&quot;</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;0.1.0&quot;</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;A modern Python framework for building MCP servers with multiple API styles&quot;</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="n">authors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">    </span><span class="p">{</span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;Clockwork Innovations&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;info@clockwork-innovations.com&quot;</span><span class="p">}</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="p">]</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="n">license</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">text</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;MIT&quot;</span><span class="p">}</span>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="n">readme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;README.md&quot;</span>
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="n">requires-python</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=3.10&quot;</span>
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="n">keywords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a><span class="w">    </span><span class="s2">&quot;mcp&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="w">    </span><span class="s2">&quot;model-context-protocol&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="w">    </span><span class="s2">&quot;ai&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="w">    </span><span class="s2">&quot;llm&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a><span class="w">    </span><span class="s2">&quot;anthropic&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a><span class="w">    </span><span class="s2">&quot;server&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a><span class="w">    </span><span class="s2">&quot;framework&quot;</span>
+<a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a><span class="p">]</span>
+<a id="__codelineno-19-24" name="__codelineno-19-24" href="#__codelineno-19-24"></a><span class="n">classifiers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-25" name="__codelineno-19-25" href="#__codelineno-19-25"></a><span class="w">    </span><span class="s2">&quot;Development Status :: 3 - Alpha&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-26" name="__codelineno-19-26" href="#__codelineno-19-26"></a><span class="w">    </span><span class="s2">&quot;Intended Audience :: Developers&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-27" name="__codelineno-19-27" href="#__codelineno-19-27"></a><span class="w">    </span><span class="s2">&quot;License :: OSI Approved :: MIT License&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-28" name="__codelineno-19-28" href="#__codelineno-19-28"></a><span class="w">    </span><span class="s2">&quot;Programming Language :: Python :: 3&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-29" name="__codelineno-19-29" href="#__codelineno-19-29"></a><span class="w">    </span><span class="s2">&quot;Programming Language :: Python :: 3.10&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-30" name="__codelineno-19-30" href="#__codelineno-19-30"></a><span class="w">    </span><span class="s2">&quot;Programming Language :: Python :: 3.11&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-31" name="__codelineno-19-31" href="#__codelineno-19-31"></a><span class="w">    </span><span class="s2">&quot;Programming Language :: Python :: 3.12&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-32" name="__codelineno-19-32" href="#__codelineno-19-32"></a><span class="w">    </span><span class="s2">&quot;Topic :: Software Development :: Libraries :: Python Modules&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-33" name="__codelineno-19-33" href="#__codelineno-19-33"></a><span class="w">    </span><span class="s2">&quot;Topic :: Scientific/Engineering :: Artificial Intelligence&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-34" name="__codelineno-19-34" href="#__codelineno-19-34"></a><span class="p">]</span>
+<a id="__codelineno-19-35" name="__codelineno-19-35" href="#__codelineno-19-35"></a>
+<a id="__codelineno-19-36" name="__codelineno-19-36" href="#__codelineno-19-36"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-37" name="__codelineno-19-37" href="#__codelineno-19-37"></a><span class="w">    </span><span class="s2">&quot;mcp&gt;=0.1.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-38" name="__codelineno-19-38" href="#__codelineno-19-38"></a><span class="w">    </span><span class="s2">&quot;pydantic&gt;=2.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-39" name="__codelineno-19-39" href="#__codelineno-19-39"></a><span class="w">    </span><span class="s2">&quot;pydantic-settings&gt;=2.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-40" name="__codelineno-19-40" href="#__codelineno-19-40"></a><span class="w">    </span><span class="s2">&quot;click&gt;=8.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-41" name="__codelineno-19-41" href="#__codelineno-19-41"></a><span class="w">    </span><span class="s2">&quot;rich&gt;=13.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-42" name="__codelineno-19-42" href="#__codelineno-19-42"></a><span class="w">    </span><span class="s2">&quot;watchdog&gt;=3.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-43" name="__codelineno-19-43" href="#__codelineno-19-43"></a><span class="w">    </span><span class="s2">&quot;aiohttp&gt;=3.9.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-44" name="__codelineno-19-44" href="#__codelineno-19-44"></a><span class="w">    </span><span class="s2">&quot;aiohttp-cors&gt;=0.7.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-45" name="__codelineno-19-45" href="#__codelineno-19-45"></a><span class="w">    </span><span class="s2">&quot;tomli&gt;=2.0.0; python_version &lt; &#39;3.11&#39;&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-46" name="__codelineno-19-46" href="#__codelineno-19-46"></a><span class="w">    </span><span class="s2">&quot;python-dotenv&gt;=1.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-47" name="__codelineno-19-47" href="#__codelineno-19-47"></a><span class="w">    </span><span class="s2">&quot;typing-extensions&gt;=4.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-48" name="__codelineno-19-48" href="#__codelineno-19-48"></a><span class="p">]</span>
+<a id="__codelineno-19-49" name="__codelineno-19-49" href="#__codelineno-19-49"></a>
+<a id="__codelineno-19-50" name="__codelineno-19-50" href="#__codelineno-19-50"></a><span class="k">[project.optional-dependencies]</span>
+<a id="__codelineno-19-51" name="__codelineno-19-51" href="#__codelineno-19-51"></a><span class="n">dev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-52" name="__codelineno-19-52" href="#__codelineno-19-52"></a><span class="w">    </span><span class="s2">&quot;pytest&gt;=7.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-53" name="__codelineno-19-53" href="#__codelineno-19-53"></a><span class="w">    </span><span class="s2">&quot;pytest-asyncio&gt;=0.21.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-54" name="__codelineno-19-54" href="#__codelineno-19-54"></a><span class="w">    </span><span class="s2">&quot;pytest-cov&gt;=4.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-55" name="__codelineno-19-55" href="#__codelineno-19-55"></a><span class="w">    </span><span class="s2">&quot;pytest-mock&gt;=3.10.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-56" name="__codelineno-19-56" href="#__codelineno-19-56"></a><span class="w">    </span><span class="s2">&quot;httpx&gt;=0.24.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-57" name="__codelineno-19-57" href="#__codelineno-19-57"></a><span class="w">    </span><span class="s2">&quot;black&gt;=23.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-58" name="__codelineno-19-58" href="#__codelineno-19-58"></a><span class="w">    </span><span class="s2">&quot;ruff&gt;=0.1.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-59" name="__codelineno-19-59" href="#__codelineno-19-59"></a><span class="w">    </span><span class="s2">&quot;mypy&gt;=1.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-60" name="__codelineno-19-60" href="#__codelineno-19-60"></a><span class="w">    </span><span class="s2">&quot;pre-commit&gt;=3.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-61" name="__codelineno-19-61" href="#__codelineno-19-61"></a><span class="w">    </span><span class="s2">&quot;mkdocs&gt;=1.5.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-62" name="__codelineno-19-62" href="#__codelineno-19-62"></a><span class="w">    </span><span class="s2">&quot;mkdocs-material&gt;=9.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-63" name="__codelineno-19-63" href="#__codelineno-19-63"></a><span class="w">    </span><span class="s2">&quot;mkdocstrings[python]&gt;=0.24.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-64" name="__codelineno-19-64" href="#__codelineno-19-64"></a><span class="w">    </span><span class="s2">&quot;build&gt;=1.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-65" name="__codelineno-19-65" href="#__codelineno-19-65"></a><span class="w">    </span><span class="s2">&quot;twine&gt;=4.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-66" name="__codelineno-19-66" href="#__codelineno-19-66"></a><span class="p">]</span>
+<a id="__codelineno-19-67" name="__codelineno-19-67" href="#__codelineno-19-67"></a>
+<a id="__codelineno-19-68" name="__codelineno-19-68" href="#__codelineno-19-68"></a><span class="n">bundling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-69" name="__codelineno-19-69" href="#__codelineno-19-69"></a><span class="w">    </span><span class="s2">&quot;pyinstaller&gt;=5.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-70" name="__codelineno-19-70" href="#__codelineno-19-70"></a><span class="p">]</span>
+<a id="__codelineno-19-71" name="__codelineno-19-71" href="#__codelineno-19-71"></a>
+<a id="__codelineno-19-72" name="__codelineno-19-72" href="#__codelineno-19-72"></a><span class="k">[project.scripts]</span>
+<a id="__codelineno-19-73" name="__codelineno-19-73" href="#__codelineno-19-73"></a><span class="n">simply-mcp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;simply_mcp.cli.main:cli&quot;</span>
+<a id="__codelineno-19-74" name="__codelineno-19-74" href="#__codelineno-19-74"></a>
+<a id="__codelineno-19-75" name="__codelineno-19-75" href="#__codelineno-19-75"></a><span class="k">[project.urls]</span>
+<a id="__codelineno-19-76" name="__codelineno-19-76" href="#__codelineno-19-76"></a><span class="n">Homepage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://github.com/Clockwork-Innovations/simply-mcp-py&quot;</span>
+<a id="__codelineno-19-77" name="__codelineno-19-77" href="#__codelineno-19-77"></a><span class="n">Documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://simply-mcp-py.readthedocs.io&quot;</span>
+<a id="__codelineno-19-78" name="__codelineno-19-78" href="#__codelineno-19-78"></a><span class="n">Repository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://github.com/Clockwork-Innovations/simply-mcp-py&quot;</span>
+<a id="__codelineno-19-79" name="__codelineno-19-79" href="#__codelineno-19-79"></a><span class="n">Issues</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://github.com/Clockwork-Innovations/simply-mcp-py/issues&quot;</span>
+<a id="__codelineno-19-80" name="__codelineno-19-80" href="#__codelineno-19-80"></a><span class="n">Changelog</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://github.com/Clockwork-Innovations/simply-mcp-py/blob/main/CHANGELOG.md&quot;</span>
+<a id="__codelineno-19-81" name="__codelineno-19-81" href="#__codelineno-19-81"></a>
+<a id="__codelineno-19-82" name="__codelineno-19-82" href="#__codelineno-19-82"></a><span class="k">[tool.hatch.build.targets.wheel]</span>
+<a id="__codelineno-19-83" name="__codelineno-19-83" href="#__codelineno-19-83"></a><span class="n">packages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;src/simply_mcp&quot;</span><span class="p">]</span>
+<a id="__codelineno-19-84" name="__codelineno-19-84" href="#__codelineno-19-84"></a>
+<a id="__codelineno-19-85" name="__codelineno-19-85" href="#__codelineno-19-85"></a><span class="k">[tool.pytest.ini_options]</span>
+<a id="__codelineno-19-86" name="__codelineno-19-86" href="#__codelineno-19-86"></a><span class="n">testpaths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tests&quot;</span><span class="p">]</span>
+<a id="__codelineno-19-87" name="__codelineno-19-87" href="#__codelineno-19-87"></a><span class="n">asyncio_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;auto&quot;</span>
+<a id="__codelineno-19-88" name="__codelineno-19-88" href="#__codelineno-19-88"></a><span class="n">addopts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-89" name="__codelineno-19-89" href="#__codelineno-19-89"></a><span class="w">    </span><span class="s2">&quot;--cov=simply_mcp&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-90" name="__codelineno-19-90" href="#__codelineno-19-90"></a><span class="w">    </span><span class="s2">&quot;--cov-report=term-missing&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-91" name="__codelineno-19-91" href="#__codelineno-19-91"></a><span class="w">    </span><span class="s2">&quot;--cov-report=html&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-92" name="__codelineno-19-92" href="#__codelineno-19-92"></a><span class="w">    </span><span class="s2">&quot;--cov-report=xml&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-93" name="__codelineno-19-93" href="#__codelineno-19-93"></a><span class="p">]</span>
+<a id="__codelineno-19-94" name="__codelineno-19-94" href="#__codelineno-19-94"></a>
+<a id="__codelineno-19-95" name="__codelineno-19-95" href="#__codelineno-19-95"></a><span class="k">[tool.coverage.run]</span>
+<a id="__codelineno-19-96" name="__codelineno-19-96" href="#__codelineno-19-96"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">]</span>
+<a id="__codelineno-19-97" name="__codelineno-19-97" href="#__codelineno-19-97"></a><span class="n">omit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tests/*&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;*/test_*.py&quot;</span><span class="p">]</span>
+<a id="__codelineno-19-98" name="__codelineno-19-98" href="#__codelineno-19-98"></a>
+<a id="__codelineno-19-99" name="__codelineno-19-99" href="#__codelineno-19-99"></a><span class="k">[tool.coverage.report]</span>
+<a id="__codelineno-19-100" name="__codelineno-19-100" href="#__codelineno-19-100"></a><span class="n">exclude_lines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-101" name="__codelineno-19-101" href="#__codelineno-19-101"></a><span class="w">    </span><span class="s2">&quot;pragma: no cover&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-102" name="__codelineno-19-102" href="#__codelineno-19-102"></a><span class="w">    </span><span class="s2">&quot;def __repr__&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-103" name="__codelineno-19-103" href="#__codelineno-19-103"></a><span class="w">    </span><span class="s2">&quot;raise AssertionError&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-104" name="__codelineno-19-104" href="#__codelineno-19-104"></a><span class="w">    </span><span class="s2">&quot;raise NotImplementedError&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-105" name="__codelineno-19-105" href="#__codelineno-19-105"></a><span class="w">    </span><span class="s2">&quot;if __name__ == .__main__.:&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-106" name="__codelineno-19-106" href="#__codelineno-19-106"></a><span class="w">    </span><span class="s2">&quot;if TYPE_CHECKING:&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-107" name="__codelineno-19-107" href="#__codelineno-19-107"></a><span class="p">]</span>
+<a id="__codelineno-19-108" name="__codelineno-19-108" href="#__codelineno-19-108"></a>
+<a id="__codelineno-19-109" name="__codelineno-19-109" href="#__codelineno-19-109"></a><span class="k">[tool.black]</span>
+<a id="__codelineno-19-110" name="__codelineno-19-110" href="#__codelineno-19-110"></a><span class="n">line-length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span>
+<a id="__codelineno-19-111" name="__codelineno-19-111" href="#__codelineno-19-111"></a><span class="n">target-version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;py310&#39;</span><span class="p">]</span>
+<a id="__codelineno-19-112" name="__codelineno-19-112" href="#__codelineno-19-112"></a><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;\.pyi?$&#39;</span>
+<a id="__codelineno-19-113" name="__codelineno-19-113" href="#__codelineno-19-113"></a><span class="n">extend-exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;&#39;</span>
+<a id="__codelineno-19-114" name="__codelineno-19-114" href="#__codelineno-19-114"></a><span class="s1">/(</span>
+<a id="__codelineno-19-115" name="__codelineno-19-115" href="#__codelineno-19-115"></a><span class="s1">  # directories</span>
+<a id="__codelineno-19-116" name="__codelineno-19-116" href="#__codelineno-19-116"></a><span class="s1">  \.eggs</span>
+<a id="__codelineno-19-117" name="__codelineno-19-117" href="#__codelineno-19-117"></a><span class="s1">  | \.git</span>
+<a id="__codelineno-19-118" name="__codelineno-19-118" href="#__codelineno-19-118"></a><span class="s1">  | \.hg</span>
+<a id="__codelineno-19-119" name="__codelineno-19-119" href="#__codelineno-19-119"></a><span class="s1">  | \.mypy_cache</span>
+<a id="__codelineno-19-120" name="__codelineno-19-120" href="#__codelineno-19-120"></a><span class="s1">  | \.tox</span>
+<a id="__codelineno-19-121" name="__codelineno-19-121" href="#__codelineno-19-121"></a><span class="s1">  | \.venv</span>
+<a id="__codelineno-19-122" name="__codelineno-19-122" href="#__codelineno-19-122"></a><span class="s1">  | build</span>
+<a id="__codelineno-19-123" name="__codelineno-19-123" href="#__codelineno-19-123"></a><span class="s1">  | dist</span>
+<a id="__codelineno-19-124" name="__codelineno-19-124" href="#__codelineno-19-124"></a><span class="s1">)/</span>
+<a id="__codelineno-19-125" name="__codelineno-19-125" href="#__codelineno-19-125"></a><span class="s1">&#39;&#39;&#39;</span>
+<a id="__codelineno-19-126" name="__codelineno-19-126" href="#__codelineno-19-126"></a>
+<a id="__codelineno-19-127" name="__codelineno-19-127" href="#__codelineno-19-127"></a><span class="k">[tool.ruff]</span>
+<a id="__codelineno-19-128" name="__codelineno-19-128" href="#__codelineno-19-128"></a><span class="n">line-length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span>
+<a id="__codelineno-19-129" name="__codelineno-19-129" href="#__codelineno-19-129"></a><span class="n">target-version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;py310&quot;</span>
+<a id="__codelineno-19-130" name="__codelineno-19-130" href="#__codelineno-19-130"></a><span class="n">select</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-131" name="__codelineno-19-131" href="#__codelineno-19-131"></a><span class="w">    </span><span class="s2">&quot;E&quot;</span><span class="p">,</span><span class="w">   </span><span class="c1"># pycodestyle errors</span>
+<a id="__codelineno-19-132" name="__codelineno-19-132" href="#__codelineno-19-132"></a><span class="w">    </span><span class="s2">&quot;W&quot;</span><span class="p">,</span><span class="w">   </span><span class="c1"># pycodestyle warnings</span>
+<a id="__codelineno-19-133" name="__codelineno-19-133" href="#__codelineno-19-133"></a><span class="w">    </span><span class="s2">&quot;F&quot;</span><span class="p">,</span><span class="w">   </span><span class="c1"># pyflakes</span>
+<a id="__codelineno-19-134" name="__codelineno-19-134" href="#__codelineno-19-134"></a><span class="w">    </span><span class="s2">&quot;I&quot;</span><span class="p">,</span><span class="w">   </span><span class="c1"># isort</span>
+<a id="__codelineno-19-135" name="__codelineno-19-135" href="#__codelineno-19-135"></a><span class="w">    </span><span class="s2">&quot;B&quot;</span><span class="p">,</span><span class="w">   </span><span class="c1"># flake8-bugbear</span>
+<a id="__codelineno-19-136" name="__codelineno-19-136" href="#__codelineno-19-136"></a><span class="w">    </span><span class="s2">&quot;C4&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># flake8-comprehensions</span>
+<a id="__codelineno-19-137" name="__codelineno-19-137" href="#__codelineno-19-137"></a><span class="w">    </span><span class="s2">&quot;UP&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># pyupgrade</span>
+<a id="__codelineno-19-138" name="__codelineno-19-138" href="#__codelineno-19-138"></a><span class="p">]</span>
+<a id="__codelineno-19-139" name="__codelineno-19-139" href="#__codelineno-19-139"></a><span class="n">ignore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-140" name="__codelineno-19-140" href="#__codelineno-19-140"></a><span class="w">    </span><span class="s2">&quot;E501&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># line too long, handled by black</span>
+<a id="__codelineno-19-141" name="__codelineno-19-141" href="#__codelineno-19-141"></a><span class="w">    </span><span class="s2">&quot;B008&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># do not perform function calls in argument defaults</span>
+<a id="__codelineno-19-142" name="__codelineno-19-142" href="#__codelineno-19-142"></a><span class="p">]</span>
+<a id="__codelineno-19-143" name="__codelineno-19-143" href="#__codelineno-19-143"></a>
+<a id="__codelineno-19-144" name="__codelineno-19-144" href="#__codelineno-19-144"></a><span class="k">[tool.ruff.per-file-ignores]</span>
+<a id="__codelineno-19-145" name="__codelineno-19-145" href="#__codelineno-19-145"></a><span class="s2">&quot;__init__.py&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;F401&quot;</span><span class="p">]</span><span class="w">  </span><span class="c1"># imported but unused</span>
+<a id="__codelineno-19-146" name="__codelineno-19-146" href="#__codelineno-19-146"></a>
+<a id="__codelineno-19-147" name="__codelineno-19-147" href="#__codelineno-19-147"></a><span class="k">[tool.mypy]</span>
+<a id="__codelineno-19-148" name="__codelineno-19-148" href="#__codelineno-19-148"></a><span class="n">python_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;3.10&quot;</span>
+<a id="__codelineno-19-149" name="__codelineno-19-149" href="#__codelineno-19-149"></a><span class="n">strict</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-19-150" name="__codelineno-19-150" href="#__codelineno-19-150"></a><span class="n">warn_return_any</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-19-151" name="__codelineno-19-151" href="#__codelineno-19-151"></a><span class="n">warn_unused_configs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-19-152" name="__codelineno-19-152" href="#__codelineno-19-152"></a><span class="n">disallow_untyped_defs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-19-153" name="__codelineno-19-153" href="#__codelineno-19-153"></a><span class="n">disallow_any_unimported</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<a id="__codelineno-19-154" name="__codelineno-19-154" href="#__codelineno-19-154"></a><span class="n">no_implicit_optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-19-155" name="__codelineno-19-155" href="#__codelineno-19-155"></a><span class="n">warn_redundant_casts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-19-156" name="__codelineno-19-156" href="#__codelineno-19-156"></a><span class="n">warn_unused_ignores</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-19-157" name="__codelineno-19-157" href="#__codelineno-19-157"></a><span class="n">warn_no_return</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-19-158" name="__codelineno-19-158" href="#__codelineno-19-158"></a><span class="n">check_untyped_defs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-19-159" name="__codelineno-19-159" href="#__codelineno-19-159"></a><span class="n">strict_equality</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-19-160" name="__codelineno-19-160" href="#__codelineno-19-160"></a>
+<a id="__codelineno-19-161" name="__codelineno-19-161" href="#__codelineno-19-161"></a><span class="k">[[tool.mypy.overrides]]</span>
+<a id="__codelineno-19-162" name="__codelineno-19-162" href="#__codelineno-19-162"></a><span class="n">module</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tests.*&quot;</span>
+<a id="__codelineno-19-163" name="__codelineno-19-163" href="#__codelineno-19-163"></a><span class="n">disallow_untyped_defs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<a id="__codelineno-19-164" name="__codelineno-19-164" href="#__codelineno-19-164"></a>
+<a id="__codelineno-19-165" name="__codelineno-19-165" href="#__codelineno-19-165"></a><span class="k">[[tool.mypy.overrides]]</span>
+<a id="__codelineno-19-166" name="__codelineno-19-166" href="#__codelineno-19-166"></a><span class="n">module</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mcp.*&quot;</span>
+<a id="__codelineno-19-167" name="__codelineno-19-167" href="#__codelineno-19-167"></a><span class="n">ignore_missing_imports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</code></pre></div>
+<hr />
+<h2 id="9-success-metrics">9. Success Metrics</h2>
+<h3 id="91-feature-completeness">9.1 Feature Completeness</h3>
+<ul>
+<li>[ ] All 4 API styles implemented</li>
+<li>[ ] All 3 transports functional</li>
+<li>[ ] CLI feature parity with TypeScript version</li>
+<li>[ ] Security features implemented</li>
+</ul>
+<h3 id="92-quality-metrics">9.2 Quality Metrics</h3>
+<ul>
+<li>[ ] &gt;85% test coverage</li>
+<li>[ ] 100% mypy strict mode compliance</li>
+<li>[ ] 100% of public API documented</li>
+<li>[ ] Zero critical security vulnerabilities</li>
+</ul>
+<h3 id="93-performance-metrics">9.3 Performance Metrics</h3>
+<ul>
+<li>[ ] &lt;100ms overhead vs raw MCP SDK</li>
+<li>[ ] &lt;500MB memory for basic server</li>
+<li>[ ] &lt;2s startup time for bundled executable</li>
+</ul>
+<h3 id="94-documentation-metrics">9.4 Documentation Metrics</h3>
+<ul>
+<li>[ ] Complete API reference</li>
+<li>[ ] 10+ working examples</li>
+<li>[ ] Getting started guide</li>
+<li>[ ] Migration guide from TypeScript</li>
+</ul>
+<hr />
+<h2 id="appendix-a-glossary">Appendix A: Glossary</h2>
+<ul>
+<li><strong>MCP</strong>: Model Context Protocol</li>
+<li><strong>Tool</strong>: An executable function exposed by the server</li>
+<li><strong>Prompt</strong>: A template for generating context for LLMs</li>
+<li><strong>Resource</strong>: Data exposed by the server (files, configurations, etc.)</li>
+<li><strong>Transport</strong>: Communication mechanism (stdio, HTTP, SSE)</li>
+<li><strong>Handler</strong>: Code that processes requests for tools/prompts/resources</li>
+<li><strong>Session</strong>: Stateful connection context for HTTP transport</li>
+</ul>
+<h2 id="appendix-b-references">Appendix B: References</h2>
+<ul>
+<li><a href="https://github.com/Clockwork-Innovations/simply-mcp-ts">simply-mcp-ts Repository</a></li>
+<li><a href="https://github.com/modelcontextprotocol/python-sdk">Anthropic MCP Python SDK</a></li>
+<li><a href="https://modelcontextprotocol.io">Model Context Protocol Specification</a></li>
+<li><a href="https://packaging.python.org">Python Packaging Guide</a></li>
+<li><a href="https://docs.pydantic.dev">Pydantic Documentation</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

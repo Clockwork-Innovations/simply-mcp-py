@@ -1,0 +1,4181 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A modern, Pythonic framework for building MCP servers">
+      
+      
+      
+        <link rel="canonical" href="https://simply-mcp-py.readthedocs.io/ROADMAP/">
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.21">
+    
+    
+      
+        <title>Simply-MCP-PY: Implementation Roadmap - Simply-MCP-PY Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2a3383ac.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#simply-mcp-py-implementation-roadmap" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Simply-MCP-PY Documentation" class="md-header__button md-logo" aria-label="Simply-MCP-PY Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Simply-MCP-PY Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Simply-MCP-PY: Implementation Roadmap
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Clockwork-Innovations/simply-mcp-py" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Clockwork-Innovations/simply-mcp-py
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../getting-started/installation/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api/core/server/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../examples/" class="md-tabs__link">
+          
+  
+  
+  Examples
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guide/configuration/" class="md-tabs__link">
+          
+  
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Simply-MCP-PY Documentation" class="md-nav__button md-logo" aria-label="Simply-MCP-PY Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Simply-MCP-PY Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Clockwork-Innovations/simply-mcp-py" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Clockwork-Innovations/simply-mcp-py
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/first-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    First Server
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Core
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Core
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Server
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Types
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Config
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Registry
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Errors
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/logger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Logger
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Styles
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            API Styles
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/decorators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Decorators
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Builder
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Transports
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Transports
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/transports/http/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    HTTP
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/transports/sse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SSE
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/transports/middleware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Middleware
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/transports/stdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    STDIO
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/transports/factory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Factory
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Features
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Features
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/features/progress/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Progress
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/features/binary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Binary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Security
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Security
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/security/auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Auth
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/security/rate_limiter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Rate Limiter
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    CLI
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            CLI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/main/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Main
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Run
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Config
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/dev/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dev
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/watch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Watch
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/bundle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bundle
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/list_cmd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    List
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Validation
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            Validation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/validation/schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Schema
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Examples
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Deployment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-timeline-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.1 Timeline Summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-team-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.2 Team Structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-development-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.3 Development Approach
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-phase-1-foundation-weeks-1-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Phase 1: Foundation (Weeks 1-2)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Phase 1: Foundation (Weeks 1-2)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#week-1-project-setup-core-infrastructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 1: Project Setup &amp; Core Infrastructure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Week 1: Project Setup &amp; Core Infrastructure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tasks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-1-2-repository-development-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 1-2: Repository &amp; Development Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-3-cicd-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 3: CI/CD Pipeline
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-4-5-core-type-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 4-5: Core Type System
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-6-7-configuration-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 6-7: Configuration System
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-2-core-server-basic-transport" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 2: Core Server &amp; Basic Transport
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Week 2: Core Server &amp; Basic Transport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tasks_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tasks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-1-2-error-handling-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 1-2: Error Handling System
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-3-logging-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 3: Logging System
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-4-5-component-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 4-5: Component Registry
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-6-7-core-server-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 6-7: Core Server Implementation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-7-stdio-transport" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 7: Stdio Transport
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-7-first-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 7: First Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-phase-2-api-styles-weeks-3-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Phase 2: API Styles (Weeks 3-4)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Phase 2: API Styles (Weeks 3-4)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#week-3-decorator-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 3: Decorator API
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Week 3: Decorator API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tasks_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tasks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-1-2-schema-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 1-2: Schema Generation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-3-4-tool-decorator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 3-4: Tool Decorator
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-4-prompt-resource-decorators" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 4: Prompt &amp; Resource Decorators
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-5-server-decorator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 5: Server Decorator
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-6-7-integration-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 6-7: Integration &amp; Examples
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-4-functional-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 4: Functional API
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Week 4: Functional API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tasks_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tasks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-1-2-simplymcp-builder-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 1-2: SimplyMCP Builder Class
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-3-tool-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 3: Tool Registration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-4-prompt-resource-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 4: Prompt &amp; Resource Registration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-5-configuration-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 5: Configuration &amp; Execution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-6-7-integration-examples_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 6-7: Integration &amp; Examples
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-phase-3-cli-transport-weeks-5-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Phase 3: CLI &amp; Transport (Weeks 5-6)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Phase 3: CLI &amp; Transport (Weeks 5-6)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#week-5-cli-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 5: CLI Framework
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Week 5: CLI Framework">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tasks_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tasks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-1-2-cli-entry-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 1-2: CLI Entry Point
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-3-4-run-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 3-4: Run Command
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-4-api-auto-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 4: API Auto-Detection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-5-config-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 5: Config Command
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-6-list-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 6: List Command
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-7-integration-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 7: Integration Testing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-6-http-sse-transports" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 6: HTTP &amp; SSE Transports
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Week 6: HTTP &amp; SSE Transports">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tasks_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tasks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-1-3-http-transport" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 1-3: HTTP Transport
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-3-4-cors-middleware" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 3-4: CORS &amp; Middleware
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-4-6-sse-transport" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 4-6: SSE Transport
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-6-7-integration-examples_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 6-7: Integration &amp; Examples
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-phase-4-advanced-features-weeks-7-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Phase 4: Advanced Features (Weeks 7-8)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Phase 4: Advanced Features (Weeks 7-8)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#week-7-watch-mode-bundling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 7: Watch Mode &amp; Bundling
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Week 7: Watch Mode &amp; Bundling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tasks_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tasks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-1-3-watch-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 1-3: Watch Mode
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-2-3-cli-watch-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 2-3: CLI Watch Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-4-5-bundling-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 4-5: Bundling System
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-6-7-development-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 6-7: Development Server
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-8-security-advanced-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 8: Security &amp; Advanced Features
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Week 8: Security &amp; Advanced Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tasks_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tasks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-1-2-rate-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 1-2: Rate Limiting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-2-3-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 2-3: Authentication
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-3-4-progress-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 3-4: Progress Reporting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-4-5-binary-content-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 4-5: Binary Content Support
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-6-7-handler-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 6-7: Handler System
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-7-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 7: Integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-phase-5-documentation-polish-week-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Phase 5: Documentation &amp; Polish (Week 9)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Phase 5: Documentation &amp; Polish (Week 9)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#week-9-documentation-release-prep" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 9: Documentation &amp; Release Prep
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Week 9: Documentation &amp; Release Prep">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tasks_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tasks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-1-2-api-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 1-2: API Documentation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-2-3-user-guides" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 2-3: User Guides
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-3-4-examples-tutorials" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 3-4: Examples &amp; Tutorials
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-4-5-migration-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 4-5: Migration Guide
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-5-6-polish-cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 5-6: Polish &amp; Cleanup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-6-7-release-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 6-7: Release Preparation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-phase-6-interface-api-builder-api-week-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Phase 6: Interface API &amp; Builder API (Week 10+)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Phase 6: Interface API &amp; Builder API (Week 10+)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#week-10-interface-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week 10: Interface API
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Week 10: Interface API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tasks_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tasks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-1-2-protocol-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 1-2: Protocol Design
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-2-4-interface-inspector" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 2-4: Interface Inspector
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-4-5-auto-schema-builder" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 4-5: Auto Schema Builder
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-6-7-integration-examples_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Day 6-7: Integration &amp; Examples
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#future-builder-api-post-launch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Future: Builder API (Post-Launch)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Future: Builder API (Post-Launch)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tasks_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tasks
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-milestones" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. Milestones
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Milestones">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#m1-foundation-complete-end-of-week-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      M1: Foundation Complete (End of Week 2)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m2-api-styles-complete-end-of-week-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      M2: API Styles Complete (End of Week 4)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m3-cli-transports-complete-end-of-week-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      M3: CLI &amp; Transports Complete (End of Week 6)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m4-feature-parity-end-of-week-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      M4: Feature Parity (End of Week 8)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m5-beta-release-ready-end-of-week-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      M5: Beta Release Ready (End of Week 9)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-success-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Success Criteria
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Success Criteria">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-feature-completeness" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.1 Feature Completeness
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-quality-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.2 Quality Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-performance-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.3 Performance Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-documentation-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.4 Documentation Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-community-metrics-post-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.5 Community Metrics (Post-Release)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-risk-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      10. Risk Management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Risk Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-technical-risks" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.1 Technical Risks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.1 Technical Risks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#risk-mcp-sdk-api-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Risk: MCP SDK API Changes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risk-performance-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Risk: Performance Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risk-type-system-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Risk: Type System Limitations
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-project-risks" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.2 Project Risks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.2 Project Risks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#risk-scope-creep" class="md-nav__link">
+    <span class="md-ellipsis">
+      Risk: Scope Creep
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risk-testing-gaps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Risk: Testing Gaps
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risk-documentation-debt" class="md-nav__link">
+    <span class="md-ellipsis">
+      Risk: Documentation Debt
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-contingency-plans" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.3 Contingency Plans
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.3 Contingency Plans">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plan-if-behind-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plan: If Behind Schedule
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plan-if-performance-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plan: If Performance Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plan-if-breaking-sdk-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plan: If Breaking SDK Changes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-post-10-roadmap-future" class="md-nav__link">
+    <span class="md-ellipsis">
+      11. Post-1.0 Roadmap (Future)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Post-1.0 Roadmap (Future)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#v11-enhanced-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      v1.1: Enhanced Features
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#v12-developer-experience" class="md-nav__link">
+    <span class="md-ellipsis">
+      v1.2: Developer Experience
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#v20-builder-api-advanced" class="md-nav__link">
+    <span class="md-ellipsis">
+      v2.0: Builder API &amp; Advanced
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-a-weekly-sprint-planning-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      Appendix A: Weekly Sprint Planning Template
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Appendix A: Weekly Sprint Planning Template">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#week-x-sprint-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      Week X Sprint Plan
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-b-release-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      Appendix B: Release Checklist
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Appendix B: Release Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-release-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pre-Release Checklist
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-Release Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code Quality
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#package" class="md-nav__link">
+    <span class="md-ellipsis">
+      Package
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#release" class="md-nav__link">
+    <span class="md-ellipsis">
+      Release
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="simply-mcp-py-implementation-roadmap">Simply-MCP-PY: Implementation Roadmap</h1>
+<p><strong>Version:</strong> 0.1.0
+<strong>Last Updated:</strong> 2025-10-12
+<strong>Status:</strong> Planning Phase</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#1-overview">Overview</a></li>
+<li><a href="#2-phase-1-foundation-weeks-1-2">Phase 1: Foundation</a></li>
+<li><a href="#3-phase-2-api-styles-weeks-3-4">Phase 2: API Styles</a></li>
+<li><a href="#4-phase-3-cli--transport-weeks-5-6">Phase 3: CLI &amp; Transport</a></li>
+<li><a href="#5-phase-4-advanced-features-weeks-7-8">Phase 4: Advanced Features</a></li>
+<li><a href="#6-phase-5-documentation--polish-week-9">Phase 5: Documentation &amp; Polish</a></li>
+<li><a href="#7-phase-6-interface-api--builder-api-week-10">Phase 6: Interface API &amp; Builder API</a></li>
+<li><a href="#8-milestones">Milestones</a></li>
+<li><a href="#9-success-criteria">Success Criteria</a></li>
+<li><a href="#10-risk-management">Risk Management</a></li>
+</ol>
+<hr />
+<h2 id="1-overview">1. Overview</h2>
+<h3 id="11-timeline-summary">1.1 Timeline Summary</h3>
+<ul>
+<li><strong>Total Duration</strong>: 10 weeks (2.5 months)</li>
+<li><strong>Core Features</strong>: Weeks 1-6</li>
+<li><strong>Advanced Features</strong>: Weeks 7-8</li>
+<li><strong>Polish &amp; Docs</strong>: Week 9</li>
+<li><strong>Future Extensions</strong>: Week 10+</li>
+</ul>
+<h3 id="12-team-structure">1.2 Team Structure</h3>
+<ul>
+<li><strong>Primary Developer</strong>: 1 full-time</li>
+<li><strong>Code Reviewers</strong>: 1-2 part-time</li>
+<li><strong>Testing</strong>: Automated + manual QA</li>
+<li><strong>Documentation</strong>: Technical writer (optional)</li>
+</ul>
+<h3 id="13-development-approach">1.3 Development Approach</h3>
+<ul>
+<li><strong>Methodology</strong>: Agile with 1-week sprints</li>
+<li><strong>Testing</strong>: Test-Driven Development (TDD)</li>
+<li><strong>Version Control</strong>: Git with feature branches</li>
+<li><strong>CI/CD</strong>: GitHub Actions</li>
+<li><strong>Code Quality</strong>: Pre-commit hooks, mypy strict mode, 85%+ coverage</li>
+</ul>
+<hr />
+<h2 id="2-phase-1-foundation-weeks-1-2">2. Phase 1: Foundation (Weeks 1-2)</h2>
+<h3 id="week-1-project-setup-core-infrastructure">Week 1: Project Setup &amp; Core Infrastructure</h3>
+<p><strong>Goal</strong>: Establish project foundation and development environment</p>
+<h4 id="tasks">Tasks</h4>
+<h5 id="day-1-2-repository-development-setup">Day 1-2: Repository &amp; Development Setup</h5>
+<ul>
+<li>[ ] Initialize Git repository</li>
+<li>[ ] Create <code>.gitignore</code> for Python projects</li>
+<li>[ ] Set up branch protection rules</li>
+<li>[ ] Configure issue templates</li>
+<li>[ ] Create pull request template</li>
+<li>[ ] Set up project structure (src layout)</li>
+<li>[ ] Create <code>src/simply_mcp/</code> directory structure</li>
+<li>[ ] Create <code>tests/</code> directory structure</li>
+<li>[ ] Create <code>examples/</code> directory</li>
+<li>[ ] Create <code>docs/</code> directory</li>
+<li>[ ] Create <code>scripts/</code> directory</li>
+<li>[ ] Configure <code>pyproject.toml</code></li>
+<li>[ ] Define project metadata</li>
+<li>[ ] Specify dependencies</li>
+<li>[ ] Configure build system (Hatch)</li>
+<li>[ ] Set up dev dependencies</li>
+<li>[ ] Configure testing tools</li>
+<li>[ ] Set up development tools</li>
+<li>[ ] Configure Black formatter</li>
+<li>[ ] Configure Ruff linter</li>
+<li>[ ] Configure mypy type checker</li>
+<li>[ ] Set up pre-commit hooks</li>
+<li>[ ] Create <code>.python-version</code> (3.10)</li>
+</ul>
+<h5 id="day-3-cicd-pipeline">Day 3: CI/CD Pipeline</h5>
+<ul>
+<li>[ ] Create GitHub Actions workflow</li>
+<li>[ ] Workflow: Run tests on push/PR</li>
+<li>[ ] Workflow: Type checking with mypy</li>
+<li>[ ] Workflow: Linting with ruff</li>
+<li>[ ] Workflow: Coverage reporting</li>
+<li>[ ] Workflow: Build package</li>
+<li>[ ] Set up test environment</li>
+<li>[ ] Configure pytest</li>
+<li>[ ] Configure pytest-cov for coverage</li>
+<li>[ ] Configure pytest-asyncio</li>
+<li>[ ] Create test fixtures directory</li>
+</ul>
+<h5 id="day-4-5-core-type-system">Day 4-5: Core Type System</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/core/types.py</code></li>
+<li>[ ] Define <code>ToolConfig</code> TypedDict</li>
+<li>[ ] Define <code>PromptConfig</code> TypedDict</li>
+<li>[ ] Define <code>ResourceConfig</code> TypedDict</li>
+<li>[ ] Define <code>ServerMetadata</code> TypedDict</li>
+<li>[ ] Create type aliases for handlers</li>
+<li>[ ] Add comprehensive docstrings</li>
+<li>[ ] Write unit tests (test_types.py)</li>
+</ul>
+<h5 id="day-6-7-configuration-system">Day 6-7: Configuration System</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/core/config.py</code></li>
+<li>[ ] Create <code>ServerConfig</code> Pydantic model</li>
+<li>[ ] Create <code>TransportConfig</code> Pydantic model</li>
+<li>[ ] Create <code>LoggingConfig</code> Pydantic model</li>
+<li>[ ] Create <code>SecurityConfig</code> Pydantic model</li>
+<li>[ ] Create <code>SimplyMCPConfig</code> root model</li>
+<li>[ ] Implement <code>load_from_file()</code> (TOML/JSON)</li>
+<li>[ ] Implement <code>load_from_env()</code> (env variables)</li>
+<li>[ ] Implement <code>merge_configs()</code> with precedence</li>
+<li>[ ] Add validation rules</li>
+<li>[ ] Write unit tests (test_config.py)</li>
+</ul>
+<p><strong>Deliverables</strong>:
+- Fully configured development environment
+- CI/CD pipeline running
+- Core types defined and tested
+- Configuration system implemented and tested</p>
+<p><strong>Success Metrics</strong>:
+- CI pipeline green
+- 100% mypy compliance on core types
+- 90%+ test coverage on config module</p>
+<hr />
+<h3 id="week-2-core-server-basic-transport">Week 2: Core Server &amp; Basic Transport</h3>
+<p><strong>Goal</strong>: Implement core server and stdio transport</p>
+<h4 id="tasks_1">Tasks</h4>
+<h5 id="day-1-2-error-handling-system">Day 1-2: Error Handling System</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/core/errors.py</code></li>
+<li>[ ] Create <code>SimplyMCPError</code> base exception</li>
+<li>[ ] Create <code>ConfigurationError</code> class</li>
+<li>[ ] Create <code>ValidationError</code> class</li>
+<li>[ ] Create <code>TransportError</code> class</li>
+<li>[ ] Create <code>HandlerError</code> class</li>
+<li>[ ] Create <code>SecurityError</code> class</li>
+<li>[ ] Implement error formatting</li>
+<li>[ ] Implement error context tracking</li>
+<li>[ ] Write unit tests (test_errors.py)</li>
+</ul>
+<h5 id="day-3-logging-system">Day 3: Logging System</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/core/logger.py</code></li>
+<li>[ ] Configure structured logging</li>
+<li>[ ] Implement JSON/text formatters</li>
+<li>[ ] Add context injection support</li>
+<li>[ ] Create log level helpers</li>
+<li>[ ] Add performance logging utilities</li>
+<li>[ ] Write unit tests (test_logger.py)</li>
+</ul>
+<h5 id="day-4-5-component-registry">Day 4-5: Component Registry</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/core/registry.py</code></li>
+<li>[ ] Create <code>Registry</code> class</li>
+<li>[ ] Implement <code>register_tool()</code> method</li>
+<li>[ ] Implement <code>register_prompt()</code> method</li>
+<li>[ ] Implement <code>register_resource()</code> method</li>
+<li>[ ] Implement <code>get_tool()</code> lookup</li>
+<li>[ ] Implement <code>get_all_tools()</code> query</li>
+<li>[ ] Add duplicate detection</li>
+<li>[ ] Add metadata storage</li>
+<li>[ ] Write unit tests (test_registry.py)</li>
+</ul>
+<h5 id="day-6-7-core-server-implementation">Day 6-7: Core Server Implementation</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/core/server.py</code></li>
+<li>[ ] Create <code>SimplyMCPServer</code> class</li>
+<li>[ ] Implement <code>__init__()</code> with config</li>
+<li>[ ] Implement <code>register_tool()</code> method</li>
+<li>[ ] Implement <code>register_prompt()</code> method</li>
+<li>[ ] Implement <code>register_resource()</code> method</li>
+<li>[ ] Implement <code>start()</code> lifecycle method</li>
+<li>[ ] Implement <code>stop()</code> lifecycle method</li>
+<li>[ ] Add MCP SDK integration</li>
+<li>[ ] Write unit tests (test_server.py)</li>
+</ul>
+<h5 id="day-7-stdio-transport">Day 7: Stdio Transport</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/transports/base.py</code></li>
+<li>[ ] Create <code>Transport</code> abstract base class</li>
+<li>[ ] Define abstract methods</li>
+<li>[ ] Add lifecycle hooks</li>
+<li>[ ] Implement <code>src/simply_mcp/transports/stdio.py</code></li>
+<li>[ ] Create <code>StdioTransport</code> class</li>
+<li>[ ] Implement message reading from stdin</li>
+<li>[ ] Implement message writing to stdout</li>
+<li>[ ] Add error handling to stderr</li>
+<li>[ ] Integrate with MCP SDK stdio transport</li>
+<li>[ ] Write unit tests (test_stdio.py)</li>
+</ul>
+<h5 id="day-7-first-example">Day 7: First Example</h5>
+<ul>
+<li>[ ] Create <code>examples/simple_server.py</code></li>
+<li>[ ] Minimal working server</li>
+<li>[ ] One tool example</li>
+<li>[ ] One prompt example</li>
+<li>[ ] One resource example</li>
+<li>[ ] Test manual execution</li>
+</ul>
+<p><strong>Deliverables</strong>:
+- Core server implementation
+- Stdio transport working
+- First working example
+- Comprehensive test suite</p>
+<p><strong>Success Metrics</strong>:
+- Can run a basic MCP server via stdio
+- 85%+ test coverage
+- All tests passing
+- Example runs successfully</p>
+<hr />
+<h2 id="3-phase-2-api-styles-weeks-3-4">3. Phase 2: API Styles (Weeks 3-4)</h2>
+<h3 id="week-3-decorator-api">Week 3: Decorator API</h3>
+<p><strong>Goal</strong>: Implement decorator-based API style</p>
+<h4 id="tasks_2">Tasks</h4>
+<h5 id="day-1-2-schema-generation">Day 1-2: Schema Generation</h5>
+<ul>
+<li>[ ] Implement schema generation utilities</li>
+<li>[ ] Create <code>type_to_schema()</code> function</li>
+<li>[ ] Support Pydantic models → JSON Schema</li>
+<li>[ ] Support TypedDict → JSON Schema</li>
+<li>[ ] Support dataclass → JSON Schema</li>
+<li>[ ] Support primitive types</li>
+<li>[ ] Write tests (test_schema_generation.py)</li>
+</ul>
+<h5 id="day-3-4-tool-decorator">Day 3-4: Tool Decorator</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/api/decorator.py</code> - <code>@tool()</code></li>
+<li>[ ] Create <code>@tool()</code> decorator factory</li>
+<li>[ ] Extract function metadata</li>
+<li>[ ] Parse type hints</li>
+<li>[ ] Generate input schema</li>
+<li>[ ] Store handler reference</li>
+<li>[ ] Support optional description</li>
+<li>[ ] Support custom schema</li>
+<li>[ ] Write tests (test_tool_decorator.py)</li>
+</ul>
+<h5 id="day-4-prompt-resource-decorators">Day 4: Prompt &amp; Resource Decorators</h5>
+<ul>
+<li>[ ] Implement <code>@prompt()</code> decorator</li>
+<li>[ ] Extract prompt metadata</li>
+<li>[ ] Parse template strings</li>
+<li>[ ] Support arguments</li>
+<li>[ ] Write tests</li>
+<li>[ ] Implement <code>@resource()</code> decorator</li>
+<li>[ ] Extract resource metadata</li>
+<li>[ ] Parse URI templates</li>
+<li>[ ] Support MIME types</li>
+<li>[ ] Write tests</li>
+</ul>
+<h5 id="day-5-server-decorator">Day 5: Server Decorator</h5>
+<ul>
+<li>[ ] Implement <code>@mcp_server()</code> class decorator</li>
+<li>[ ] Extract class metadata</li>
+<li>[ ] Scan class methods for decorators</li>
+<li>[ ] Register all tools/prompts/resources</li>
+<li>[ ] Create server instance</li>
+<li>[ ] Support configuration</li>
+<li>[ ] Write tests (test_server_decorator.py)</li>
+</ul>
+<h5 id="day-6-7-integration-examples">Day 6-7: Integration &amp; Examples</h5>
+<ul>
+<li>[ ] Create decorator API integration tests</li>
+<li>[ ] Test full decorator workflow</li>
+<li>[ ] Test with MCP SDK</li>
+<li>[ ] Test error cases</li>
+<li>[ ] Create examples</li>
+<li>[ ] <code>examples/decorator_basic.py</code></li>
+<li>[ ] <code>examples/decorator_advanced.py</code></li>
+<li>[ ] Document usage patterns</li>
+</ul>
+<p><strong>Deliverables</strong>:
+- Full decorator API implementation
+- Schema generation system
+- 2+ examples
+- Comprehensive tests</p>
+<p><strong>Success Metrics</strong>:
+- Decorator API fully functional
+- 90%+ test coverage
+- Examples run successfully
+- Clean, Pythonic API</p>
+<hr />
+<h3 id="week-4-functional-api">Week 4: Functional API</h3>
+<p><strong>Goal</strong>: Implement programmatic/functional API style</p>
+<h4 id="tasks_3">Tasks</h4>
+<h5 id="day-1-2-simplymcp-builder-class">Day 1-2: SimplyMCP Builder Class</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/api/functional.py</code></li>
+<li>[ ] Create <code>SimplyMCP</code> class</li>
+<li>[ ] Implement <code>__init__(name, version, **config)</code></li>
+<li>[ ] Implement internal registry</li>
+<li>[ ] Add configuration storage</li>
+<li>[ ] Write tests (test_functional_api.py)</li>
+</ul>
+<h5 id="day-3-tool-registration">Day 3: Tool Registration</h5>
+<ul>
+<li>[ ] Implement <code>.add_tool()</code> method</li>
+<li>[ ] Accept function and metadata</li>
+<li>[ ] Support decorator syntax <code>@mcp.add_tool()</code></li>
+<li>[ ] Generate schema from type hints</li>
+<li>[ ] Validate tool configuration</li>
+<li>[ ] Return self for chaining</li>
+<li>[ ] Write tests</li>
+</ul>
+<h5 id="day-4-prompt-resource-registration">Day 4: Prompt &amp; Resource Registration</h5>
+<ul>
+<li>[ ] Implement <code>.add_prompt()</code> method</li>
+<li>[ ] Accept function and metadata</li>
+<li>[ ] Support decorator syntax</li>
+<li>[ ] Validate prompt configuration</li>
+<li>[ ] Return self for chaining</li>
+<li>[ ] Write tests</li>
+<li>[ ] Implement <code>.add_resource()</code> method</li>
+<li>[ ] Accept function and metadata</li>
+<li>[ ] Support decorator syntax</li>
+<li>[ ] Validate resource configuration</li>
+<li>[ ] Return self for chaining</li>
+<li>[ ] Write tests</li>
+</ul>
+<h5 id="day-5-configuration-execution">Day 5: Configuration &amp; Execution</h5>
+<ul>
+<li>[ ] Implement <code>.configure()</code> method</li>
+<li>[ ] Update configuration</li>
+<li>[ ] Validate changes</li>
+<li>[ ] Return self for chaining</li>
+<li>[ ] Write tests</li>
+<li>[ ] Implement <code>.run()</code> method</li>
+<li>[ ] Create <code>SimplyMCPServer</code> instance</li>
+<li>[ ] Transfer all registrations</li>
+<li>[ ] Start server</li>
+<li>[ ] Handle shutdown</li>
+<li>[ ] Write tests</li>
+</ul>
+<h5 id="day-6-7-integration-examples_1">Day 6-7: Integration &amp; Examples</h5>
+<ul>
+<li>[ ] Create functional API integration tests</li>
+<li>[ ] Test method chaining</li>
+<li>[ ] Test with MCP SDK</li>
+<li>[ ] Test error cases</li>
+<li>[ ] Create examples</li>
+<li>[ ] <code>examples/functional_api.py</code></li>
+<li>[ ] <code>examples/functional_advanced.py</code></li>
+<li>[ ] Document usage patterns</li>
+</ul>
+<p><strong>Deliverables</strong>:
+- Full functional API implementation
+- Fluent interface with method chaining
+- 2+ examples
+- Comprehensive tests</p>
+<p><strong>Success Metrics</strong>:
+- Functional API fully operational
+- 90%+ test coverage
+- Examples run successfully
+- Ergonomic, chainable API</p>
+<hr />
+<h2 id="4-phase-3-cli-transport-weeks-5-6">4. Phase 3: CLI &amp; Transport (Weeks 5-6)</h2>
+<h3 id="week-5-cli-framework">Week 5: CLI Framework</h3>
+<p><strong>Goal</strong>: Implement comprehensive CLI</p>
+<h4 id="tasks_4">Tasks</h4>
+<h5 id="day-1-2-cli-entry-point">Day 1-2: CLI Entry Point</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/cli/main.py</code></li>
+<li>[ ] Create Click application</li>
+<li>[ ] Define global options</li>
+<li>[ ] Add version command</li>
+<li>[ ] Add help text</li>
+<li>[ ] Configure rich output</li>
+<li>[ ] Write tests (test_cli_main.py)</li>
+</ul>
+<h5 id="day-3-4-run-command">Day 3-4: Run Command</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/cli/run.py</code></li>
+<li>[ ] Create <code>run</code> Click command</li>
+<li>[ ] Implement file loading (server.py)</li>
+<li>[ ] Add API style auto-detection</li>
+<li>[ ] Support <code>--transport</code> option</li>
+<li>[ ] Support <code>--port</code> option</li>
+<li>[ ] Support <code>--config</code> option</li>
+<li>[ ] Add error handling</li>
+<li>[ ] Write tests (test_cli_run.py)</li>
+</ul>
+<h5 id="day-4-api-auto-detection">Day 4: API Auto-Detection</h5>
+<ul>
+<li>[ ] Implement API style detection</li>
+<li>[ ] Detect decorator API (class with @mcp_server)</li>
+<li>[ ] Detect functional API (SimplyMCP instance)</li>
+<li>[ ] Detect interface API (Protocol subclass)</li>
+<li>[ ] Handle detection errors</li>
+<li>[ ] Write tests</li>
+</ul>
+<h5 id="day-5-config-command">Day 5: Config Command</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/cli/config_cmd.py</code></li>
+<li>[ ] Create <code>config init</code> subcommand</li>
+<li>[ ] Create <code>config validate</code> subcommand</li>
+<li>[ ] Create <code>config show</code> subcommand</li>
+<li>[ ] Add template generation</li>
+<li>[ ] Write tests (test_cli_config.py)</li>
+</ul>
+<h5 id="day-6-list-command">Day 6: List Command</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/cli/list.py</code></li>
+<li>[ ] Create <code>list</code> Click command</li>
+<li>[ ] Scan for servers in directory</li>
+<li>[ ] Display server metadata</li>
+<li>[ ] Support <code>--json</code> output</li>
+<li>[ ] Write tests (test_cli_list.py)</li>
+</ul>
+<h5 id="day-7-integration-testing">Day 7: Integration Testing</h5>
+<ul>
+<li>[ ] Create end-to-end CLI tests</li>
+<li>[ ] Test <code>simply-mcp run server.py</code></li>
+<li>[ ] Test all command combinations</li>
+<li>[ ] Test error scenarios</li>
+<li>[ ] Update examples to use CLI</li>
+<li>[ ] Add CLI usage instructions</li>
+<li>[ ] Create shell script examples</li>
+</ul>
+<p><strong>Deliverables</strong>:
+- Full CLI implementation
+- All commands functional
+- API auto-detection working
+- Comprehensive tests</p>
+<p><strong>Success Metrics</strong>:
+- CLI commands work as expected
+- Auto-detection accurate
+- 85%+ test coverage
+- Good UX with rich output</p>
+<hr />
+<h3 id="week-6-http-sse-transports">Week 6: HTTP &amp; SSE Transports</h3>
+<p><strong>Goal</strong>: Implement HTTP and SSE transports</p>
+<h4 id="tasks_5">Tasks</h4>
+<h5 id="day-1-3-http-transport">Day 1-3: HTTP Transport</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/transports/http.py</code></li>
+<li>[ ] Create <code>HTTPTransport</code> class</li>
+<li>[ ] Set up aiohttp application</li>
+<li>[ ] Implement <code>POST /tools/{tool_name}</code> endpoint</li>
+<li>[ ] Implement <code>POST /prompts/{prompt_name}</code> endpoint</li>
+<li>[ ] Implement <code>GET /resources/{resource_uri}</code> endpoint</li>
+<li>[ ] Implement <code>GET /health</code> endpoint</li>
+<li>[ ] Implement <code>GET /openapi.json</code> endpoint</li>
+<li>[ ] Add session management (stateful mode)</li>
+<li>[ ] Write tests (test_http_transport.py)</li>
+</ul>
+<h5 id="day-3-4-cors-middleware">Day 3-4: CORS &amp; Middleware</h5>
+<ul>
+<li>[ ] Implement CORS support</li>
+<li>[ ] Configure aiohttp-cors</li>
+<li>[ ] Support configurable origins</li>
+<li>[ ] Add preflight handling</li>
+<li>[ ] Write tests</li>
+<li>[ ] Implement middleware system</li>
+<li>[ ] Create middleware interface</li>
+<li>[ ] Add request/response logging</li>
+<li>[ ] Add timing middleware</li>
+<li>[ ] Write tests</li>
+</ul>
+<h5 id="day-4-6-sse-transport">Day 4-6: SSE Transport</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/transports/sse.py</code></li>
+<li>[ ] Create <code>SSETransport</code> class</li>
+<li>[ ] Implement event streaming</li>
+<li>[ ] Add connection management</li>
+<li>[ ] Implement heartbeat/keepalive</li>
+<li>[ ] Support progress updates</li>
+<li>[ ] Add auto-reconnection support</li>
+<li>[ ] Write tests (test_sse_transport.py)</li>
+</ul>
+<h5 id="day-6-7-integration-examples_2">Day 6-7: Integration &amp; Examples</h5>
+<ul>
+<li>[ ] Create transport integration tests</li>
+<li>[ ] Test HTTP transport end-to-end</li>
+<li>[ ] Test SSE transport end-to-end</li>
+<li>[ ] Test transport switching</li>
+<li>[ ] Create examples</li>
+<li>[ ] <code>examples/http_server.py</code></li>
+<li>[ ] <code>examples/sse_server.py</code></li>
+<li>[ ] <code>examples/http_client.py</code></li>
+<li>[ ] Document usage</li>
+</ul>
+<p><strong>Deliverables</strong>:
+- HTTP transport fully functional
+- SSE transport fully functional
+- CORS and middleware support
+- Examples for both transports</p>
+<p><strong>Success Metrics</strong>:
+- All 3 transports working
+- HTTP RESTful endpoints functional
+- SSE event streaming working
+- 85%+ test coverage</p>
+<hr />
+<h2 id="5-phase-4-advanced-features-weeks-7-8">5. Phase 4: Advanced Features (Weeks 7-8)</h2>
+<h3 id="week-7-watch-mode-bundling">Week 7: Watch Mode &amp; Bundling</h3>
+<p><strong>Goal</strong>: Implement development features</p>
+<h4 id="tasks_6">Tasks</h4>
+<h5 id="day-1-3-watch-mode">Day 1-3: Watch Mode</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/cli/watch.py</code></li>
+<li>[ ] Integrate watchdog library</li>
+<li>[ ] Monitor file changes</li>
+<li>[ ] Implement debouncing</li>
+<li>[ ] Trigger server restart</li>
+<li>[ ] Preserve state (optional)</li>
+<li>[ ] Add console feedback</li>
+<li>[ ] Write tests (test_watch.py)</li>
+</ul>
+<h5 id="day-2-3-cli-watch-integration">Day 2-3: CLI Watch Integration</h5>
+<ul>
+<li>[ ] Add <code>--watch</code> flag to run command</li>
+<li>[ ] Start in watch mode</li>
+<li>[ ] Handle graceful restart</li>
+<li>[ ] Show reload notifications</li>
+<li>[ ] Test watch mode end-to-end</li>
+</ul>
+<h5 id="day-4-5-bundling-system">Day 4-5: Bundling System</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/cli/bundle.py</code></li>
+<li>[ ] Create <code>bundle</code> Click command</li>
+<li>[ ] Integrate PyInstaller</li>
+<li>[ ] Support <code>--output</code> option</li>
+<li>[ ] Include dependencies</li>
+<li>[ ] Create standalone executable</li>
+<li>[ ] Test on Linux/macOS/Windows</li>
+<li>[ ] Write tests (test_bundle.py)</li>
+</ul>
+<h5 id="day-6-7-development-server">Day 6-7: Development Server</h5>
+<ul>
+<li>[ ] Create development mode</li>
+<li>[ ] Enhanced logging in dev mode</li>
+<li>[ ] Better error messages</li>
+<li>[ ] Request/response debugging</li>
+<li>[ ] Auto-reload on config change</li>
+<li>[ ] Write tests</li>
+</ul>
+<p><strong>Deliverables</strong>:
+- Watch mode fully functional
+- Bundling creates standalone executables
+- Enhanced development experience
+- Tests for all features</p>
+<p><strong>Success Metrics</strong>:
+- Watch mode restarts server on changes
+- Bundled executable runs standalone
+- Good developer UX
+- 80%+ test coverage</p>
+<hr />
+<h3 id="week-8-security-advanced-features">Week 8: Security &amp; Advanced Features</h3>
+<p><strong>Goal</strong>: Implement security and advanced features</p>
+<h4 id="tasks_7">Tasks</h4>
+<h5 id="day-1-2-rate-limiting">Day 1-2: Rate Limiting</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/security/rate_limit.py</code></li>
+<li>[ ] Create <code>RateLimiter</code> class</li>
+<li>[ ] Implement token bucket algorithm</li>
+<li>[ ] Per-client tracking</li>
+<li>[ ] Configurable limits</li>
+<li>[ ] Integration with transports</li>
+<li>[ ] Write tests (test_rate_limit.py)</li>
+</ul>
+<h5 id="day-2-3-authentication">Day 2-3: Authentication</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/security/auth.py</code></li>
+<li>[ ] API key authentication</li>
+<li>[ ] JWT token validation</li>
+<li>[ ] OAuth 2.1 support (via MCP SDK)</li>
+<li>[ ] Authentication middleware</li>
+<li>[ ] Configuration options</li>
+<li>[ ] Write tests (test_auth.py)</li>
+</ul>
+<h5 id="day-3-4-progress-reporting">Day 3-4: Progress Reporting</h5>
+<ul>
+<li>[ ] Implement progress reporting</li>
+<li>[ ] Add progress context to handlers</li>
+<li>[ ] Support percentage updates</li>
+<li>[ ] Support message updates</li>
+<li>[ ] Stream progress via SSE</li>
+<li>[ ] Create example</li>
+<li>[ ] Write tests</li>
+</ul>
+<h5 id="day-4-5-binary-content-support">Day 4-5: Binary Content Support</h5>
+<ul>
+<li>[ ] Implement binary content handling</li>
+<li>[ ] Support binary resources</li>
+<li>[ ] MIME type detection</li>
+<li>[ ] Streaming support</li>
+<li>[ ] Efficient memory handling</li>
+<li>[ ] Create example</li>
+<li>[ ] Write tests</li>
+</ul>
+<h5 id="day-6-7-handler-system">Day 6-7: Handler System</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/handlers/manager.py</code></li>
+<li>[ ] Create <code>HandlerManager</code> class</li>
+<li>[ ] Request pipeline</li>
+<li>[ ] Context injection</li>
+<li>[ ] Error recovery</li>
+<li>[ ] Write tests (test_handler_manager.py)</li>
+<li>[ ] Implement <code>src/simply_mcp/handlers/middleware.py</code></li>
+<li>[ ] Create <code>Middleware</code> base class</li>
+<li>[ ] Pre/post request hooks</li>
+<li>[ ] Error handling middleware</li>
+<li>[ ] Write tests</li>
+</ul>
+<h5 id="day-7-integration">Day 7: Integration</h5>
+<ul>
+<li>[ ] Create advanced feature examples</li>
+<li>[ ] <code>examples/advanced_features.py</code></li>
+<li>[ ] Progress reporting example</li>
+<li>[ ] Binary content example</li>
+<li>[ ] Authentication example</li>
+<li>[ ] Integration testing</li>
+<li>[ ] Test all features together</li>
+<li>[ ] Test security features</li>
+<li>[ ] Test performance</li>
+</ul>
+<p><strong>Deliverables</strong>:
+- Rate limiting functional
+- Authentication working
+- Progress reporting implemented
+- Binary content support
+- Handler system complete</p>
+<p><strong>Success Metrics</strong>:
+- Security features prevent abuse
+- Progress streaming works
+- Binary content handled efficiently
+- 85%+ test coverage</p>
+<hr />
+<h2 id="6-phase-5-documentation-polish-week-9">6. Phase 5: Documentation &amp; Polish (Week 9)</h2>
+<h3 id="week-9-documentation-release-prep">Week 9: Documentation &amp; Release Prep</h3>
+<p><strong>Goal</strong>: Comprehensive documentation and polish</p>
+<h4 id="tasks_8">Tasks</h4>
+<h5 id="day-1-2-api-documentation">Day 1-2: API Documentation</h5>
+<ul>
+<li>[ ] Write API reference documentation</li>
+<li>[ ] Document all public APIs</li>
+<li>[ ] Add usage examples for each API</li>
+<li>[ ] Document configuration options</li>
+<li>[ ] Add type annotations to docs</li>
+<li>[ ] Generate API docs with mkdocstrings</li>
+</ul>
+<h5 id="day-2-3-user-guides">Day 2-3: User Guides</h5>
+<ul>
+<li>[ ] Write getting started guide</li>
+<li>[ ] Installation instructions</li>
+<li>[ ] First server tutorial</li>
+<li>[ ] Common patterns</li>
+<li>[ ] Troubleshooting</li>
+<li>[ ] Write configuration guide</li>
+<li>[ ] All configuration options</li>
+<li>[ ] Environment variables</li>
+<li>[ ] Best practices</li>
+<li>[ ] Examples</li>
+</ul>
+<h5 id="day-3-4-examples-tutorials">Day 3-4: Examples &amp; Tutorials</h5>
+<ul>
+<li>[ ] Polish all examples</li>
+<li>[ ] Add comprehensive comments</li>
+<li>[ ] Add README for each example</li>
+<li>[ ] Test all examples</li>
+<li>[ ] Create example index</li>
+<li>[ ] Create advanced tutorials</li>
+<li>[ ] Building a real-world server</li>
+<li>[ ] Deployment guide</li>
+<li>[ ] Performance optimization</li>
+<li>[ ] Security hardening</li>
+</ul>
+<h5 id="day-4-5-migration-guide">Day 4-5: Migration Guide</h5>
+<ul>
+<li>[ ] Write migration guide from TypeScript</li>
+<li>[ ] Feature comparison</li>
+<li>[ ] Code examples (TS vs Python)</li>
+<li>[ ] Common patterns translation</li>
+<li>[ ] FAQ section</li>
+</ul>
+<h5 id="day-5-6-polish-cleanup">Day 5-6: Polish &amp; Cleanup</h5>
+<ul>
+<li>[ ] Code cleanup</li>
+<li>[ ] Remove debug code</li>
+<li>[ ] Optimize imports</li>
+<li>[ ] Fix linting warnings</li>
+<li>[ ] Standardize docstrings</li>
+<li>[ ] Performance optimization</li>
+<li>[ ] Profile critical paths</li>
+<li>[ ] Optimize hot spots</li>
+<li>[ ] Reduce memory usage</li>
+<li>[ ] Benchmark against goals</li>
+</ul>
+<h5 id="day-6-7-release-preparation">Day 6-7: Release Preparation</h5>
+<ul>
+<li>[ ] Prepare for release</li>
+<li>[ ] Update CHANGELOG.md</li>
+<li>[ ] Finalize version number</li>
+<li>[ ] Update README.md</li>
+<li>[ ] Create CONTRIBUTING.md</li>
+<li>[ ] Add CODE_OF_CONDUCT.md</li>
+<li>[ ] Test package build</li>
+<li>[ ] Test installation</li>
+<li>[ ] Create release notes</li>
+</ul>
+<p><strong>Deliverables</strong>:
+- Complete API reference
+- User guides and tutorials
+- Migration guide from TypeScript
+- Polished, production-ready code
+- Release package ready</p>
+<p><strong>Success Metrics</strong>:
+- 100% public API documented
+- 10+ working examples
+- All guides complete
+- Package builds successfully
+- Ready for beta release</p>
+<hr />
+<h2 id="7-phase-6-interface-api-builder-api-week-10">7. Phase 6: Interface API &amp; Builder API (Week 10+)</h2>
+<h3 id="week-10-interface-api">Week 10: Interface API</h3>
+<p><strong>Goal</strong>: Implement type-based interface API</p>
+<h4 id="tasks_9">Tasks</h4>
+<h5 id="day-1-2-protocol-design">Day 1-2: Protocol Design</h5>
+<ul>
+<li>[ ] Design <code>MCPServerProtocol</code></li>
+<li>[ ] Define Protocol interface</li>
+<li>[ ] Specify required methods</li>
+<li>[ ] Document type requirements</li>
+<li>[ ] Write tests</li>
+</ul>
+<h5 id="day-2-4-interface-inspector">Day 2-4: Interface Inspector</h5>
+<ul>
+<li>[ ] Implement <code>src/simply_mcp/api/interface.py</code></li>
+<li>[ ] Create <code>InterfaceInspector</code> class</li>
+<li>[ ] Implement class introspection</li>
+<li>[ ] Extract type hints</li>
+<li>[ ] Parse docstrings</li>
+<li>[ ] Discover tools from methods</li>
+<li>[ ] Write tests (test_interface_api.py)</li>
+</ul>
+<h5 id="day-4-5-auto-schema-builder">Day 4-5: Auto Schema Builder</h5>
+<ul>
+<li>[ ] Implement schema generation</li>
+<li>[ ] Type → JSON Schema mapping</li>
+<li>[ ] Pydantic model generation</li>
+<li>[ ] Support complex types</li>
+<li>[ ] Write tests</li>
+</ul>
+<h5 id="day-6-7-integration-examples_3">Day 6-7: Integration &amp; Examples</h5>
+<ul>
+<li>[ ] Create interface API examples</li>
+<li>[ ] <code>examples/interface_api.py</code></li>
+<li>[ ] Document usage</li>
+<li>[ ] Integration tests</li>
+</ul>
+<p><strong>Deliverables</strong>:
+- Interface API functional
+- Auto schema generation working
+- Examples and tests</p>
+<hr />
+<h3 id="future-builder-api-post-launch">Future: Builder API (Post-Launch)</h3>
+<p><strong>Goal</strong>: AI-powered tool building</p>
+<h4 id="tasks_10">Tasks</h4>
+<ul>
+<li>[ ] Design Builder API</li>
+<li>[ ] Spec out AI-powered tool creation</li>
+<li>[ ] Integration with MCP Builder protocol</li>
+<li>[ ] Template library</li>
+<li>[ ] Implement Builder API</li>
+<li>[ ] <code>src/simply_mcp/api/builder.py</code></li>
+<li>[ ] AI integration</li>
+<li>[ ] Validation tools</li>
+<li>[ ] Examples and documentation</li>
+</ul>
+<p><strong>Note</strong>: Builder API is a post-1.0 feature</p>
+<hr />
+<h2 id="8-milestones">8. Milestones</h2>
+<h3 id="m1-foundation-complete-end-of-week-2">M1: Foundation Complete (End of Week 2)</h3>
+<ul>
+<li><strong>Date</strong>: Week 2, Day 7</li>
+<li><strong>Deliverables</strong>:</li>
+<li>Core server implemented</li>
+<li>Stdio transport working</li>
+<li>Configuration system functional</li>
+<li>First example running</li>
+<li><strong>Success Criteria</strong>:</li>
+<li>Can run basic MCP server</li>
+<li>85%+ test coverage</li>
+<li>CI pipeline green</li>
+</ul>
+<h3 id="m2-api-styles-complete-end-of-week-4">M2: API Styles Complete (End of Week 4)</h3>
+<ul>
+<li><strong>Date</strong>: Week 4, Day 7</li>
+<li><strong>Deliverables</strong>:</li>
+<li>Decorator API fully functional</li>
+<li>Functional API fully functional</li>
+<li>Schema generation working</li>
+<li>Multiple examples</li>
+<li><strong>Success Criteria</strong>:</li>
+<li>Both APIs feature-complete</li>
+<li>90%+ test coverage</li>
+<li>Examples demonstrate all features</li>
+</ul>
+<h3 id="m3-cli-transports-complete-end-of-week-6">M3: CLI &amp; Transports Complete (End of Week 6)</h3>
+<ul>
+<li><strong>Date</strong>: Week 6, Day 7</li>
+<li><strong>Deliverables</strong>:</li>
+<li>Full CLI implementation</li>
+<li>HTTP transport working</li>
+<li>SSE transport working</li>
+<li>Transport examples</li>
+<li><strong>Success Criteria</strong>:</li>
+<li>All transports functional</li>
+<li>CLI commands working</li>
+<li>API auto-detection accurate</li>
+</ul>
+<h3 id="m4-feature-parity-end-of-week-8">M4: Feature Parity (End of Week 8)</h3>
+<ul>
+<li><strong>Date</strong>: Week 8, Day 7</li>
+<li><strong>Deliverables</strong>:</li>
+<li>All security features</li>
+<li>Advanced features (progress, binary)</li>
+<li>Watch mode and bundling</li>
+<li>Handler system complete</li>
+<li><strong>Success Criteria</strong>:</li>
+<li>100% feature parity with simply-mcp-ts</li>
+<li>85%+ overall test coverage</li>
+<li>All examples working</li>
+</ul>
+<h3 id="m5-beta-release-ready-end-of-week-9">M5: Beta Release Ready (End of Week 9)</h3>
+<ul>
+<li><strong>Date</strong>: Week 9, Day 7</li>
+<li><strong>Deliverables</strong>:</li>
+<li>Complete documentation</li>
+<li>Polished code</li>
+<li>Release package</li>
+<li>Migration guide</li>
+<li><strong>Success Criteria</strong>:</li>
+<li>Documentation complete</li>
+<li>Package installable</li>
+<li>Ready for public beta</li>
+</ul>
+<hr />
+<h2 id="9-success-criteria">9. Success Criteria</h2>
+<h3 id="91-feature-completeness">9.1 Feature Completeness</h3>
+<ul>
+<li>[ ] All 4 API styles implemented (3 in Phase 1-5, 1 future)</li>
+<li>[ ] All 3 transports functional (stdio, HTTP, SSE)</li>
+<li>[ ] CLI feature parity with TypeScript version</li>
+<li>[ ] Security features implemented (rate limiting, auth)</li>
+<li>[ ] Advanced features working (progress, binary content)</li>
+</ul>
+<h3 id="92-quality-metrics">9.2 Quality Metrics</h3>
+<ul>
+<li>[ ] &gt;85% overall code coverage</li>
+<li>[ ] 100% mypy strict mode compliance</li>
+<li>[ ] 100% of public API documented</li>
+<li>[ ] Zero critical security vulnerabilities</li>
+<li>[ ] All pre-commit hooks passing</li>
+</ul>
+<h3 id="93-performance-metrics">9.3 Performance Metrics</h3>
+<ul>
+<li>[ ] &lt;100ms overhead vs raw MCP SDK</li>
+<li>[ ] &lt;500MB memory for basic server</li>
+<li>[ ] &lt;2s startup time for bundled executable</li>
+<li>[ ] &lt;10ms per request routing overhead</li>
+</ul>
+<h3 id="94-documentation-metrics">9.4 Documentation Metrics</h3>
+<ul>
+<li>[ ] Complete API reference documentation</li>
+<li>[ ] 10+ working examples</li>
+<li>[ ] Getting started guide complete</li>
+<li>[ ] Migration guide from TypeScript</li>
+<li>[ ] Configuration guide complete</li>
+<li>[ ] Troubleshooting guide</li>
+</ul>
+<h3 id="95-community-metrics-post-release">9.5 Community Metrics (Post-Release)</h3>
+<ul>
+<li>[ ] 100+ GitHub stars (6 months)</li>
+<li>[ ] 5+ community contributions (6 months)</li>
+<li>[ ] &lt;48h average issue response time</li>
+<li>[ ] Active Discord/Slack community</li>
+</ul>
+<hr />
+<h2 id="10-risk-management">10. Risk Management</h2>
+<h3 id="101-technical-risks">10.1 Technical Risks</h3>
+<h4 id="risk-mcp-sdk-api-changes">Risk: MCP SDK API Changes</h4>
+<ul>
+<li><strong>Probability</strong>: Medium</li>
+<li><strong>Impact</strong>: High</li>
+<li><strong>Mitigation</strong>:</li>
+<li>Pin SDK version in development</li>
+<li>Create adapter layer for SDK</li>
+<li>Monitor SDK releases</li>
+<li>Maintain compatibility layer</li>
+</ul>
+<h4 id="risk-performance-issues">Risk: Performance Issues</h4>
+<ul>
+<li><strong>Probability</strong>: Medium</li>
+<li><strong>Impact</strong>: Medium</li>
+<li><strong>Mitigation</strong>:</li>
+<li>Profile early and often</li>
+<li>Set performance benchmarks</li>
+<li>Optimize critical paths</li>
+<li>Consider Cython for hotspots</li>
+</ul>
+<h4 id="risk-type-system-limitations">Risk: Type System Limitations</h4>
+<ul>
+<li><strong>Probability</strong>: Low</li>
+<li><strong>Impact</strong>: Medium</li>
+<li><strong>Mitigation</strong>:</li>
+<li>Use typing_extensions</li>
+<li>Leverage Pydantic</li>
+<li>Runtime type checking where needed</li>
+<li>Document limitations</li>
+</ul>
+<h3 id="102-project-risks">10.2 Project Risks</h3>
+<h4 id="risk-scope-creep">Risk: Scope Creep</h4>
+<ul>
+<li><strong>Probability</strong>: Medium</li>
+<li><strong>Impact</strong>: High</li>
+<li><strong>Mitigation</strong>:</li>
+<li>Strict adherence to roadmap</li>
+<li>Feature freeze after Week 8</li>
+<li>Defer nice-to-haves to post-1.0</li>
+<li>Regular scope reviews</li>
+</ul>
+<h4 id="risk-testing-gaps">Risk: Testing Gaps</h4>
+<ul>
+<li><strong>Probability</strong>: Medium</li>
+<li><strong>Impact</strong>: High</li>
+<li><strong>Mitigation</strong>:</li>
+<li>TDD from Day 1</li>
+<li>Coverage monitoring in CI</li>
+<li>Integration tests for all features</li>
+<li>Manual QA before releases</li>
+</ul>
+<h4 id="risk-documentation-debt">Risk: Documentation Debt</h4>
+<ul>
+<li><strong>Probability</strong>: High</li>
+<li><strong>Impact</strong>: Medium</li>
+<li><strong>Mitigation</strong>:</li>
+<li>Document as you code</li>
+<li>Dedicate full week to docs (Week 9)</li>
+<li>Use docstring-based doc generation</li>
+<li>Get community feedback early</li>
+</ul>
+<h3 id="103-contingency-plans">10.3 Contingency Plans</h3>
+<h4 id="plan-if-behind-schedule">Plan: If Behind Schedule</h4>
+<ul>
+<li><strong>Action</strong>:</li>
+<li>Defer Interface API to post-1.0</li>
+<li>Reduce example count to 5-7</li>
+<li>Simplify bundling (PyInstaller only)</li>
+<li>Focus on Decorator + Functional APIs</li>
+</ul>
+<h4 id="plan-if-performance-issues">Plan: If Performance Issues</h4>
+<ul>
+<li><strong>Action</strong>:</li>
+<li>Profile and identify bottlenecks</li>
+<li>Consider Cython for critical paths</li>
+<li>Optimize schema generation</li>
+<li>Add caching where appropriate</li>
+</ul>
+<h4 id="plan-if-breaking-sdk-changes">Plan: If Breaking SDK Changes</h4>
+<ul>
+<li><strong>Action</strong>:</li>
+<li>Create compatibility shim</li>
+<li>Version lock temporarily</li>
+<li>Work with SDK maintainers</li>
+<li>Communicate clearly to users</li>
+</ul>
+<hr />
+<h2 id="11-post-10-roadmap-future">11. Post-1.0 Roadmap (Future)</h2>
+<h3 id="v11-enhanced-features">v1.1: Enhanced Features</h3>
+<ul>
+<li>WebSocket transport</li>
+<li>Enhanced debugging tools</li>
+<li>Performance monitoring</li>
+<li>Metrics export (Prometheus)</li>
+</ul>
+<h3 id="v12-developer-experience">v1.2: Developer Experience</h3>
+<ul>
+<li>VS Code extension</li>
+<li>PyCharm plugin</li>
+<li>Interactive debugging</li>
+<li>Hot reload improvements</li>
+</ul>
+<h3 id="v20-builder-api-advanced">v2.0: Builder API &amp; Advanced</h3>
+<ul>
+<li>Full Builder API implementation</li>
+<li>Template marketplace</li>
+<li>AI-powered tool generation</li>
+<li>Advanced validation</li>
+</ul>
+<hr />
+<h2 id="appendix-a-weekly-sprint-planning-template">Appendix A: Weekly Sprint Planning Template</h2>
+<h3 id="week-x-sprint-plan">Week X Sprint Plan</h3>
+<p><strong>Sprint Goal</strong>: [One sentence goal]</p>
+<p><strong>Tasks</strong>:
+- [ ] Task 1 (Owner, Est: Xd)
+- [ ] Task 2 (Owner, Est: Xd)
+- ...</p>
+<p><strong>Definition of Done</strong>:
+- Tests written and passing
+- Code reviewed
+- Documentation updated
+- CI pipeline green</p>
+<p><strong>Blockers</strong>:
+- [Any known blockers]</p>
+<p><strong>Notes</strong>:
+- [Sprint-specific notes]</p>
+<hr />
+<h2 id="appendix-b-release-checklist">Appendix B: Release Checklist</h2>
+<h3 id="pre-release-checklist">Pre-Release Checklist</h3>
+<h4 id="code-quality">Code Quality</h4>
+<ul>
+<li>[ ] All tests passing</li>
+<li>[ ] Coverage &gt;85%</li>
+<li>[ ] Mypy strict mode passing</li>
+<li>[ ] No linting errors</li>
+<li>[ ] Security scan clean</li>
+</ul>
+<h4 id="documentation">Documentation</h4>
+<ul>
+<li>[ ] API reference complete</li>
+<li>[ ] Examples working</li>
+<li>[ ] Guides written</li>
+<li>[ ] CHANGELOG updated</li>
+<li>[ ] README accurate</li>
+</ul>
+<h4 id="package">Package</h4>
+<ul>
+<li>[ ] Version bumped</li>
+<li>[ ] Build succeeds</li>
+<li>[ ] Installation tested</li>
+<li>[ ] PyPI metadata correct</li>
+<li>[ ] License file included</li>
+</ul>
+<h4 id="release">Release</h4>
+<ul>
+<li>[ ] Tag created</li>
+<li>[ ] GitHub release notes</li>
+<li>[ ] PyPI upload</li>
+<li>[ ] Documentation deployed</li>
+<li>[ ] Announcement prepared</li>
+</ul>
+<hr />
+<p><strong>End of Roadmap</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>
