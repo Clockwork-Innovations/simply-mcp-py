@@ -274,8 +274,9 @@ def setup_logger(
             log_file.parent.mkdir(parents=True, exist_ok=True)
 
             # Use rotating file handler (10MB max, 5 backups)
+            # Convert Path to string for Windows compatibility
             file_handler: logging.Handler = RotatingFileHandler(
-                log_file,
+                str(log_file),
                 maxBytes=10 * 1024 * 1024,  # 10MB
                 backupCount=5,
                 encoding="utf-8",

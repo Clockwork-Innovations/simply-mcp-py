@@ -214,15 +214,17 @@ port = 8080
 level = "DEBUG"
 """)
             f.flush()
+            temp_path = f.name
 
-            config = load_config_from_file(f.name)
+        try:
+            config = load_config_from_file(temp_path)
             assert config.server.name == "toml-server"
             assert config.server.version == "1.0.0"
             assert config.transport.type == "http"
             assert config.transport.port == 8080
             assert config.logging.level == "DEBUG"
-
-            Path(f.name).unlink()
+        finally:
+            Path(temp_path).unlink()
 
     def test_load_json_config(self) -> None:
         """Test loading configuration from JSON file."""
@@ -235,14 +237,16 @@ level = "DEBUG"
                 f,
             )
             f.flush()
+            temp_path = f.name
 
-            config = load_config_from_file(f.name)
+        try:
+            config = load_config_from_file(temp_path)
             assert config.server.name == "json-server"
             assert config.server.version == "2.0.0"
             assert config.transport.type == "sse"
             assert config.transport.port == 9000
-
-            Path(f.name).unlink()
+        finally:
+            Path(temp_path).unlink()
 
     def test_load_nonexistent_file(self) -> None:
         """Test loading from non-existent file."""
@@ -296,15 +300,17 @@ version = "1.0.0"
 port = 3000
 """)
             f.flush()
+            temp_path = f.name
 
+        try:
             monkeypatch.setenv("SIMPLY_MCP_TRANSPORT__PORT", "9999")
 
-            config = load_config(f.name, env_override=True)
+            config = load_config(temp_path, env_override=True)
             assert config.server.name == "file-server"
             # Environment should override file
             assert config.transport.port == 9999
-
-            Path(f.name).unlink()
+        finally:
+            Path(temp_path).unlink()
 
     def test_load_from_file_without_env_override(
         self, monkeypatch: pytest.MonkeyPatch
@@ -320,15 +326,17 @@ version = "1.0.0"
 port = 3000
 """)
             f.flush()
+            temp_path = f.name
 
+        try:
             monkeypatch.setenv("SIMPLY_MCP_TRANSPORT__PORT", "9999")
 
-            config = load_config(f.name, env_override=False)
+            config = load_config(temp_path, env_override=False)
             assert config.server.name == "file-server"
             # File should take precedence
             assert config.transport.port == 3000
-
-            Path(f.name).unlink()
+        finally:
+            Path(temp_path).unlink()
 
 
 class TestValidateConfig:
