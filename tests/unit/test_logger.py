@@ -84,6 +84,11 @@ class TestSetupLogger:
             content = log_file.read_text()
             assert "Test message" in content
 
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
+
     def test_setup_logger_with_file_json(self) -> None:
         """Test logger setup with JSON file output."""
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -111,6 +116,11 @@ class TestSetupLogger:
             assert log_entry["message"] == "Test JSON message"
             assert log_entry["level"] == "INFO"
 
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
+
     def test_setup_logger_creates_directories(self) -> None:
         """Test logger creates parent directories for log file."""
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -133,6 +143,11 @@ class TestSetupLogger:
             assert log_file.exists()
             assert log_file.parent.exists()
 
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
+
     def test_setup_logger_multiple_handlers(self) -> None:
         """Test logger with both console and file handlers."""
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -149,6 +164,11 @@ class TestSetupLogger:
 
             # Should have 2 handlers (console + file)
             assert len(logger.handlers) == 2
+
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
 
     def test_setup_logger_log_levels(self) -> None:
         """Test logger respects different log levels."""
@@ -230,6 +250,11 @@ class TestLoggerContext:
             content = log_file.read_text()
             assert "Test message" in content
 
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
+
     def test_context_nested(self) -> None:
         """Test nested context managers."""
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -253,6 +278,11 @@ class TestLoggerContext:
 
             content = log_file.read_text()
             assert "Nested context" in content
+
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
 
     def test_context_cleanup(self) -> None:
         """Test context is properly cleaned up after exit."""
@@ -314,6 +344,11 @@ class TestLoggerContext:
             content = log_file.read_text()
             assert "Multiple fields" in content
 
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
+
 
 class TestLogWithContext:
     """Tests for log_with_context function."""
@@ -339,6 +374,11 @@ class TestLogWithContext:
 
             content = log_file.read_text()
             assert "Test message" in content
+
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
 
     def test_log_with_context_levels(self) -> None:
         """Test logging at different levels."""
@@ -367,6 +407,11 @@ class TestLogWithContext:
             assert "Info message" in content
             assert "Warning message" in content
             assert "Error message" in content
+
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
 
 
 class TestSanitizeSensitiveData:
@@ -496,6 +541,11 @@ class TestContextualJSONFormatter:
             assert log_entry["message"] == "Test message"
             assert log_entry["logger"] == "test_json_formatter"
 
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
+
     def test_json_formatter_with_context(self) -> None:
         """Test JSON formatting with context."""
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -523,6 +573,11 @@ class TestContextualJSONFormatter:
 
             assert log_entry["request_id"] == "req-123"
             assert log_entry["session_id"] == "sess-456"
+
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
 
     def test_json_formatter_sanitizes_sensitive_data(self) -> None:
         """Test JSON formatter sanitizes sensitive data."""
@@ -561,6 +616,11 @@ class TestContextualJSONFormatter:
                 assert log_entry["context"]["user"] == "john"
             elif "user" in log_entry:
                 assert log_entry["user"] == "john"
+
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
 
 
 class TestThreadSafety:
@@ -605,6 +665,11 @@ class TestThreadSafety:
                 for j in range(10):
                     assert f"Thread {i} message {j}" in content
 
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
+
     def test_concurrent_context(self) -> None:
         """Test context manager from multiple threads."""
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -643,6 +708,11 @@ class TestThreadSafety:
             for i in range(5):
                 assert f"Thread {i} message" in content
 
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
+
 
 class TestLogRotation:
     """Tests for log file rotation."""
@@ -674,6 +744,11 @@ class TestLogRotation:
             backup_files = list(Path(tmpdir).glob("test.log.*"))
             assert len(backup_files) > 0  # At least one backup file
 
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
+
 
 class TestRichHandler:
     """Tests for ContextualRichHandler."""
@@ -702,6 +777,11 @@ class TestRichHandler:
             content = log_file.read_text()
             assert "Rich handler test" in content
 
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
+
     def test_rich_handler_with_extra_context(self) -> None:
         """Test Rich handler with extra context from record."""
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -724,6 +804,11 @@ class TestRichHandler:
 
             content = log_file.read_text()
             assert "Extra context test" in content
+
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
 
     def test_rich_handler_console_rendering(self) -> None:
         """Test Rich handler console rendering (for coverage)."""
@@ -831,6 +916,11 @@ class TestLoggerIntegration:
                 assert "message" in log_entry
                 assert log_entry["session_id"] == "sess-123"
 
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
+
     def test_end_to_end_text_logging(self) -> None:
         """Test complete text logging workflow."""
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -861,3 +951,8 @@ class TestLoggerIntegration:
             assert "INFO" in content
             assert "WARNING" in content
             assert "ERROR" in content
+
+            # Clean up handlers before tempfile cleanup
+            for handler in logger.handlers[:]:
+                handler.close()
+                logger.removeHandler(handler)
