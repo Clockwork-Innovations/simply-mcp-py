@@ -1,7 +1,5 @@
 """Stdio transport helpers for Simply-MCP."""
 
-import asyncio
-from typing import Optional
 
 from simply_mcp.core.config import SimplyMCPConfig
 from simply_mcp.core.server import SimplyMCPServer
@@ -9,7 +7,7 @@ from simply_mcp.core.server import SimplyMCPServer
 
 async def run_stdio_server(
     server: SimplyMCPServer,
-    config: Optional[SimplyMCPConfig] = None
+    config: SimplyMCPConfig | None = None
 ) -> None:
     """Run MCP server with stdio transport.
 

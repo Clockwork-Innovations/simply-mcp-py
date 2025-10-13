@@ -36,8 +36,19 @@ from simply_mcp.core.errors import SimplyMCPError
 @click.option(
     "--port",
     type=int,
-    default=None,
+    default=3000,
     help="Port for network transports (default: 3000)",
+)
+@click.option(
+    "--host",
+    type=str,
+    default="0.0.0.0",
+    help="Host for network transports (default: 0.0.0.0)",
+)
+@click.option(
+    "--cors/--no-cors",
+    default=True,
+    help="Enable/disable CORS for network transports (default: enabled)",
 )
 @click.option(
     "--config",
@@ -53,7 +64,9 @@ from simply_mcp.core.errors import SimplyMCPError
 def run(
     server_file: str,
     transport: str,
-    port: Optional[int],
+    port: int,
+    host: str,
+    cors: bool,
     config: Optional[str],
     watch: bool,
 ) -> None:
@@ -75,8 +88,16 @@ def run(
         simply-mcp run server.py --transport stdio
 
         \b
-        # Run with custom port (for network transports)
+        # Run with HTTP transport
         simply-mcp run server.py --transport http --port 8080
+
+        \b
+        # Run with SSE transport
+        simply-mcp run server.py --transport sse --port 8080
+
+        \b
+        # Run with custom host and CORS disabled
+        simply-mcp run server.py --transport http --host localhost --no-cors
 
         \b
         # Run with custom config
@@ -91,11 +112,17 @@ def run(
 
     try:
         # Display startup info
+        # Build transport info string
+        transport_info = f"Transport: [yellow]{transport}[/yellow]"
+        if transport in ["http", "sse"]:
+            transport_info += f"\nHost: [yellow]{host}[/yellow]"
+            transport_info += f"\nPort: [yellow]{port}[/yellow]"
+            transport_info += f"\nCORS: [yellow]{'enabled' if cors else 'disabled'}[/yellow]"
+
         console.print(Panel(
             f"[bold cyan]Starting Simply-MCP Server[/bold cyan]\n\n"
             f"File: [green]{server_file}[/green]\n"
-            f"Transport: [yellow]{transport}[/yellow]"
-            + (f"\nPort: [yellow]{port}[/yellow]" if port else ""),
+            f"{transport_info}",
             title="[bold blue]Simply-MCP[/bold blue]",
         ))
 
@@ -163,9 +190,31 @@ def run(
                 await server.initialize()
                 format_success("Server initialized successfully")
 
+                # Prepare running message
+                if transport == "stdio":
+                    running_msg = (
+                        f"[bold green]Server is running on {transport} transport[/bold green]\n\n"
+                        f"Press [bold]Ctrl+C[/bold] to stop the server."
+                    )
+                else:
+                    running_msg = (
+                        f"[bold green]Server is running on {transport} transport[/bold green]\n\n"
+                        f"URL: [cyan]http://{host}:{port}[/cyan]\n"
+                        f"Endpoints:\n"
+                        f"  - [cyan]http://{host}:{port}/[/cyan] (info)\n"
+                        f"  - [cyan]http://{host}:{port}/health[/cyan] (health check)\n"
+                    )
+                    if transport == "http":
+                        running_msg += f"  - [cyan]http://{host}:{port}/mcp[/cyan] (JSON-RPC)\n"
+                    elif transport == "sse":
+                        running_msg += (
+                            f"  - [cyan]http://{host}:{port}/sse[/cyan] (SSE stream)\n"
+                            f"  - [cyan]http://{host}:{port}/mcp[/cyan] (JSON-RPC)\n"
+                        )
+                    running_msg += f"\nPress [bold]Ctrl+C[/bold] to stop the server."
+
                 console.print(Panel(
-                    f"[bold green]Server is running on {transport} transport[/bold green]\n\n"
-                    f"Press [bold]Ctrl+C[/bold] to stop the server.",
+                    running_msg,
                     title="[bold cyan]Running[/bold cyan]",
                 ))
 
@@ -173,17 +222,17 @@ def run(
                 if transport == "stdio":
                     await server.run_stdio()
                 elif transport == "http":
-                    format_error(
-                        "HTTP transport is not yet implemented. Use 'stdio' for now.",
-                        "Not Implemented"
+                    await server.run_http(
+                        host=host,
+                        port=port,
+                        cors_enabled=cors,
                     )
-                    sys.exit(1)
                 elif transport == "sse":
-                    format_error(
-                        "SSE transport is not yet implemented. Use 'stdio' for now.",
-                        "Not Implemented"
+                    await server.run_sse(
+                        host=host,
+                        port=port,
+                        cors_enabled=cors,
                     )
-                    sys.exit(1)
 
             except KeyboardInterrupt:
                 console.print("\n[yellow]Received interrupt signal, shutting down...[/yellow]")

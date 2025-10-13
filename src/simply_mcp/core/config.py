@@ -46,12 +46,16 @@ class TransportConfigModel(BaseModel):
         host: Host address for network transports
         port: Port number for network transports
         path: Optional path prefix for HTTP endpoints
+        cors_enabled: Whether CORS is enabled for network transports
+        cors_origins: List of allowed CORS origins (default: ["*"] for all)
     """
 
     type: TransportType = Field(default="stdio", description="Transport type")
     host: str = Field(default="0.0.0.0", description="Host address")
     port: int = Field(default=3000, ge=1, le=65535, description="Port number")
     path: Optional[str] = Field(default=None, description="Path prefix")
+    cors_enabled: bool = Field(default=True, description="Enable CORS")
+    cors_origins: Optional[List[str]] = Field(default=None, description="Allowed CORS origins")
 
 
 class RateLimitConfigModel(BaseModel):

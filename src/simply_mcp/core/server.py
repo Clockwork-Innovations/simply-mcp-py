@@ -837,6 +837,120 @@ class SimplyMCPServer:
             raise_exceptions=False,
         )
 
+    async def run_http(
+        self,
+        host: str = "0.0.0.0",
+        port: int = 3000,
+        cors_enabled: bool = True,
+        cors_origins: Optional[List[str]] = None,
+    ) -> None:
+        """Run the server with HTTP transport.
+
+        This method starts an HTTP server that accepts MCP requests
+        via RESTful HTTP endpoints using JSON-RPC 2.0 protocol.
+
+        Args:
+            host: Host to bind to (default: 0.0.0.0)
+            port: Port to bind to (default: 3000)
+            cors_enabled: Whether to enable CORS (default: True)
+            cors_origins: Allowed CORS origins or None for all (default: None)
+
+        Raises:
+            RuntimeError: If server is not initialized
+
+        Example:
+            >>> server = SimplyMCPServer()
+            >>> await server.initialize()
+            >>> await server.run_http(port=8080)
+        """
+        if not self._initialized:
+            raise RuntimeError("Server not initialized. Call initialize() first.")
+
+        logger.info(f"Starting MCP server with HTTP transport on {host}:{port}")
+
+        # Import here to avoid circular dependency
+        from simply_mcp.transports.http import HTTPTransport
+
+        # Create and start HTTP transport
+        transport = HTTPTransport(
+            server=self,
+            host=host,
+            port=port,
+            cors_enabled=cors_enabled,
+            cors_origins=cors_origins,
+        )
+
+        try:
+            await transport.start()
+
+            # Keep running until interrupted
+            while self._running:
+                await asyncio.sleep(1)
+
+        except KeyboardInterrupt:
+            logger.info("Received interrupt signal")
+            raise
+
+        finally:
+            await transport.stop()
+
+    async def run_sse(
+        self,
+        host: str = "0.0.0.0",
+        port: int = 3000,
+        cors_enabled: bool = True,
+        cors_origins: Optional[List[str]] = None,
+    ) -> None:
+        """Run the server with SSE transport.
+
+        This method starts a Server-Sent Events (SSE) server that provides
+        real-time event streaming to web clients.
+
+        Args:
+            host: Host to bind to (default: 0.0.0.0)
+            port: Port to bind to (default: 3000)
+            cors_enabled: Whether to enable CORS (default: True)
+            cors_origins: Allowed CORS origins or None for all (default: None)
+
+        Raises:
+            RuntimeError: If server is not initialized
+
+        Example:
+            >>> server = SimplyMCPServer()
+            >>> await server.initialize()
+            >>> await server.run_sse(port=8080)
+        """
+        if not self._initialized:
+            raise RuntimeError("Server not initialized. Call initialize() first.")
+
+        logger.info(f"Starting MCP server with SSE transport on {host}:{port}")
+
+        # Import here to avoid circular dependency
+        from simply_mcp.transports.sse import SSETransport
+
+        # Create and start SSE transport
+        transport = SSETransport(
+            server=self,
+            host=host,
+            port=port,
+            cors_enabled=cors_enabled,
+            cors_origins=cors_origins,
+        )
+
+        try:
+            await transport.start()
+
+            # Keep running until interrupted
+            while self._running:
+                await asyncio.sleep(1)
+
+        except KeyboardInterrupt:
+            logger.info("Received interrupt signal")
+            raise
+
+        finally:
+            await transport.stop()
+
     async def start(self) -> None:
         """Start the server (alias for run_stdio).
 
