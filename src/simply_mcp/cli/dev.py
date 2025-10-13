@@ -15,14 +15,20 @@ Features:
 """
 
 import os
-import select
 import subprocess
 import sys
-import termios
 import time
-import tty
 from pathlib import Path
 from typing import Any
+
+# Unix-only modules (not available on Windows)
+try:
+    import select
+    import termios
+    import tty
+    HAS_TERMIOS = True
+except ImportError:
+    HAS_TERMIOS = False
 
 import click
 from rich.panel import Panel
@@ -240,7 +246,8 @@ def _handle_keyboard_input(handler: DevServerHandler | None, server_file: str) -
         True if should continue, False if should quit
     """
     # Check if stdin has input available (non-blocking)
-    if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+    # This only works on Unix systems with select module
+    if HAS_TERMIOS and sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
         try:
             char = sys.stdin.read(1).lower()
 
@@ -441,12 +448,13 @@ def dev(
 
         # Set terminal to non-blocking mode for keyboard input
         old_settings = None
-        try:
-            old_settings = termios.tcgetattr(sys.stdin)
-            tty.setcbreak(sys.stdin.fileno())
-        except Exception:
-            # Not a TTY, keyboard shortcuts won't work
-            pass
+        if HAS_TERMIOS:
+            try:
+                old_settings = termios.tcgetattr(sys.stdin)
+                tty.setcbreak(sys.stdin.fileno())
+            except Exception:
+                # Not a TTY, keyboard shortcuts won't work
+                pass
 
         try:
             # Keep the main thread alive and handle keyboard input
@@ -460,7 +468,7 @@ def dev(
 
         finally:
             # Restore terminal settings
-            if old_settings is not None:
+            if HAS_TERMIOS and old_settings is not None:
                 try:
                     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
                 except Exception:
