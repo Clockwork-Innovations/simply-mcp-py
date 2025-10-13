@@ -12,7 +12,14 @@ The generated schemas are compatible with MCP tool input schemas.
 import dataclasses
 import inspect
 import re
-from typing import Any, Callable, Dict, List, Optional, Set, Type, Union, get_args, get_origin, get_type_hints
+from collections.abc import Callable
+from typing import (
+    Any,
+    Union,
+    get_args,
+    get_origin,
+    get_type_hints,
+)
 
 try:
     from pydantic import BaseModel
@@ -29,7 +36,7 @@ class SchemaGenerationError(Exception):
     pass
 
 
-def python_type_to_json_schema_type(python_type: Any) -> Dict[str, Any]:
+def python_type_to_json_schema_type(python_type: Any) -> dict[str, Any]:
     """Convert Python type to JSON Schema type.
 
     Args:
@@ -113,7 +120,7 @@ def python_type_to_json_schema_type(python_type: Any) -> Dict[str, Any]:
     return {}
 
 
-def extract_description_from_docstring(func: Callable[..., Any]) -> Optional[str]:
+def extract_description_from_docstring(func: Callable[..., Any]) -> str | None:
     """Extract description from function docstring.
 
     Supports Google-style and NumPy-style docstrings.
@@ -156,7 +163,7 @@ def extract_description_from_docstring(func: Callable[..., Any]) -> Optional[str
     return description if description else None
 
 
-def extract_param_descriptions_from_docstring(func: Callable[..., Any]) -> Dict[str, str]:
+def extract_param_descriptions_from_docstring(func: Callable[..., Any]) -> dict[str, str]:
     """Extract parameter descriptions from function docstring.
 
     Supports Google-style and NumPy-style docstrings.
@@ -171,7 +178,7 @@ def extract_param_descriptions_from_docstring(func: Callable[..., Any]) -> Dict[
         return {}
 
     docstring = inspect.cleandoc(func.__doc__)
-    descriptions: Dict[str, str] = {}
+    descriptions: dict[str, str] = {}
 
     # Google-style: Args: or Arguments:
     google_match = re.search(r'(?:Args?|Arguments?):\s*\n((?:.*\n?)*?)(?=\n(?:Returns?|Raises?|Examples?|Note|Notes):|$)', docstring, re.DOTALL)
@@ -196,7 +203,7 @@ def extract_param_descriptions_from_docstring(func: Callable[..., Any]) -> Dict[
     return descriptions
 
 
-def generate_schema_from_function(func: Callable[..., Any]) -> Dict[str, Any]:
+def generate_schema_from_function(func: Callable[..., Any]) -> dict[str, Any]:
     """Generate JSON schema from function signature.
 
     Inspects function parameters, type hints, and docstring to generate
@@ -230,10 +237,10 @@ def generate_schema_from_function(func: Callable[..., Any]) -> Dict[str, Any]:
         sig = inspect.signature(func)
         type_hints = get_type_hints(func)
     except Exception as e:
-        raise SchemaGenerationError(f"Failed to inspect function {func.__name__}: {e}")
+        raise SchemaGenerationError(f"Failed to inspect function {func.__name__}: {e}") from e
 
-    properties: Dict[str, Any] = {}
-    required: List[str] = []
+    properties: dict[str, Any] = {}
+    required: list[str] = []
 
     # Extract parameter descriptions from docstring
     param_descriptions = extract_param_descriptions_from_docstring(func)
@@ -270,7 +277,7 @@ def generate_schema_from_function(func: Callable[..., Any]) -> Dict[str, Any]:
 
         properties[param_name] = param_schema
 
-    schema: Dict[str, Any] = {
+    schema: dict[str, Any] = {
         "type": "object",
         "properties": properties
     }
@@ -281,7 +288,7 @@ def generate_schema_from_function(func: Callable[..., Any]) -> Dict[str, Any]:
     return schema
 
 
-def generate_schema_from_pydantic(model: Type[BaseModel]) -> Dict[str, Any]:
+def generate_schema_from_pydantic(model: type[BaseModel]) -> dict[str, Any]:
     """Generate JSON schema from Pydantic model.
 
     Uses Pydantic's built-in schema generation with proper field metadata.
@@ -321,10 +328,10 @@ def generate_schema_from_pydantic(model: Type[BaseModel]) -> Dict[str, Any]:
 
         return json_schema
     except Exception as e:
-        raise SchemaGenerationError(f"Failed to generate schema from Pydantic model {model.__name__}: {e}")
+        raise SchemaGenerationError(f"Failed to generate schema from Pydantic model {model.__name__}: {e}") from e
 
 
-def generate_schema_from_dataclass(cls: Type[Any]) -> Dict[str, Any]:
+def generate_schema_from_dataclass(cls: type[Any]) -> dict[str, Any]:
     """Generate JSON schema from dataclass.
 
     Args:
@@ -356,8 +363,8 @@ def generate_schema_from_dataclass(cls: Type[Any]) -> Dict[str, Any]:
         fields = dataclasses.fields(cls)
         type_hints = get_type_hints(cls)
 
-        properties: Dict[str, Any] = {}
-        required: List[str] = []
+        properties: dict[str, Any] = {}
+        required: list[str] = []
 
         for field in fields:
             field_type = type_hints.get(field.name, Any)
@@ -380,7 +387,7 @@ def generate_schema_from_dataclass(cls: Type[Any]) -> Dict[str, Any]:
 
             properties[field.name] = field_schema
 
-        schema: Dict[str, Any] = {
+        schema: dict[str, Any] = {
             "type": "object",
             "properties": properties
         }
@@ -390,10 +397,10 @@ def generate_schema_from_dataclass(cls: Type[Any]) -> Dict[str, Any]:
 
         return schema
     except Exception as e:
-        raise SchemaGenerationError(f"Failed to generate schema from dataclass {cls.__name__}: {e}")
+        raise SchemaGenerationError(f"Failed to generate schema from dataclass {cls.__name__}: {e}") from e
 
 
-def generate_schema_from_typeddict(cls: Type[Any]) -> Dict[str, Any]:
+def generate_schema_from_typeddict(cls: type[Any]) -> dict[str, Any]:
     """Generate JSON schema from TypedDict.
 
     Args:
@@ -420,11 +427,11 @@ def generate_schema_from_typeddict(cls: Type[Any]) -> Dict[str, Any]:
 
     try:
         type_hints = get_type_hints(cls)
-        required_keys: Set[str] = getattr(cls, '__required_keys__', set())
-        optional_keys: Set[str] = getattr(cls, '__optional_keys__', set())
+        required_keys: set[str] = getattr(cls, '__required_keys__', set())
+        optional_keys: set[str] = getattr(cls, '__optional_keys__', set())
 
-        properties: Dict[str, Any] = {}
-        required: List[str] = []
+        properties: dict[str, Any] = {}
+        required: list[str] = []
 
         for field_name, field_type in type_hints.items():
             field_schema = python_type_to_json_schema_type(field_type)
@@ -442,7 +449,7 @@ def generate_schema_from_typeddict(cls: Type[Any]) -> Dict[str, Any]:
                 if not is_optional:
                     required.append(field_name)
 
-        schema: Dict[str, Any] = {
+        schema: dict[str, Any] = {
             "type": "object",
             "properties": properties
         }
@@ -452,10 +459,10 @@ def generate_schema_from_typeddict(cls: Type[Any]) -> Dict[str, Any]:
 
         return schema
     except Exception as e:
-        raise SchemaGenerationError(f"Failed to generate schema from TypedDict {cls.__name__}: {e}")
+        raise SchemaGenerationError(f"Failed to generate schema from TypedDict {cls.__name__}: {e}") from e
 
 
-def auto_generate_schema(source: Union[Callable[..., Any], Type[Any]]) -> Dict[str, Any]:
+def auto_generate_schema(source: Callable[..., Any] | type[Any]) -> dict[str, Any]:
     """Auto-detect source type and generate schema.
 
     Smart detection that supports:

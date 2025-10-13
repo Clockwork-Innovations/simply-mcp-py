@@ -11,7 +11,7 @@ The hierarchy follows Python exception best practices and provides specific
 exceptions for different subsystems (configuration, transport, handlers, etc.).
 """
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class SimplyMCPError(Exception):
@@ -30,7 +30,7 @@ class SimplyMCPError(Exception):
         self,
         message: str,
         code: str = "SIMPLY_MCP_ERROR",
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a Simply-MCP error.
 
@@ -44,7 +44,7 @@ class SimplyMCPError(Exception):
         self.code = code
         self.context = context or {}
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert error to dictionary for JSON serialization.
 
         Returns:
@@ -80,7 +80,7 @@ class ConfigurationError(SimplyMCPError):
         self,
         message: str,
         code: str = "CONFIG_ERROR",
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a configuration error."""
         super().__init__(message, code, context)
@@ -96,7 +96,7 @@ class ConfigFileNotFoundError(ConfigurationError):
     def __init__(
         self,
         file_path: str,
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a config file not found error.
 
@@ -120,8 +120,8 @@ class ConfigValidationError(ConfigurationError):
     def __init__(
         self,
         message: str,
-        field: Optional[str] = None,
-        context: Optional[Dict[str, Any]] = None,
+        field: str | None = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a config validation error.
 
@@ -146,8 +146,8 @@ class ConfigFormatError(ConfigurationError):
     def __init__(
         self,
         file_format: str,
-        supported_formats: Optional[list[str]] = None,
-        context: Optional[Dict[str, Any]] = None,
+        supported_formats: list[str] | None = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a config format error.
 
@@ -178,7 +178,7 @@ class TransportError(SimplyMCPError):
         self,
         message: str,
         code: str = "TRANSPORT_ERROR",
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a transport error."""
         super().__init__(message, code, context)
@@ -194,9 +194,9 @@ class ConnectionError(TransportError):
     def __init__(
         self,
         message: str,
-        host: Optional[str] = None,
-        port: Optional[int] = None,
-        context: Optional[Dict[str, Any]] = None,
+        host: str | None = None,
+        port: int | None = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a connection error.
 
@@ -224,8 +224,8 @@ class TransportNotSupportedError(TransportError):
     def __init__(
         self,
         transport_type: str,
-        supported_types: Optional[list[str]] = None,
-        context: Optional[Dict[str, Any]] = None,
+        supported_types: list[str] | None = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a transport not supported error.
 
@@ -252,8 +252,8 @@ class MessageError(TransportError):
     def __init__(
         self,
         message: str,
-        message_type: Optional[str] = None,
-        context: Optional[Dict[str, Any]] = None,
+        message_type: str | None = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a message error.
 
@@ -282,7 +282,7 @@ class HandlerError(SimplyMCPError):
         self,
         message: str,
         code: str = "HANDLER_ERROR",
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a handler error."""
         super().__init__(message, code, context)
@@ -299,7 +299,7 @@ class HandlerNotFoundError(HandlerError):
         self,
         handler_name: str,
         handler_type: str = "handler",
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a handler not found error.
 
@@ -326,7 +326,7 @@ class HandlerExecutionError(HandlerError):
         self,
         handler_name: str,
         original_error: Exception,
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a handler execution error.
 
@@ -356,7 +356,7 @@ class InvalidHandlerSignatureError(HandlerError):
         handler_name: str,
         expected_signature: str,
         actual_signature: str,
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize an invalid handler signature error.
 
@@ -391,7 +391,7 @@ class ValidationError(SimplyMCPError):
         self,
         message: str,
         code: str = "VALIDATION_ERROR",
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a validation error."""
         super().__init__(message, code, context)
@@ -407,9 +407,9 @@ class SchemaValidationError(ValidationError):
     def __init__(
         self,
         message: str,
-        schema_path: Optional[str] = None,
-        validation_errors: Optional[list[str]] = None,
-        context: Optional[Dict[str, Any]] = None,
+        schema_path: str | None = None,
+        validation_errors: list[str] | None = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a schema validation error.
 
@@ -439,7 +439,7 @@ class TypeValidationError(ValidationError):
         field_name: str,
         expected_type: str,
         actual_type: str,
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a type validation error.
 
@@ -469,7 +469,7 @@ class RequiredFieldError(ValidationError):
     def __init__(
         self,
         field_name: str,
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a required field error.
 
@@ -497,7 +497,7 @@ class SecurityError(SimplyMCPError):
         self,
         message: str,
         code: str = "SECURITY_ERROR",
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a security error."""
         super().__init__(message, code, context)
@@ -512,8 +512,8 @@ class AuthenticationError(SecurityError):
     def __init__(
         self,
         message: str = "Authentication failed",
-        auth_type: Optional[str] = None,
-        context: Optional[Dict[str, Any]] = None,
+        auth_type: str | None = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize an authentication error.
 
@@ -538,8 +538,8 @@ class AuthorizationError(SecurityError):
     def __init__(
         self,
         message: str = "Insufficient permissions",
-        required_permission: Optional[str] = None,
-        context: Optional[Dict[str, Any]] = None,
+        required_permission: str | None = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize an authorization error.
 
@@ -564,9 +564,9 @@ class RateLimitExceededError(SecurityError):
     def __init__(
         self,
         message: str = "Rate limit exceeded",
-        limit: Optional[int] = None,
-        retry_after: Optional[int] = None,
-        context: Optional[Dict[str, Any]] = None,
+        limit: int | None = None,
+        retry_after: int | None = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Initialize a rate limit exceeded error.
 

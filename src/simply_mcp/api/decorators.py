@@ -32,7 +32,8 @@ Example:
 
 import functools
 import inspect
-from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union, cast
+from collections.abc import Callable
+from typing import Any, TypeVar
 
 try:
     from pydantic import BaseModel
@@ -43,7 +44,7 @@ except ImportError:
 
 from simply_mcp.core.config import SimplyMCPConfig, get_default_config
 from simply_mcp.core.server import SimplyMCPServer
-from simply_mcp.core.types import HandlerFunction, PromptConfig, ResourceConfig, ToolConfig
+from simply_mcp.core.types import PromptConfigModel, ResourceConfigModel, ToolConfigModel
 from simply_mcp.validation.schema import (
     auto_generate_schema,
     extract_description_from_docstring,
@@ -55,7 +56,7 @@ F = TypeVar('F', bound=Callable[..., Any])
 T = TypeVar('T')
 
 # Module-level global server instance
-_global_server: Optional[SimplyMCPServer] = None
+_global_server: SimplyMCPServer | None = None
 
 
 def get_global_server() -> SimplyMCPServer:
@@ -96,10 +97,25 @@ def set_global_server(server: SimplyMCPServer) -> None:
     _global_server = server
 
 
+def reset_global_server() -> None:
+    """Reset the global server instance.
+
+    This clears the global server singleton, which is useful for testing
+    or when you want to reinitialize the server with a fresh state.
+
+    Example:
+        >>> from simply_mcp.api.decorators import reset_global_server
+        >>> reset_global_server()  # Clear global state
+        >>> # Now next call to get_global_server() will create a new instance
+    """
+    global _global_server
+    _global_server = None
+
+
 def tool(
-    name: Optional[str] = None,
-    description: Optional[str] = None,
-    input_schema: Optional[Union[Dict[str, Any], Type[BaseModel]]] = None,
+    name: str | None = None,
+    description: str | None = None,
+    input_schema: dict[str, Any] | type[BaseModel] | None = None,
 ) -> Callable[[F], F]:
     """Decorator to register a function as an MCP tool.
 
@@ -167,7 +183,7 @@ def tool(
             tool_description = f"Tool: {tool_name}"
 
         # Determine input schema
-        schema: Dict[str, Any]
+        schema: dict[str, Any]
         if input_schema is not None:
             # Check if it's a Pydantic model
             if PYDANTIC_AVAILABLE and isinstance(input_schema, type) and issubclass(input_schema, BaseModel):
@@ -183,16 +199,16 @@ def tool(
             schema = auto_generate_schema(func)
 
         # Create tool configuration
-        config: ToolConfig = {
-            "name": tool_name,
-            "description": tool_description,
-            "input_schema": schema,
-            "handler": func,
-        }
+        config = ToolConfigModel(
+            name=tool_name,
+            description=tool_description,
+            input_schema=schema,
+            handler=func,
+        )
 
-        # Store metadata on function
-        setattr(func, '_mcp_tool_config', config)
-        setattr(func, '_mcp_component_type', 'tool')
+        # Store metadata on function - these are dynamic attributes added at runtime
+        func._mcp_tool_config = config  # type: ignore[attr-defined]
+        func._mcp_component_type = 'tool'  # type: ignore[attr-defined]
 
         # Auto-register with global server
         server = get_global_server()
@@ -207,9 +223,9 @@ def tool(
 
 
 def prompt(
-    name: Optional[str] = None,
-    description: Optional[str] = None,
-    arguments: Optional[List[str]] = None,
+    name: str | None = None,
+    description: str | None = None,
+    arguments: list[str] | None = None,
 ) -> Callable[[F], F]:
     """Decorator to register a function as an MCP prompt.
 
@@ -265,19 +281,17 @@ def prompt(
             ]
 
         # Create prompt configuration
-        config: PromptConfig = {
-            "name": prompt_name,
-            "description": prompt_description,
-            "handler": func,
-        }
+        config = PromptConfigModel(
+            name=prompt_name,
+            description=prompt_description,
+            handler=func,
+            arguments=prompt_arguments or [],
+            template=None,
+        )
 
-        # Add arguments if present
-        if prompt_arguments:
-            config["arguments"] = prompt_arguments
-
-        # Store metadata on function
-        setattr(func, '_mcp_prompt_config', config)
-        setattr(func, '_mcp_component_type', 'prompt')
+        # Store metadata on function - these are dynamic attributes added at runtime
+        func._mcp_prompt_config = config  # type: ignore[attr-defined]
+        func._mcp_component_type = 'prompt'  # type: ignore[attr-defined]
 
         # Auto-register with global server
         server = get_global_server()
@@ -293,8 +307,8 @@ def prompt(
 
 def resource(
     uri: str,
-    name: Optional[str] = None,
-    description: Optional[str] = None,
+    name: str | None = None,
+    description: str | None = None,
     mime_type: str = "application/json",
 ) -> Callable[[F], F]:
     """Decorator to register a function as an MCP resource.
@@ -348,17 +362,17 @@ def resource(
             resource_description = f"Resource: {resource_name}"
 
         # Create resource configuration
-        config: ResourceConfig = {
-            "uri": uri,
-            "name": resource_name,
-            "description": resource_description,
-            "mime_type": mime_type,
-            "handler": func,
-        }
+        config = ResourceConfigModel(
+            uri=uri,
+            name=resource_name,
+            description=resource_description,
+            mime_type=mime_type,
+            handler=func,
+        )
 
-        # Store metadata on function
-        setattr(func, '_mcp_resource_config', config)
-        setattr(func, '_mcp_component_type', 'resource')
+        # Store metadata on function - these are dynamic attributes added at runtime
+        func._mcp_resource_config = config  # type: ignore[attr-defined]
+        func._mcp_component_type = 'resource'  # type: ignore[attr-defined]
 
         # Auto-register with global server
         server = get_global_server()
@@ -373,11 +387,11 @@ def resource(
 
 
 def mcp_server(
-    name: Optional[str] = None,
+    name: str | None = None,
     version: str = "1.0.0",
-    description: Optional[str] = None,
-    config: Optional[SimplyMCPConfig] = None,
-) -> Callable[[Type[T]], Type[T]]:
+    description: str | None = None,
+    config: SimplyMCPConfig | None = None,
+) -> Callable[[type[T]], type[T]]:
     """Class decorator to create an MCP server from a class.
 
     This decorator scans a class for methods decorated with @tool, @prompt, or @resource
@@ -425,7 +439,7 @@ def mcp_server(
         ...     def get_config(self) -> dict:
         ...         return {"mode": "helpful"}
     """
-    def decorator(cls: Type[T]) -> Type[T]:
+    def decorator(cls: type[T]) -> type[T]:
         # Determine server name
         server_name = name or cls.__name__
 
@@ -471,51 +485,51 @@ def mcp_server(
 
             if component_type == 'tool':
                 # Get original config and create bound handler
-                tool_config = getattr(attr, '_mcp_tool_config')
+                tool_config = attr._mcp_tool_config
                 bound_method = getattr(instance, attr_name)
 
                 # Create new config with bound method
-                bound_config: ToolConfig = {
-                    "name": tool_config["name"],
-                    "description": tool_config["description"],
-                    "input_schema": tool_config["input_schema"],
-                    "handler": bound_method,
-                }
+                bound_config = ToolConfigModel(
+                    name=tool_config.name,
+                    description=tool_config.description,
+                    input_schema=tool_config.input_schema,
+                    handler=bound_method,
+                )
                 server.register_tool(bound_config)
 
             elif component_type == 'prompt':
                 # Get original config and create bound handler
-                prompt_config = getattr(attr, '_mcp_prompt_config')
+                prompt_config = attr._mcp_prompt_config
                 bound_method = getattr(instance, attr_name)
 
                 # Create new config with bound method
-                bound_config_prompt: PromptConfig = {
-                    "name": prompt_config["name"],
-                    "description": prompt_config["description"],
-                    "handler": bound_method,
-                }
-                if "arguments" in prompt_config:
-                    bound_config_prompt["arguments"] = prompt_config["arguments"]
+                bound_config_prompt = PromptConfigModel(
+                    name=prompt_config.name,
+                    description=prompt_config.description,
+                    handler=bound_method,
+                    arguments=prompt_config.arguments,
+                    template=prompt_config.template,
+                )
 
                 server.register_prompt(bound_config_prompt)
 
             elif component_type == 'resource':
                 # Get original config and create bound handler
-                resource_config = getattr(attr, '_mcp_resource_config')
+                resource_config = attr._mcp_resource_config
                 bound_method = getattr(instance, attr_name)
 
                 # Create new config with bound method
-                bound_config_resource: ResourceConfig = {
-                    "uri": resource_config["uri"],
-                    "name": resource_config["name"],
-                    "description": resource_config["description"],
-                    "mime_type": resource_config["mime_type"],
-                    "handler": bound_method,
-                }
+                bound_config_resource = ResourceConfigModel(
+                    uri=resource_config.uri,
+                    name=resource_config.name,
+                    description=resource_config.description,
+                    mime_type=resource_config.mime_type,
+                    handler=bound_method,
+                )
                 server.register_resource(bound_config_resource)
 
         # Add get_server class method - use regular function and make it classmethod via setattr
-        def get_server_impl(cls_inner: Type[T]) -> SimplyMCPServer:
+        def get_server_impl(cls_inner: type[T]) -> SimplyMCPServer:
             """Get the configured server instance.
 
             Returns:
@@ -523,11 +537,11 @@ def mcp_server(
             """
             return server
 
-        # Create classmethod and attach to class
-        setattr(cls, 'get_server', classmethod(get_server_impl))
+        # Create classmethod and attach to class - dynamic attributes added at runtime
+        cls.get_server = classmethod(get_server_impl)  # type: ignore[attr-defined]
 
-        # Store server reference on class
-        setattr(cls, '_mcp_server', server)
+        # Store server reference on class - dynamic attribute added at runtime
+        cls._mcp_server = server  # type: ignore[attr-defined]
 
         return cls
 
@@ -541,4 +555,5 @@ __all__ = [
     "mcp_server",
     "get_global_server",
     "set_global_server",
+    "reset_global_server",
 ]

@@ -35,7 +35,8 @@ Example:
 
 import functools
 import inspect
-from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
+from collections.abc import Callable
+from typing import Any, TypeVar
 
 try:
     from pydantic import BaseModel
@@ -45,15 +46,12 @@ except ImportError:
     PYDANTIC_AVAILABLE = False
 
 from simply_mcp.core.config import (
-    LogConfigModel,
     ServerMetadataModel,
     SimplyMCPConfig,
-    TransportConfigModel,
     get_default_config,
 )
-from simply_mcp.core.errors import ValidationError
 from simply_mcp.core.server import SimplyMCPServer
-from simply_mcp.core.types import HandlerFunction, PromptConfig, ResourceConfig, ToolConfig
+from simply_mcp.core.types import PromptConfigModel, ResourceConfigModel, ToolConfigModel
 from simply_mcp.validation.schema import (
     auto_generate_schema,
     extract_description_from_docstring,
@@ -96,8 +94,8 @@ class SimplyMCP:
         self,
         name: str = "simply-mcp-server",
         version: str = "0.1.0",
-        description: Optional[str] = None,
-        config: Optional[SimplyMCPConfig] = None,
+        description: str | None = None,
+        config: SimplyMCPConfig | None = None,
     ) -> None:
         """Initialize a new MCP server builder.
 
@@ -137,8 +135,8 @@ class SimplyMCP:
         self,
         name: str,
         handler: Callable[..., Any],
-        description: Optional[str] = None,
-        input_schema: Optional[Union[Dict[str, Any], Type[BaseModel]]] = None,
+        description: str | None = None,
+        input_schema: dict[str, Any] | type[BaseModel] | None = None,
     ) -> "SimplyMCP":
         """Add a tool to the server.
 
@@ -168,7 +166,7 @@ class SimplyMCP:
             tool_description = f"Tool: {name}"
 
         # Determine input schema
-        schema: Dict[str, Any]
+        schema: dict[str, Any]
         if input_schema is not None:
             # Check if it's a Pydantic model
             if PYDANTIC_AVAILABLE and isinstance(input_schema, type) and issubclass(
@@ -186,12 +184,12 @@ class SimplyMCP:
             schema = auto_generate_schema(handler)
 
         # Create tool configuration
-        config: ToolConfig = {
-            "name": name,
-            "description": tool_description,
-            "input_schema": schema,
-            "handler": handler,
-        }
+        config = ToolConfigModel(
+            name=name,
+            description=tool_description,
+            input_schema=schema,
+            handler=handler,
+        )
 
         # Register with server
         self.server.register_tool(config)
@@ -200,9 +198,9 @@ class SimplyMCP:
 
     def tool(
         self,
-        name: Optional[str] = None,
-        description: Optional[str] = None,
-        input_schema: Optional[Union[Dict[str, Any], Type[BaseModel]]] = None,
+        name: str | None = None,
+        description: str | None = None,
+        input_schema: dict[str, Any] | type[BaseModel] | None = None,
     ) -> Callable[[F], F]:
         """Decorator to add a tool to the server.
 
@@ -247,8 +245,8 @@ class SimplyMCP:
         self,
         name: str,
         handler: Callable[..., Any],
-        description: Optional[str] = None,
-        arguments: Optional[List[str]] = None,
+        description: str | None = None,
+        arguments: list[str] | None = None,
     ) -> "SimplyMCP":
         """Add a prompt to the server.
 
@@ -290,15 +288,13 @@ class SimplyMCP:
             ]
 
         # Create prompt configuration
-        config: PromptConfig = {
-            "name": name,
-            "description": prompt_description,
-            "handler": handler,
-        }
-
-        # Add arguments if present
-        if prompt_arguments:
-            config["arguments"] = prompt_arguments
+        config = PromptConfigModel(
+            name=name,
+            description=prompt_description,
+            handler=handler,
+            arguments=prompt_arguments or [],
+            template=None,
+        )
 
         # Register with server
         self.server.register_prompt(config)
@@ -307,9 +303,9 @@ class SimplyMCP:
 
     def prompt(
         self,
-        name: Optional[str] = None,
-        description: Optional[str] = None,
-        arguments: Optional[List[str]] = None,
+        name: str | None = None,
+        description: str | None = None,
+        arguments: list[str] | None = None,
     ) -> Callable[[F], F]:
         """Decorator to add a prompt to the server.
 
@@ -350,8 +346,8 @@ class SimplyMCP:
         self,
         uri: str,
         handler: Callable[..., Any],
-        name: Optional[str] = None,
-        description: Optional[str] = None,
+        name: str | None = None,
+        description: str | None = None,
         mime_type: str = "application/json",
     ) -> "SimplyMCP":
         """Add a resource to the server.
@@ -390,13 +386,13 @@ class SimplyMCP:
             resource_description = f"Resource: {resource_name}"
 
         # Create resource configuration
-        config: ResourceConfig = {
-            "uri": uri,
-            "name": resource_name,
-            "description": resource_description,
-            "mime_type": mime_type,
-            "handler": handler,
-        }
+        config = ResourceConfigModel(
+            uri=uri,
+            name=resource_name,
+            description=resource_description,
+            mime_type=mime_type,
+            handler=handler,
+        )
 
         # Register with server
         self.server.register_resource(config)
@@ -406,8 +402,8 @@ class SimplyMCP:
     def resource(
         self,
         uri: str,
-        name: Optional[str] = None,
-        description: Optional[str] = None,
+        name: str | None = None,
+        description: str | None = None,
         mime_type: str = "application/json",
     ) -> Callable[[F], F]:
         """Decorator to add a resource to the server.
@@ -451,8 +447,8 @@ class SimplyMCP:
 
     def configure(
         self,
-        port: Optional[int] = None,
-        log_level: Optional[str] = None,
+        port: int | None = None,
+        log_level: str | None = None,
         **kwargs: Any,
     ) -> "SimplyMCP":
         """Configure the server.
@@ -474,7 +470,6 @@ class SimplyMCP:
 
         # Update logging config if log_level provided
         if log_level is not None:
-            from simply_mcp.core.types import LogLevel
 
             # Validate log level
             valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
@@ -485,7 +480,7 @@ class SimplyMCP:
             self.config.logging.level = log_level.upper()  # type: ignore[assignment]
 
         # Handle additional kwargs (extend as needed)
-        for key, value in kwargs.items():
+        for _key, _value in kwargs.items():
             # You can add more configuration options here
             # For now, we'll just ignore unknown options
             pass
@@ -558,7 +553,7 @@ class SimplyMCP:
 
     # Component Query
 
-    def list_tools(self) -> List[str]:
+    def list_tools(self) -> list[str]:
         """List registered tool names.
 
         Returns:
@@ -570,9 +565,9 @@ class SimplyMCP:
             ['add', 'multiply']
         """
         tool_configs = self.server.registry.list_tools()
-        return [config["name"] for config in tool_configs]
+        return [config.name for config in tool_configs]
 
-    def list_prompts(self) -> List[str]:
+    def list_prompts(self) -> list[str]:
         """List registered prompt names.
 
         Returns:
@@ -584,9 +579,9 @@ class SimplyMCP:
             ['greet', 'code_review']
         """
         prompt_configs = self.server.registry.list_prompts()
-        return [config["name"] for config in prompt_configs]
+        return [config.name for config in prompt_configs]
 
-    def list_resources(self) -> List[str]:
+    def list_resources(self) -> list[str]:
         """List registered resource URIs.
 
         Returns:
@@ -598,7 +593,7 @@ class SimplyMCP:
             ['config://app', 'data://stats']
         """
         resource_configs = self.server.registry.list_resources()
-        return [config["uri"] for config in resource_configs]
+        return [config.uri for config in resource_configs]
 
 
 __all__ = ["SimplyMCP"]

@@ -48,6 +48,8 @@ class HTTPTransport:
         port: int = 3000,
         cors_enabled: bool = True,
         cors_origins: list[str] | None = None,
+        auth_provider: Any | None = None,
+        rate_limiter: Any | None = None,
     ) -> None:
         """Initialize HTTP transport.
 
@@ -57,12 +59,16 @@ class HTTPTransport:
             port: Port to bind to
             cors_enabled: Whether to enable CORS
             cors_origins: Allowed CORS origins or None for all (*)
+            auth_provider: Optional authentication provider
+            rate_limiter: Optional rate limiter
         """
         self.server = server
         self.host = host
         self.port = port
         self.cors_enabled = cors_enabled
         self.cors_origins = cors_origins
+        self.auth_provider = auth_provider
+        self.rate_limiter = rate_limiter
         self.app: web.Application | None = None
         self.runner: web.AppRunner | None = None
         self._site: web.TCPSite | None = None
@@ -74,6 +80,8 @@ class HTTPTransport:
                     "host": host,
                     "port": port,
                     "cors_enabled": cors_enabled,
+                    "auth_enabled": auth_provider is not None,
+                    "rate_limit_enabled": rate_limiter is not None,
                 }
             },
         )
@@ -99,6 +107,44 @@ class HTTPTransport:
             logging_enabled=True,
             rate_limit_enabled=False,
         )
+
+        # Add rate limiting middleware if configured
+        if self.rate_limiter is not None:
+            from simply_mcp.transports.middleware import RateLimitMiddleware
+
+            rate_middleware = RateLimitMiddleware(rate_limiter=self.rate_limiter)
+            middlewares.append(rate_middleware)
+
+            # Start cleanup task
+            self.rate_limiter.start_cleanup()
+
+            logger.info(
+                "Rate limiting enabled for HTTP transport",
+                extra={
+                    "context": {
+                        "requests_per_minute": self.rate_limiter.requests_per_minute,
+                        "burst_size": self.rate_limiter.burst_size,
+                    }
+                },
+            )
+
+        # Add authentication middleware if configured
+        if self.auth_provider is not None:
+            from simply_mcp.transports.middleware import AuthMiddleware
+
+            auth_middleware = AuthMiddleware(self.auth_provider)
+            middlewares.append(auth_middleware)
+
+            logger.info(
+                "Authentication enabled for HTTP transport",
+                extra={
+                    "context": {
+                        "auth_type": getattr(
+                            self.auth_provider, "__class__", type(self.auth_provider)
+                        ).__name__
+                    }
+                },
+            )
 
         # Create aiohttp application
         self.app = web.Application(middlewares=middlewares)
@@ -133,6 +179,10 @@ class HTTPTransport:
         Closes all connections and cleans up resources.
         """
         logger.info("Stopping HTTP transport")
+
+        # Stop rate limiter cleanup if enabled
+        if self.rate_limiter is not None:
+            await self.rate_limiter.stop_cleanup()
 
         if self._site:
             await self._site.stop()
@@ -182,15 +232,19 @@ class HTTPTransport:
         Returns:
             JSON response with health status
         """
+        # For HTTP transport, we consider the server healthy if it's initialized
+        # (running state is only relevant for stdio transport with lifespan)
+        is_healthy = self.server.is_initialized
+
         health = {
-            "status": "healthy" if self.server.is_running else "stopped",
+            "status": "healthy" if is_healthy else "stopped",
             "initialized": self.server.is_initialized,
             "running": self.server.is_running,
             "requests_handled": self.server.request_count,
             "components": self.server.registry.get_stats(),
         }
 
-        status = 200 if self.server.is_running else 503
+        status = 200 if is_healthy else 503
 
         return web.json_response(health, status=status)
 
@@ -314,7 +368,16 @@ class HTTPTransport:
         """
         if method == "tools/list":
             tools = self.server.registry.list_tools()
-            return {"tools": tools}
+            # Convert Pydantic models to dicts for JSON serialization
+            tools_data = [
+                {
+                    "name": tool.name,
+                    "description": tool.description,
+                    "inputSchema": tool.input_schema,
+                }
+                for tool in tools
+            ]
+            return {"tools": tools_data}
 
         elif method == "tools/call":
             tool_name = params.get("name")
@@ -327,7 +390,7 @@ class HTTPTransport:
             if not tool_config:
                 raise ValueError(f"Tool not found: {tool_name}")
 
-            handler = tool_config["handler"]
+            handler = tool_config.handler
             result = handler(**arguments)
 
             # Handle async handlers
@@ -338,7 +401,16 @@ class HTTPTransport:
 
         elif method == "prompts/list":
             prompts = self.server.registry.list_prompts()
-            return {"prompts": prompts}
+            # Convert Pydantic models to dicts for JSON serialization
+            prompts_data = [
+                {
+                    "name": prompt.name,
+                    "description": prompt.description,
+                    "arguments": prompt.arguments or [],
+                }
+                for prompt in prompts
+            ]
+            return {"prompts": prompts_data}
 
         elif method == "prompts/get":
             prompt_name = params.get("name")
@@ -351,8 +423,8 @@ class HTTPTransport:
             if not prompt_config:
                 raise ValueError(f"Prompt not found: {prompt_name}")
 
-            if "handler" in prompt_config:
-                handler = prompt_config["handler"]
+            if prompt_config.handler:
+                handler = prompt_config.handler
                 result = handler(**arguments)
 
                 if asyncio.iscoroutine(result):
@@ -360,8 +432,8 @@ class HTTPTransport:
 
                 return {"prompt": str(result)}
 
-            elif "template" in prompt_config:
-                template = prompt_config["template"]
+            elif prompt_config.template:
+                template = prompt_config.template
                 if arguments:
                     result = template.format(**arguments)
                 else:
@@ -374,7 +446,17 @@ class HTTPTransport:
 
         elif method == "resources/list":
             resources = self.server.registry.list_resources()
-            return {"resources": resources}
+            # Convert Pydantic models to dicts for JSON serialization
+            resources_data = [
+                {
+                    "uri": resource.uri,
+                    "name": resource.name,
+                    "description": resource.description,
+                    "mimeType": resource.mime_type,
+                }
+                for resource in resources
+            ]
+            return {"resources": resources_data}
 
         elif method == "resources/read":
             uri = params.get("uri")
@@ -386,7 +468,7 @@ class HTTPTransport:
             if not resource_config:
                 raise ValueError(f"Resource not found: {uri}")
 
-            handler = resource_config["handler"]
+            handler = resource_config.handler
             result = handler()
 
             if asyncio.iscoroutine(result):
@@ -490,12 +572,36 @@ async def create_http_transport(
     if config is None:
         config = server.config
 
+    # Create rate limiter if configured
+    rate_limiter = None
+    if config.rate_limit.enabled:
+        from simply_mcp.security import RateLimiter
+
+        rate_limiter = RateLimiter(
+            requests_per_minute=config.rate_limit.requests_per_minute,
+            burst_size=config.rate_limit.burst_size,
+        )
+
+    # Create authentication provider if configured
+    auth_provider = None
+    if config.auth.enabled:
+        from simply_mcp.security.auth import create_auth_provider
+
+        auth_provider = create_auth_provider(
+            auth_type=config.auth.type,
+            api_keys=config.auth.api_keys,
+            oauth_config=config.auth.oauth_config,
+            jwt_config=config.auth.jwt_config,
+        )
+
     transport = HTTPTransport(
         server=server,
         host=config.transport.host,
         port=config.transport.port,
         cors_enabled=config.transport.cors_enabled,
         cors_origins=config.transport.cors_origins,
+        auth_provider=auth_provider,
+        rate_limiter=rate_limiter,
     )
 
     return transport

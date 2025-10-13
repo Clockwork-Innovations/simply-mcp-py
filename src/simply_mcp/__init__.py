@@ -41,7 +41,6 @@ from simply_mcp.api.decorators import (
 
 # Core components
 from simply_mcp.core.config import SimplyMCPConfig, get_default_config, load_config
-from simply_mcp.core.server import SimplyMCPServer
 
 # Error types
 from simply_mcp.core.errors import (
@@ -52,6 +51,7 @@ from simply_mcp.core.errors import (
     SimplyMCPError,
     ValidationError,
 )
+from simply_mcp.core.server import SimplyMCPServer
 
 __version__ = "0.1.0"
 

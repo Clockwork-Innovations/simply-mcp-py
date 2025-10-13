@@ -11,12 +11,11 @@ import importlib.util
 import inspect
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-from rich.text import Text
 
 from simply_mcp.api.builder import SimplyMCP
 from simply_mcp.api.decorators import get_global_server
@@ -62,7 +61,7 @@ def load_python_module(file_path: str) -> Any:
     return module
 
 
-def detect_api_style(module: Any) -> Tuple[str, Optional[Any]]:
+def detect_api_style(module: Any) -> tuple[str, Any | None]:
     """Detect the API style used in a module.
 
     Detects:
@@ -88,7 +87,7 @@ def detect_api_style(module: Any) -> Tuple[str, Optional[Any]]:
     for attr_name in dir(module):
         attr = getattr(module, attr_name)
         if inspect.isclass(attr) and hasattr(attr, '_mcp_server'):
-            server = getattr(attr, '_mcp_server')
+            server = attr._mcp_server
             if isinstance(server, SimplyMCPServer):
                 return ("class", server)
 
@@ -104,7 +103,7 @@ def detect_api_style(module: Any) -> Tuple[str, Optional[Any]]:
     return ("unknown", None)
 
 
-def get_server_instance(module: Any) -> Optional[SimplyMCPServer]:
+def get_server_instance(module: Any) -> SimplyMCPServer | None:
     """Get the server instance from a loaded module.
 
     Args:
@@ -148,10 +147,10 @@ def format_info(message: str, title: str = "Info") -> None:
 
 
 def create_components_table(
-    tools: List[Dict[str, Any]],
-    prompts: List[Dict[str, Any]],
-    resources: List[Dict[str, Any]],
-    filter_type: Optional[str] = None
+    tools: list[dict[str, Any]],
+    prompts: list[dict[str, Any]],
+    resources: list[dict[str, Any]],
+    filter_type: str | None = None
 ) -> Table:
     """Create a Rich table displaying components.
 

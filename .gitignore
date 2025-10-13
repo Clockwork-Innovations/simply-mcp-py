@@ -151,3 +151,15 @@ Thumbs.db
 simplymcp.config.toml
 server.log
 *.db
+
+# Development test files
+test_*.py
+.agents/
+MCP_INSPECTOR_TEST_REPORT.md
+
+# Documentation build artifacts
+docs/*_report.txt
+docs/*_summary.txt
+docs/phase*.txt
+mypy_errors*.txt
+mypy_fix_summary.txt

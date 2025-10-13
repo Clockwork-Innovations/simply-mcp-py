@@ -240,38 +240,57 @@ class LoggingMiddleware:
 
 
 class RateLimitMiddleware:
-    """Rate limiting middleware.
+    """Rate limiting middleware using token bucket algorithm.
 
-    Provides basic rate limiting to prevent abuse. This is a simple
-    implementation that can be extended in Phase 4 with more sophisticated
-    rate limiting strategies.
-
-    Note:
-        This is a placeholder implementation for Phase 4 integration.
-        Currently, it just logs requests without enforcing limits.
+    Provides production-ready rate limiting to prevent abuse using the
+    token bucket algorithm. Integrates with the RateLimiter class for
+    per-client rate limiting.
 
     Example:
-        >>> middleware = RateLimitMiddleware(
-        ...     max_requests=100,
-        ...     window_seconds=60
-        ... )
+        >>> from simply_mcp.security import RateLimiter
+        >>> limiter = RateLimiter(requests_per_minute=60, burst_size=10)
+        >>> middleware = RateLimitMiddleware(rate_limiter=limiter)
         >>> app.middlewares.append(middleware)
     """
 
     def __init__(
         self,
-        max_requests: int = 100,
-        window_seconds: int = 60,
+        rate_limiter: Any | None = None,
+        requests_per_minute: int = 60,
+        burst_size: int = 10,
+        client_key_extractor: Any = None,
     ) -> None:
         """Initialize rate limit middleware.
 
         Args:
-            max_requests: Maximum requests per window
-            window_seconds: Time window in seconds
+            rate_limiter: Optional RateLimiter instance (creates one if not provided)
+            requests_per_minute: Requests per minute (used if rate_limiter not provided)
+            burst_size: Burst size (used if rate_limiter not provided)
+            client_key_extractor: Optional function to extract client key from request
         """
-        self.max_requests = max_requests
-        self.window_seconds = window_seconds
-        self._requests: dict[str, list[float]] = {}
+        if rate_limiter is not None:
+            self.rate_limiter = rate_limiter
+        else:
+            # Import here to avoid circular dependency
+            from simply_mcp.security import RateLimiter
+
+            self.rate_limiter = RateLimiter(
+                requests_per_minute=requests_per_minute,
+                burst_size=burst_size,
+            )
+
+        self.client_key_extractor = client_key_extractor or self._default_key_extractor
+
+    def _default_key_extractor(self, request: web.Request) -> str:
+        """Default client key extractor (uses IP address).
+
+        Args:
+            request: HTTP request
+
+        Returns:
+            Client key (IP address)
+        """
+        return request.remote or "unknown"
 
     @web.middleware
     async def __call__(
@@ -288,48 +307,227 @@ class RateLimitMiddleware:
         Returns:
             Response from handler or 429 if rate limited
         """
-        # Get client identifier (IP address)
-        client_id = request.remote or "unknown"
+        # Import here to avoid circular dependency
+        from simply_mcp.core.errors import RateLimitExceededError
 
-        # Track request
-        current_time = time.time()
+        # Extract client key
+        client_key = self.client_key_extractor(request)
 
-        # Initialize client tracking if needed
-        if client_id not in self._requests:
-            self._requests[client_id] = []
+        # Check rate limit
+        try:
+            await self.rate_limiter.enforce_rate_limit(client_key)
+        except RateLimitExceededError as e:
+            # Get retry-after information
+            retry_after = e.context.get("retry_after", 60)
 
-        # Remove old requests outside window
-        self._requests[client_id] = [
-            req_time
-            for req_time in self._requests[client_id]
-            if current_time - req_time < self.window_seconds
-        ]
-
-        # Check rate limit (placeholder - Phase 4 will enforce)
-        if len(self._requests[client_id]) >= self.max_requests:
+            # Log rate limit violation
             logger.warning(
-                f"Rate limit would be exceeded for {client_id} "
-                f"({len(self._requests[client_id])} requests)",
+                f"Rate limit exceeded for {client_key}",
                 extra={
                     "context": {
-                        "client_id": client_id,
-                        "request_count": len(self._requests[client_id]),
-                        "max_requests": self.max_requests,
-                        "window_seconds": self.window_seconds,
+                        "client_key": client_key,
+                        "retry_after": retry_after,
                     }
                 },
             )
-            # Phase 4: Uncomment to enforce
-            # return web.Response(
-            #     status=429,
-            #     text="Rate limit exceeded",
-            # )
 
-        # Record this request
-        self._requests[client_id].append(current_time)
+            # Return 429 Too Many Requests
+            response = web.json_response(
+                {
+                    "error": "Rate limit exceeded",
+                    "code": "RATE_LIMIT_EXCEEDED",
+                    "retry_after": retry_after,
+                },
+                status=429,
+            )
+
+            # Add Retry-After header
+            response.headers["Retry-After"] = str(retry_after)
+
+            return response
 
         # Process request
         return await handler(request)
+
+
+class AuthMiddleware:
+    """Authentication middleware.
+
+    Validates requests using a configured authentication provider.
+    Sets authenticated client information in request context for
+    downstream handlers to use.
+
+    Attributes:
+        auth_provider: The authentication provider to use
+        rate_limiter: Optional rate limiter for auth failures
+
+    Example:
+        >>> from simply_mcp.security.auth import APIKeyAuthProvider
+        >>> provider = APIKeyAuthProvider(api_keys=["secret-123"])
+        >>> middleware = AuthMiddleware(provider)
+        >>> app.middlewares.append(middleware)
+    """
+
+    def __init__(
+        self,
+        auth_provider: Any,  # AuthProvider type hint causes circular import
+        rate_limit_failures: bool = True,
+        max_failures: int = 10,
+        failure_window: int = 60,
+    ) -> None:
+        """Initialize authentication middleware.
+
+        Args:
+            auth_provider: Authentication provider to use
+            rate_limit_failures: Whether to rate limit auth failures
+            max_failures: Maximum auth failures per window
+            failure_window: Time window for failure tracking (seconds)
+        """
+        self.auth_provider = auth_provider
+        self.rate_limit_failures = rate_limit_failures
+        self.max_failures = max_failures
+        self.failure_window = failure_window
+        self._failures: dict[str, list[float]] = {}
+
+    @web.middleware
+    async def __call__(
+        self,
+        request: web.Request,
+        handler: Handler,
+    ) -> web.StreamResponse:
+        """Process request with authentication.
+
+        Args:
+            request: Incoming request
+            handler: Next handler in chain
+
+        Returns:
+            Response from handler or 401 if authentication fails
+        """
+        # Import here to avoid circular dependency
+        from simply_mcp.core.errors import AuthenticationError
+
+        try:
+            # Check rate limit for auth failures (if enabled)
+            if self.rate_limit_failures:
+                client_ip = request.remote or "unknown"
+                if self._is_rate_limited(client_ip):
+                    logger.warning(
+                        f"Auth failure rate limit exceeded for {client_ip}",
+                        extra={
+                            "context": {
+                                "client_ip": client_ip,
+                                "failures": len(self._failures.get(client_ip, [])),
+                            }
+                        },
+                    )
+                    return web.json_response(
+                        {
+                            "error": "Too many authentication failures",
+                            "code": "RATE_LIMIT_EXCEEDED",
+                        },
+                        status=429,
+                    )
+
+            # Authenticate request
+            client_info = await self.auth_provider.authenticate(request)
+
+            # Store client info in request for downstream handlers
+            request["client_info"] = client_info
+
+            # Clear failures for this client on successful auth
+            if self.rate_limit_failures:
+                client_ip = request.remote or "unknown"
+                if client_ip in self._failures:
+                    del self._failures[client_ip]
+
+            # Continue to next handler
+            return await handler(request)
+
+        except AuthenticationError as e:
+            # Track authentication failure
+            if self.rate_limit_failures:
+                client_ip = request.remote or "unknown"
+                self._record_failure(client_ip)
+
+            # Log authentication failure (without sensitive info)
+            logger.warning(
+                f"Authentication failed: {e.message}",
+                extra={
+                    "context": {
+                        "remote": request.remote or "unknown",
+                        "path": request.path,
+                        "auth_type": e.context.get("auth_type", "unknown"),
+                    }
+                },
+            )
+
+            # Return 401 Unauthorized
+            return web.json_response(
+                {
+                    "error": e.message,
+                    "code": e.code,
+                },
+                status=401,
+            )
+
+        except Exception as e:
+            # Log unexpected error
+            logger.error(
+                f"Unexpected error in authentication: {e}",
+                extra={
+                    "context": {
+                        "error": str(e),
+                        "error_type": type(e).__name__,
+                    }
+                },
+            )
+
+            # Return 500 Internal Server Error
+            return web.json_response(
+                {
+                    "error": "Internal authentication error",
+                    "code": "INTERNAL_ERROR",
+                },
+                status=500,
+            )
+
+    def _is_rate_limited(self, client_ip: str) -> bool:
+        """Check if client has exceeded auth failure rate limit.
+
+        Args:
+            client_ip: Client IP address
+
+        Returns:
+            True if rate limited, False otherwise
+        """
+        if client_ip not in self._failures:
+            return False
+
+        current_time = time.time()
+
+        # Remove old failures outside window
+        self._failures[client_ip] = [
+            failure_time
+            for failure_time in self._failures[client_ip]
+            if current_time - failure_time < self.failure_window
+        ]
+
+        # Check if limit exceeded
+        return len(self._failures[client_ip]) >= self.max_failures
+
+    def _record_failure(self, client_ip: str) -> None:
+        """Record an authentication failure.
+
+        Args:
+            client_ip: Client IP address
+        """
+        current_time = time.time()
+
+        if client_ip not in self._failures:
+            self._failures[client_ip] = []
+
+        self._failures[client_ip].append(current_time)
 
 
 def create_middleware_stack(
@@ -364,20 +562,21 @@ def create_middleware_stack(
 
     # Add logging first for complete request/response tracking
     if logging_enabled:
-        middlewares.append(LoggingMiddleware())
+        middleware_instance = LoggingMiddleware()
+        middlewares.append(middleware_instance.__call__)
 
     # Add CORS support
     if cors_enabled:
-        middlewares.append(
-            CORSMiddleware(
-                enabled=True,
-                allowed_origins=cors_origins,
-            )
+        middleware_instance = CORSMiddleware(
+            enabled=True,
+            allowed_origins=cors_origins,
         )
+        middlewares.append(middleware_instance.__call__)
 
     # Add rate limiting (placeholder for Phase 4)
     if rate_limit_enabled:
-        middlewares.append(RateLimitMiddleware())
+        middleware_instance = RateLimitMiddleware()
+        middlewares.append(middleware_instance.__call__)
 
     return middlewares
 
@@ -386,5 +585,6 @@ __all__ = [
     "CORSMiddleware",
     "LoggingMiddleware",
     "RateLimitMiddleware",
+    "AuthMiddleware",
     "create_middleware_stack",
 ]

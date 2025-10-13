@@ -7,7 +7,7 @@ from multiple sources (files, environment variables) with proper precedence.
 import os
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 if sys.version_info < (3, 11):
     import tomli as tomllib  # type: ignore[import-not-found]
@@ -17,7 +17,7 @@ else:
 from pydantic import BaseModel, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from simply_mcp.core.types import APIStyle, AuthType, LogFormat, LogLevel, TransportType
+from simply_mcp.core.types import AuthType, LogFormat, LogLevel, TransportType
 
 
 class ServerMetadataModel(BaseModel):
@@ -33,9 +33,9 @@ class ServerMetadataModel(BaseModel):
 
     name: str = Field(..., min_length=1, description="Server name")
     version: str = Field(..., min_length=1, description="Server version")
-    description: Optional[str] = Field(default=None, description="Server description")
-    author: Optional[str] = Field(default=None, description="Author information")
-    homepage: Optional[str] = Field(default=None, description="Homepage URL")
+    description: str | None = Field(default=None, description="Server description")
+    author: str | None = Field(default=None, description="Author information")
+    homepage: str | None = Field(default=None, description="Homepage URL")
 
 
 class TransportConfigModel(BaseModel):
@@ -53,9 +53,9 @@ class TransportConfigModel(BaseModel):
     type: TransportType = Field(default="stdio", description="Transport type")
     host: str = Field(default="0.0.0.0", description="Host address")
     port: int = Field(default=3000, ge=1, le=65535, description="Port number")
-    path: Optional[str] = Field(default=None, description="Path prefix")
+    path: str | None = Field(default=None, description="Path prefix")
     cors_enabled: bool = Field(default=True, description="Enable CORS")
-    cors_origins: Optional[List[str]] = Field(default=None, description="Allowed CORS origins")
+    cors_origins: list[str] | None = Field(default=None, description="Allowed CORS origins")
 
 
 class RateLimitConfigModel(BaseModel):
@@ -85,13 +85,13 @@ class AuthConfigModel(BaseModel):
 
     type: AuthType = Field(default="none", description="Authentication type")
     enabled: bool = Field(default=False, description="Enable authentication")
-    api_keys: List[str] = Field(default_factory=list, description="Valid API keys")
-    oauth_config: Dict[str, Any] = Field(default_factory=dict, description="OAuth config")
-    jwt_config: Dict[str, Any] = Field(default_factory=dict, description="JWT config")
+    api_keys: list[str] = Field(default_factory=list, description="Valid API keys")
+    oauth_config: dict[str, Any] = Field(default_factory=dict, description="OAuth config")
+    jwt_config: dict[str, Any] = Field(default_factory=dict, description="JWT config")
 
     @field_validator("api_keys")
     @classmethod
-    def validate_api_keys(cls, v: List[str], info: Any) -> List[str]:
+    def validate_api_keys(cls, v: list[str], info: Any) -> list[str]:
         """Validate API keys are provided when type is api_key."""
         auth_type = info.data.get("type")
         enabled = info.data.get("enabled", False)
@@ -112,7 +112,7 @@ class LogConfigModel(BaseModel):
 
     level: LogLevel = Field(default="INFO", description="Log level")
     format: LogFormat = Field(default="json", description="Log format")
-    file: Optional[str] = Field(default=None, description="Log file path")
+    file: str | None = Field(default=None, description="Log file path")
     enable_console: bool = Field(default=True, description="Enable console logging")
 
 
@@ -182,7 +182,7 @@ class SimplyMCPConfig(BaseSettings):
     )
 
 
-def load_config_from_file(file_path: Union[str, Path]) -> SimplyMCPConfig:
+def load_config_from_file(file_path: str | Path) -> SimplyMCPConfig:
     """Load configuration from a TOML or JSON file.
 
     Args:
@@ -214,7 +214,7 @@ def load_config_from_file(file_path: Union[str, Path]) -> SimplyMCPConfig:
     elif suffix == ".json":
         import json
 
-        with open(path, "r") as f:
+        with open(path) as f:
             data = json.load(f)
     else:
         raise ValueError(f"Unsupported configuration file format: {suffix}")
@@ -240,7 +240,7 @@ def load_config_from_env() -> SimplyMCPConfig:
     return SimplyMCPConfig()
 
 
-def _merge_env_vars(config_data: Dict[str, Any]) -> Dict[str, Any]:
+def _merge_env_vars(config_data: dict[str, Any]) -> dict[str, Any]:
     """Merge environment variables into config data.
 
     Environment variables with SIMPLY_MCP_ prefix override config values.
@@ -316,7 +316,7 @@ def _merge_env_vars(config_data: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def load_config(
-    file_path: Optional[Union[str, Path]] = None,
+    file_path: str | Path | None = None,
     env_override: bool = True,
 ) -> SimplyMCPConfig:
     """Load configuration from file and/or environment with precedence.
@@ -377,7 +377,7 @@ def load_config(
     return config
 
 
-def validate_config(config: Union[SimplyMCPConfig, Dict[str, Any]]) -> bool:
+def validate_config(config: SimplyMCPConfig | dict[str, Any]) -> bool:
     """Validate a configuration object or dictionary.
 
     Args:

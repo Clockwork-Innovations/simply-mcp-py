@@ -16,7 +16,7 @@ import threading
 from contextvars import ContextVar
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
+from typing import Any
 
 from pythonjsonlogger import jsonlogger
 from rich.console import Console
@@ -24,13 +24,12 @@ from rich.logging import RichHandler
 from rich.text import Text
 
 from simply_mcp.core.config import LogConfigModel
-from simply_mcp.core.types import LogFormat, LogLevel
 
 # Context variables for contextual logging
-_log_context: ContextVar[Dict[str, Any]] = ContextVar("log_context", default={})
+_log_context: ContextVar[dict[str, Any]] = ContextVar("log_context", default={})  # noqa: B006, B039
 
 # Singleton logger instance
-_logger_instance: Optional[logging.Logger] = None
+_logger_instance: logging.Logger | None = None
 _logger_lock = threading.Lock()
 
 # Sensitive field patterns to sanitize
@@ -58,9 +57,9 @@ class ContextualJSONFormatter(jsonlogger.JsonFormatter):  # type: ignore[misc, n
 
     def add_fields(
         self,
-        log_record: Dict[str, Any],
+        log_record: dict[str, Any],
         record: logging.LogRecord,
-        message_dict: Dict[str, Any],
+        message_dict: dict[str, Any],
     ) -> None:
         """Add custom fields to log record.
 
@@ -106,7 +105,7 @@ class ContextualJSONFormatter(jsonlogger.JsonFormatter):  # type: ignore[misc, n
         log_record.clear()
         log_record.update(sanitized)
 
-    def _sanitize_dict(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _sanitize_dict(self, data: dict[str, Any]) -> dict[str, Any]:
         """Recursively sanitize sensitive data in dictionary.
 
         Args:
@@ -115,7 +114,7 @@ class ContextualJSONFormatter(jsonlogger.JsonFormatter):  # type: ignore[misc, n
         Returns:
             Sanitized dictionary
         """
-        sanitized: Dict[str, Any] = {}
+        sanitized: dict[str, Any] = {}
         for key, value in data.items():
             # Check if key matches sensitive pattern
             is_sensitive = any(re.search(pattern, key) for pattern in SENSITIVE_PATTERNS)
@@ -154,7 +153,7 @@ class ContextualRichHandler(RichHandler):
 
     def render_message(  # type: ignore[override]
         self, record: logging.LogRecord, message: str
-    ) -> Union[Text, str]:
+    ) -> Text | str:
         """Render message with contextual information.
 
         Args:
@@ -301,7 +300,7 @@ def setup_logger(
         return logger
 
 
-def get_logger(name: Optional[str] = None) -> logging.Logger:
+def get_logger(name: str | None = None) -> logging.Logger:
     """Get logger instance (singleton pattern).
 
     Returns the configured logger instance. If no logger has been set up,
@@ -376,7 +375,7 @@ class LoggerContext:
         """
         self.context = context
         self.token: Any = None
-        self.previous_context: Dict[str, Any] = {}
+        self.previous_context: dict[str, Any] = {}
 
     def __enter__(self) -> "LoggerContext":
         """Enter context and set contextual information.
@@ -430,7 +429,7 @@ def log_with_context(logger: logging.Logger, level: str, message: str, **context
     log_method(message, extra={"context": context})
 
 
-def sanitize_sensitive_data(data: Union[Dict[str, Any], str], redact: bool = True) -> Any:
+def sanitize_sensitive_data(data: dict[str, Any] | str, redact: bool = True) -> Any:
     """Sanitize sensitive data from log messages.
 
     Removes or redacts sensitive information like passwords, API keys, tokens, etc.
@@ -452,14 +451,14 @@ def sanitize_sensitive_data(data: Union[Dict[str, Any], str], redact: bool = Tru
         for pattern in SENSITIVE_PATTERNS:
             sanitized_str = re.sub(
                 rf"{pattern}['\"]?\s*[:=]\s*['\"]?[\w\-]+['\"]?",
-                rf"\1='***REDACTED***'",
+                r"\1='***REDACTED***'",
                 sanitized_str,
                 flags=re.IGNORECASE,
             )
         return sanitized_str
 
     if isinstance(data, dict):
-        sanitized_dict: Dict[str, Any] = {}
+        sanitized_dict: dict[str, Any] = {}
         for key, value in data.items():
             # Check if key matches sensitive pattern
             is_sensitive = any(re.search(pattern, key) for pattern in SENSITIVE_PATTERNS)

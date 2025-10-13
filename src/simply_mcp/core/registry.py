@@ -9,11 +9,10 @@ instance, and integrates with the error handling and logging systems for robust 
 """
 
 import threading
-from typing import Dict, List, Optional
 
-from simply_mcp.core.errors import HandlerNotFoundError, ValidationError
+from simply_mcp.core.errors import ValidationError
 from simply_mcp.core.logger import get_logger
-from simply_mcp.core.types import PromptConfig, ResourceConfig, ToolConfig
+from simply_mcp.core.types import PromptConfigModel, ResourceConfigModel, ToolConfigModel
 
 # Module-level logger
 logger = get_logger(__name__)
@@ -35,22 +34,22 @@ class ComponentRegistry:
     - Comprehensive logging of all operations
 
     Attributes:
-        _tools: Dictionary mapping tool names to ToolConfig
-        _prompts: Dictionary mapping prompt names to PromptConfig
-        _resources: Dictionary mapping resource URIs to ResourceConfig
+        _tools: Dictionary mapping tool names to ToolConfigModel
+        _prompts: Dictionary mapping prompt names to PromptConfigModel
+        _resources: Dictionary mapping resource URIs to ResourceConfigModel
         _lock: Threading lock for thread-safe operations
 
     Example:
         >>> registry = ComponentRegistry()
-        >>> tool_config: ToolConfig = {
-        ...     "name": "add",
-        ...     "description": "Add two numbers",
-        ...     "input_schema": {"type": "object"},
-        ...     "handler": lambda a, b: a + b
-        ... }
+        >>> tool_config = ToolConfigModel(
+        ...     name="add",
+        ...     description="Add two numbers",
+        ...     input_schema={"type": "object"},
+        ...     handler=lambda a, b: a + b
+        ... )
         >>> registry.register_tool(tool_config)
         >>> tool = registry.get_tool("add")
-        >>> print(tool["name"])
+        >>> print(tool.name)
         add
     """
 
@@ -60,14 +59,14 @@ class ComponentRegistry:
         Creates empty storage for tools, prompts, and resources, and initializes
         the threading lock for concurrent access control.
         """
-        self._tools: Dict[str, ToolConfig] = {}
-        self._prompts: Dict[str, PromptConfig] = {}
-        self._resources: Dict[str, ResourceConfig] = {}
+        self._tools: dict[str, ToolConfigModel] = {}
+        self._prompts: dict[str, PromptConfigModel] = {}
+        self._resources: dict[str, ResourceConfigModel] = {}
         self._lock = threading.Lock()
 
         logger.debug("Initialized ComponentRegistry")
 
-    def register_tool(self, config: ToolConfig) -> None:
+    def register_tool(self, config: ToolConfigModel) -> None:
         """Register a tool with the registry.
 
         Registers a tool configuration and validates for naming conflicts.
@@ -80,15 +79,15 @@ class ComponentRegistry:
             ValidationError: If a tool with the same name already exists
 
         Example:
-            >>> tool_config: ToolConfig = {
-            ...     "name": "calculate",
-            ...     "description": "Perform calculations",
-            ...     "input_schema": {"type": "object"},
-            ...     "handler": calculate_handler
-            ... }
+            >>> tool_config = ToolConfigModel(
+            ...     name="calculate",
+            ...     description="Perform calculations",
+            ...     input_schema={"type": "object"},
+            ...     handler=calculate_handler
+            ... )
             >>> registry.register_tool(tool_config)
         """
-        tool_name = config["name"]
+        tool_name = config.name
         tool_name_lower = tool_name.lower()
 
         with self._lock:
@@ -109,7 +108,7 @@ class ComponentRegistry:
                 extra={"context": {"tool_name": tool_name}},
             )
 
-    def register_prompt(self, config: PromptConfig) -> None:
+    def register_prompt(self, config: PromptConfigModel) -> None:
         """Register a prompt with the registry.
 
         Registers a prompt configuration and validates for naming conflicts.
@@ -122,14 +121,14 @@ class ComponentRegistry:
             ValidationError: If a prompt with the same name already exists
 
         Example:
-            >>> prompt_config: PromptConfig = {
-            ...     "name": "greeting",
-            ...     "description": "Generate a greeting",
-            ...     "template": "Hello, {name}!"
-            ... }
+            >>> prompt_config = PromptConfigModel(
+            ...     name="greeting",
+            ...     description="Generate a greeting",
+            ...     template="Hello, {name}!"
+            ... )
             >>> registry.register_prompt(prompt_config)
         """
-        prompt_name = config["name"]
+        prompt_name = config.name
         prompt_name_lower = prompt_name.lower()
 
         with self._lock:
@@ -150,7 +149,7 @@ class ComponentRegistry:
                 extra={"context": {"prompt_name": prompt_name}},
             )
 
-    def register_resource(self, config: ResourceConfig) -> None:
+    def register_resource(self, config: ResourceConfigModel) -> None:
         """Register a resource with the registry.
 
         Registers a resource configuration and validates for URI conflicts.
@@ -163,16 +162,16 @@ class ComponentRegistry:
             ValidationError: If a resource with the same URI already exists
 
         Example:
-            >>> resource_config: ResourceConfig = {
-            ...     "uri": "file:///data/config.json",
-            ...     "name": "config",
-            ...     "description": "Configuration file",
-            ...     "mime_type": "application/json",
-            ...     "handler": load_config
-            ... }
+            >>> resource_config = ResourceConfigModel(
+            ...     uri="file:///data/config.json",
+            ...     name="config",
+            ...     description="Configuration file",
+            ...     mime_type="application/json",
+            ...     handler=load_config
+            ... )
             >>> registry.register_resource(resource_config)
         """
-        resource_uri = config["uri"]
+        resource_uri = config.uri
 
         with self._lock:
             if resource_uri in self._resources:
@@ -192,12 +191,12 @@ class ComponentRegistry:
                 extra={
                     "context": {
                         "resource_uri": resource_uri,
-                        "resource_name": config["name"],
+                        "resource_name": config.name,
                     }
                 },
             )
 
-    def get_tool(self, name: str) -> Optional[ToolConfig]:
+    def get_tool(self, name: str) -> ToolConfigModel | None:
         """Get a tool by name.
 
         Performs case-insensitive lookup of a tool by name.
@@ -211,7 +210,7 @@ class ComponentRegistry:
         Example:
             >>> tool = registry.get_tool("calculate")
             >>> if tool:
-            ...     print(tool["description"])
+            ...     print(tool.description)
             Perform calculations
         """
         name_lower = name.lower()
@@ -224,7 +223,7 @@ class ComponentRegistry:
                 logger.debug(f"Tool not found: {name}")
             return tool
 
-    def get_prompt(self, name: str) -> Optional[PromptConfig]:
+    def get_prompt(self, name: str) -> PromptConfigModel | None:
         """Get a prompt by name.
 
         Performs case-insensitive lookup of a prompt by name.
@@ -238,7 +237,7 @@ class ComponentRegistry:
         Example:
             >>> prompt = registry.get_prompt("greeting")
             >>> if prompt:
-            ...     print(prompt["description"])
+            ...     print(prompt.description)
             Generate a greeting
         """
         name_lower = name.lower()
@@ -251,7 +250,7 @@ class ComponentRegistry:
                 logger.debug(f"Prompt not found: {name}")
             return prompt
 
-    def get_resource(self, uri: str) -> Optional[ResourceConfig]:
+    def get_resource(self, uri: str) -> ResourceConfigModel | None:
         """Get a resource by URI.
 
         Performs exact URI lookup of a resource.
@@ -265,7 +264,7 @@ class ComponentRegistry:
         Example:
             >>> resource = registry.get_resource("file:///data/config.json")
             >>> if resource:
-            ...     print(resource["mime_type"])
+            ...     print(resource.mime_type)
             application/json
         """
         with self._lock:
@@ -276,7 +275,7 @@ class ComponentRegistry:
                 logger.debug(f"Resource not found: {uri}")
             return resource
 
-    def list_tools(self) -> List[ToolConfig]:
+    def list_tools(self) -> list[ToolConfigModel]:
         """List all registered tools.
 
         Returns:
@@ -285,7 +284,7 @@ class ComponentRegistry:
         Example:
             >>> tools = registry.list_tools()
             >>> for tool in tools:
-            ...     print(tool["name"])
+            ...     print(tool.name)
             calculate
             add
         """
@@ -294,7 +293,7 @@ class ComponentRegistry:
             logger.debug(f"Listed {len(tools)} tools")
             return tools
 
-    def list_prompts(self) -> List[PromptConfig]:
+    def list_prompts(self) -> list[PromptConfigModel]:
         """List all registered prompts.
 
         Returns:
@@ -303,7 +302,7 @@ class ComponentRegistry:
         Example:
             >>> prompts = registry.list_prompts()
             >>> for prompt in prompts:
-            ...     print(prompt["name"])
+            ...     print(prompt.name)
             greeting
             farewell
         """
@@ -312,7 +311,7 @@ class ComponentRegistry:
             logger.debug(f"Listed {len(prompts)} prompts")
             return prompts
 
-    def list_resources(self) -> List[ResourceConfig]:
+    def list_resources(self) -> list[ResourceConfigModel]:
         """List all registered resources.
 
         Returns:
@@ -321,7 +320,7 @@ class ComponentRegistry:
         Example:
             >>> resources = registry.list_resources()
             >>> for resource in resources:
-            ...     print(resource["uri"])
+            ...     print(resource.uri)
             file:///data/config.json
             file:///data/schema.json
         """
@@ -469,7 +468,7 @@ class ComponentRegistry:
         """
         with self._lock:
             if uri in self._resources:
-                resource_name = self._resources[uri]["name"]
+                resource_name = self._resources[uri].name
                 del self._resources[uri]
                 logger.info(
                     f"Unregistered resource: {uri}",
@@ -517,7 +516,7 @@ class ComponentRegistry:
                 },
             )
 
-    def get_stats(self) -> Dict[str, int]:
+    def get_stats(self) -> dict[str, int]:
         """Get statistics about registered components.
 
         Returns:

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "simply-mcp"
-version = "0.1.0"
+version = "0.1.0-beta"
 description = "A modern Python framework for building MCP servers with multiple API styles"
 authors = [
     {name = "Clockwork Innovations", email = "info@clockwork-innovations.com"}
@@ -39,7 +39,7 @@ dependencies = [
     "pydantic-settings>=2.0.0",
     "click>=8.0.0",
     "rich>=13.0.0",
-    "watchdog>=3.0.0",
+    "watchdog>=4.0.0",
     "aiohttp>=3.9.0",
     "aiohttp-cors>=0.7.0",
     "tomli>=2.0.0; python_version < '3.11'",
@@ -63,14 +63,18 @@ dev = [
     "mypy>=1.0.0",
     "pre-commit>=3.0.0",
 
-    # Documentation
-    "mkdocs>=1.5.0",
-    "mkdocs-material>=9.0.0",
-    "mkdocstrings[python]>=0.24.0",
-
     # Build
     "build>=1.0.0",
     "twine>=4.0.0",
+]
+
+docs = [
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.4.0",
+    "mkdocstrings[python]>=0.24.0",
+    "mkdocs-gen-files>=0.5.0",
+    "mkdocs-literate-nav>=0.6.0",
+    "mkdocs-section-index>=0.3.0",
 ]
 
 bundling = [

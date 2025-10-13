@@ -3,19 +3,29 @@
 This module defines the fundamental types used throughout the Simply-MCP framework,
 including tool configurations, prompt definitions, resource specifications, and
 server metadata.
+
+All types are defined as Pydantic BaseModel classes providing runtime validation,
+type safety, and excellent IDE support.
 """
 
-from typing import Any, Callable, Dict, List, Literal, Optional, Protocol, TypedDict, Union
-from typing_extensions import NotRequired
+from collections.abc import Callable
+from typing import Any, Literal, Protocol
+
+from pydantic import BaseModel, ConfigDict, Field
 
 # Type aliases for common patterns
-JSONValue = Union[str, int, float, bool, None, Dict[str, Any], List[Any]]
-JSONDict = Dict[str, JSONValue]
+JSONValue = str | int | float | bool | None | dict[str, Any] | list[Any]
+JSONDict = dict[str, JSONValue]
 HandlerFunction = Callable[..., Any]
 
 
-class ToolConfig(TypedDict):
-    """Configuration for a tool.
+# =============================================================================
+# Pydantic Models
+# =============================================================================
+
+
+class ToolConfigModel(BaseModel):
+    """Configuration for a tool with runtime validation.
 
     Tools are executable functions that the MCP server exposes to clients.
     They can perform actions, computations, and have side effects.
@@ -28,15 +38,17 @@ class ToolConfig(TypedDict):
         metadata: Optional additional metadata about the tool
     """
 
-    name: str
-    description: str
-    input_schema: JSONDict
-    handler: HandlerFunction
-    metadata: NotRequired[Dict[str, Any]]
+    name: str = Field(..., min_length=1, description="Tool name")
+    description: str = Field(..., min_length=1, description="Tool description")
+    input_schema: dict[str, Any] = Field(..., description="JSON Schema for tool inputs")
+    handler: Callable[..., Any] = Field(..., description="Tool handler function")
+    metadata: dict[str, Any] = Field(default_factory=dict, description="Extra metadata")
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
-class PromptConfig(TypedDict):
-    """Configuration for a prompt template.
+class PromptConfigModel(BaseModel):
+    """Configuration for a prompt template with runtime validation.
 
     Prompts define interaction templates that help structure communication
     with language models.
@@ -50,16 +62,18 @@ class PromptConfig(TypedDict):
         metadata: Optional additional metadata about the prompt
     """
 
-    name: str
-    description: str
-    arguments: NotRequired[List[str]]
-    template: NotRequired[str]
-    handler: NotRequired[HandlerFunction]
-    metadata: NotRequired[Dict[str, Any]]
+    name: str = Field(..., min_length=1, description="Prompt name")
+    description: str = Field(..., min_length=1, description="Prompt description")
+    arguments: list[str] = Field(default_factory=list, description="Prompt arguments")
+    template: str | None = Field(None, description="Prompt template string")
+    handler: Callable[..., Any] | None = Field(None, description="Dynamic prompt handler")
+    metadata: dict[str, Any] = Field(default_factory=dict, description="Extra metadata")
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
-class ResourceConfig(TypedDict):
-    """Configuration for a resource.
+class ResourceConfigModel(BaseModel):
+    """Configuration for a resource with runtime validation.
 
     Resources represent data or content that the server can provide,
     such as files, configurations, or computed values.
@@ -73,16 +87,18 @@ class ResourceConfig(TypedDict):
         metadata: Optional additional metadata about the resource
     """
 
-    uri: str
-    name: str
-    description: str
-    mime_type: str
-    handler: HandlerFunction
-    metadata: NotRequired[Dict[str, Any]]
+    uri: str = Field(..., min_length=1, description="Resource URI")
+    name: str = Field(..., min_length=1, description="Resource name")
+    description: str = Field(..., min_length=1, description="Resource description")
+    mime_type: str = Field(..., description="MIME type")
+    handler: Callable[..., Any] = Field(..., description="Resource handler function")
+    metadata: dict[str, Any] = Field(default_factory=dict, description="Extra metadata")
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
-class ServerMetadata(TypedDict):
-    """Metadata about the MCP server.
+class ServerMetadataModel(BaseModel):
+    """Metadata about the MCP server with runtime validation.
 
     Attributes:
         name: Server name
@@ -92,19 +108,21 @@ class ServerMetadata(TypedDict):
         homepage: Optional homepage URL
     """
 
-    name: str
-    version: str
-    description: NotRequired[str]
-    author: NotRequired[str]
-    homepage: NotRequired[str]
+    name: str = Field(..., min_length=1, description="Server name")
+    version: str = Field(..., min_length=1, description="Server version")
+    description: str | None = Field(None, description="Server description")
+    author: str | None = Field(None, description="Author information")
+    homepage: str | None = Field(None, description="Homepage URL")
+
+    model_config = ConfigDict(extra="forbid")
 
 
 # Transport types
 TransportType = Literal["stdio", "http", "sse"]
 
 
-class TransportConfig(TypedDict):
-    """Configuration for a transport layer.
+class TransportConfigModel(BaseModel):
+    """Configuration for a transport layer with runtime validation.
 
     Attributes:
         type: Type of transport to use
@@ -113,15 +131,17 @@ class TransportConfig(TypedDict):
         path: Optional path prefix for HTTP endpoints
     """
 
-    type: TransportType
-    host: NotRequired[str]
-    port: NotRequired[int]
-    path: NotRequired[str]
+    type: TransportType = Field(..., description="Transport type")
+    host: str | None = Field(None, description="Host address")
+    port: int | None = Field(None, ge=1, le=65535, description="Port number")
+    path: str | None = Field(None, description="Path prefix")
+
+    model_config = ConfigDict(extra="forbid")
 
 
 # Progress reporting types
-class ProgressUpdate(TypedDict):
-    """Progress update information.
+class ProgressUpdateModel(BaseModel):
+    """Progress update information with runtime validation.
 
     Attributes:
         percentage: Progress as a percentage (0-100)
@@ -130,10 +150,12 @@ class ProgressUpdate(TypedDict):
         total: Optional total number of steps
     """
 
-    percentage: float
-    message: NotRequired[str]
-    current: NotRequired[int]
-    total: NotRequired[int]
+    percentage: float = Field(..., ge=0.0, le=100.0, description="Progress percentage")
+    message: str | None = Field(None, description="Status message")
+    current: int | None = Field(None, ge=0, description="Current step")
+    total: int | None = Field(None, ge=0, description="Total steps")
+
+    model_config = ConfigDict(extra="forbid")
 
 
 class ProgressReporter(Protocol):
@@ -145,9 +167,9 @@ class ProgressReporter(Protocol):
     async def update(
         self,
         percentage: float,
-        message: Optional[str] = None,
-        current: Optional[int] = None,
-        total: Optional[int] = None,
+        message: str | None = None,
+        current: int | None = None,
+        total: int | None = None,
     ) -> None:
         """Update progress.
 
@@ -161,8 +183,8 @@ class ProgressReporter(Protocol):
 
 
 # Context types
-class RequestContext(TypedDict):
-    """Context information for a request.
+class RequestContextModel(BaseModel):
+    """Context information for a request with runtime validation.
 
     Attributes:
         request_id: Unique identifier for the request
@@ -171,10 +193,12 @@ class RequestContext(TypedDict):
         metadata: Additional request metadata
     """
 
-    request_id: str
-    session_id: NotRequired[str]
-    user_id: NotRequired[str]
-    metadata: NotRequired[Dict[str, Any]]
+    request_id: str = Field(..., min_length=1, description="Request ID")
+    session_id: str | None = Field(None, description="Session ID")
+    user_id: str | None = Field(None, description="User ID")
+    metadata: dict[str, Any] = Field(default_factory=dict, description="Request metadata")
+
+    model_config = ConfigDict(extra="forbid")
 
 
 class HandlerContext(Protocol):
@@ -185,12 +209,12 @@ class HandlerContext(Protocol):
     """
 
     @property
-    def request(self) -> RequestContext:
+    def request(self) -> RequestContextModel:
         """Get the current request context."""
         ...
 
     @property
-    def progress(self) -> Optional[ProgressReporter]:
+    def progress(self) -> ProgressReporter | None:
         """Get the progress reporter if available."""
         ...
 
@@ -204,8 +228,8 @@ class HandlerContext(Protocol):
 APIStyle = Literal["decorator", "functional", "interface", "builder"]
 
 
-class APIStyleInfo(TypedDict):
-    """Information about detected API style.
+class APIStyleInfoModel(BaseModel):
+    """Information about detected API style with runtime validation.
 
     Attributes:
         style: The detected API style
@@ -213,14 +237,16 @@ class APIStyleInfo(TypedDict):
         indicators: List of indicators that led to this detection
     """
 
-    style: APIStyle
-    confidence: float
-    indicators: List[str]
+    style: APIStyle = Field(..., description="Detected API style")
+    confidence: float = Field(..., ge=0.0, le=1.0, description="Confidence level")
+    indicators: list[str] = Field(default_factory=list, description="Detection indicators")
+
+    model_config = ConfigDict(extra="forbid")
 
 
 # Validation types
-class ValidationError(TypedDict):
-    """Validation error information.
+class ValidationErrorModel(BaseModel):
+    """Validation error information with runtime validation.
 
     Attributes:
         field: Field name that failed validation
@@ -229,27 +255,33 @@ class ValidationError(TypedDict):
         context: Optional additional context
     """
 
-    field: str
-    message: str
-    code: NotRequired[str]
-    context: NotRequired[Dict[str, Any]]
+    field: str = Field(..., min_length=1, description="Field name")
+    message: str = Field(..., min_length=1, description="Error message")
+    code: str | None = Field(None, description="Error code")
+    context: dict[str, Any] = Field(default_factory=dict, description="Additional context")
+
+    model_config = ConfigDict(extra="forbid")
 
 
-class ValidationResult(TypedDict):
-    """Result of a validation operation.
+class ValidationResultModel(BaseModel):
+    """Result of a validation operation with runtime validation.
 
     Attributes:
         valid: Whether validation passed
         errors: List of validation errors (if any)
     """
 
-    valid: bool
-    errors: NotRequired[List[ValidationError]]
+    valid: bool = Field(..., description="Validation status")
+    errors: list[ValidationErrorModel] = Field(
+        default_factory=list, description="Validation errors"
+    )
+
+    model_config = ConfigDict(extra="forbid")
 
 
 # Security types
-class RateLimitConfig(TypedDict):
-    """Rate limiting configuration.
+class RateLimitConfigModel(BaseModel):
+    """Rate limiting configuration with runtime validation.
 
     Attributes:
         enabled: Whether rate limiting is enabled
@@ -257,16 +289,18 @@ class RateLimitConfig(TypedDict):
         burst_size: Maximum burst size (token bucket)
     """
 
-    enabled: bool
-    requests_per_minute: int
-    burst_size: NotRequired[int]
+    enabled: bool = Field(..., description="Enable rate limiting")
+    requests_per_minute: int = Field(..., gt=0, description="Max requests per minute")
+    burst_size: int | None = Field(None, gt=0, description="Burst size")
+
+    model_config = ConfigDict(extra="forbid")
 
 
 AuthType = Literal["api_key", "oauth", "jwt", "none"]
 
 
-class AuthConfig(TypedDict):
-    """Authentication configuration.
+class AuthConfigModel(BaseModel):
+    """Authentication configuration with runtime validation.
 
     Attributes:
         type: Type of authentication
@@ -276,11 +310,13 @@ class AuthConfig(TypedDict):
         jwt_config: JWT configuration (for jwt type)
     """
 
-    type: AuthType
-    enabled: bool
-    api_keys: NotRequired[List[str]]
-    oauth_config: NotRequired[Dict[str, Any]]
-    jwt_config: NotRequired[Dict[str, Any]]
+    type: AuthType = Field(..., description="Authentication type")
+    enabled: bool = Field(..., description="Enable authentication")
+    api_keys: list[str] = Field(default_factory=list, description="API keys")
+    oauth_config: dict[str, Any] = Field(default_factory=dict, description="OAuth config")
+    jwt_config: dict[str, Any] = Field(default_factory=dict, description="JWT config")
+
+    model_config = ConfigDict(extra="forbid")
 
 
 # Logging types
@@ -288,8 +324,8 @@ LogLevel = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 LogFormat = Literal["json", "text"]
 
 
-class LogConfig(TypedDict):
-    """Logging configuration.
+class LogConfigModel(BaseModel):
+    """Logging configuration with runtime validation.
 
     Attributes:
         level: Log level
@@ -298,15 +334,17 @@ class LogConfig(TypedDict):
         enable_console: Whether to log to console
     """
 
-    level: LogLevel
-    format: LogFormat
-    file: NotRequired[str]
-    enable_console: NotRequired[bool]
+    level: LogLevel = Field(..., description="Log level")
+    format: LogFormat = Field(..., description="Log format")
+    file: str | None = Field(None, description="Log file path")
+    enable_console: bool = Field(True, description="Enable console logging")
+
+    model_config = ConfigDict(extra="forbid")
 
 
 # Feature flags
-class FeatureFlags(TypedDict):
-    """Feature flags configuration.
+class FeatureFlagsModel(BaseModel):
+    """Feature flags configuration with runtime validation.
 
     Attributes:
         enable_progress: Enable progress reporting
@@ -314,14 +352,16 @@ class FeatureFlags(TypedDict):
         max_request_size: Maximum request size in bytes
     """
 
-    enable_progress: bool
-    enable_binary_content: bool
-    max_request_size: int
+    enable_progress: bool = Field(..., description="Enable progress reporting")
+    enable_binary_content: bool = Field(..., description="Enable binary content")
+    max_request_size: int = Field(..., gt=0, description="Max request size in bytes")
+
+    model_config = ConfigDict(extra="forbid")
 
 
 # Complete server configuration
-class ServerConfig(TypedDict):
-    """Complete server configuration.
+class ServerConfigModel(BaseModel):
+    """Complete server configuration with runtime validation.
 
     Attributes:
         metadata: Server metadata
@@ -332,12 +372,14 @@ class ServerConfig(TypedDict):
         features: Feature flags
     """
 
-    metadata: ServerMetadata
-    transport: TransportConfig
-    rate_limit: NotRequired[RateLimitConfig]
-    auth: NotRequired[AuthConfig]
-    logging: NotRequired[LogConfig]
-    features: NotRequired[FeatureFlags]
+    metadata: ServerMetadataModel = Field(..., description="Server metadata")
+    transport: TransportConfigModel = Field(..., description="Transport configuration")
+    rate_limit: RateLimitConfigModel | None = Field(None, description="Rate limit config")
+    auth: AuthConfigModel | None = Field(None, description="Auth config")
+    logging: LogConfigModel | None = Field(None, description="Logging config")
+    features: FeatureFlagsModel | None = Field(None, description="Feature flags")
+
+    model_config = ConfigDict(extra="forbid")
 
 
 __all__ = [
@@ -345,36 +387,28 @@ __all__ = [
     "JSONValue",
     "JSONDict",
     "HandlerFunction",
-    # Core configs
-    "ToolConfig",
-    "PromptConfig",
-    "ResourceConfig",
-    "ServerMetadata",
-    # Transport
+    # Pydantic Models
+    "ToolConfigModel",
+    "PromptConfigModel",
+    "ResourceConfigModel",
+    "ServerMetadataModel",
+    "TransportConfigModel",
+    "ProgressUpdateModel",
+    "RequestContextModel",
+    "APIStyleInfoModel",
+    "ValidationErrorModel",
+    "ValidationResultModel",
+    "RateLimitConfigModel",
+    "AuthConfigModel",
+    "LogConfigModel",
+    "FeatureFlagsModel",
+    "ServerConfigModel",
+    # Enums and Protocols
     "TransportType",
-    "TransportConfig",
-    # Progress
-    "ProgressUpdate",
     "ProgressReporter",
-    # Context
-    "RequestContext",
     "HandlerContext",
-    # API Style
     "APIStyle",
-    "APIStyleInfo",
-    # Validation
-    "ValidationError",
-    "ValidationResult",
-    # Security
-    "RateLimitConfig",
     "AuthType",
-    "AuthConfig",
-    # Logging
     "LogLevel",
     "LogFormat",
-    "LogConfig",
-    # Features
-    "FeatureFlags",
-    # Server
-    "ServerConfig",
 ]

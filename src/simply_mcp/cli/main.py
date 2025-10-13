@@ -25,6 +25,10 @@ def cli() -> None:
     Examples:
 
         \b
+        # Run a server in dev mode
+        simply-mcp dev server.py
+
+        \b
         # Run a server
         simply-mcp run server.py
 
@@ -43,12 +47,15 @@ def cli() -> None:
 # Lazy imports to improve startup time
 def _register_commands() -> None:
     """Register CLI commands."""
+    from simply_mcp.cli import bundle, dev, list_cmd, run, watch
     from simply_mcp.cli import config as config_module
-    from simply_mcp.cli import list_cmd, run
 
+    cli.add_command(dev.dev)
     cli.add_command(run.run)
     cli.add_command(config_module.config)
     cli.add_command(list_cmd.list_components)
+    cli.add_command(watch.watch)
+    cli.add_command(bundle.bundle)
 
 
 _register_commands()

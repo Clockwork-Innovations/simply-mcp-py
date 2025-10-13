@@ -97,9 +97,9 @@ class TestAddTool:
         # Check tool config
         tool = mcp.server.registry.get_tool("add")
         assert tool is not None
-        assert tool["name"] == "add"
-        assert tool["description"] == "Add two numbers."
-        assert tool["handler"] == add
+        assert tool.name == "add"
+        assert tool.description == "Add two numbers."
+        assert tool.handler == add
 
     def test_add_tool_custom_description(self):
         """Test add_tool with custom description."""
@@ -111,7 +111,7 @@ class TestAddTool:
         mcp.add_tool("multiply", multiply, description="Custom multiply")
 
         tool = mcp.server.registry.get_tool("multiply")
-        assert tool["description"] == "Custom multiply"
+        assert tool.description == "Custom multiply"
 
     def test_add_tool_auto_description_from_docstring(self):
         """Test add_tool extracts description from docstring."""
@@ -124,7 +124,7 @@ class TestAddTool:
         mcp.add_tool("subtract", subtract)
 
         tool = mcp.server.registry.get_tool("subtract")
-        assert tool["description"] == "Subtract b from a."
+        assert tool.description == "Subtract b from a."
 
     def test_add_tool_auto_schema_generation(self):
         """Test add_tool generates schema from function signature."""
@@ -137,7 +137,7 @@ class TestAddTool:
         mcp.add_tool("divide", divide)
 
         tool = mcp.server.registry.get_tool("divide")
-        schema = tool["input_schema"]
+        schema = tool.input_schema
         assert schema["type"] == "object"
         assert "a" in schema["properties"]
         assert "b" in schema["properties"]
@@ -162,7 +162,7 @@ class TestAddTool:
         mcp.add_tool("process", process, input_schema=schema)
 
         tool = mcp.server.registry.get_tool("process")
-        assert tool["input_schema"] == schema
+        assert tool.input_schema == schema
 
     @pytest.mark.skipif(not PYDANTIC_AVAILABLE, reason="Pydantic not available")
     def test_add_tool_pydantic_model(self):
@@ -180,7 +180,7 @@ class TestAddTool:
         mcp.add_tool("search", search, input_schema=SearchInput)
 
         tool = mcp.server.registry.get_tool("search")
-        schema = tool["input_schema"]
+        schema = tool.input_schema
         assert schema["type"] == "object"
         assert "query" in schema["properties"]
         assert "limit" in schema["properties"]
@@ -238,7 +238,7 @@ class TestToolDecorator:
             return a / b
 
         tool = mcp.server.registry.get_tool("divide")
-        assert tool["description"] == "Custom description"
+        assert tool.description == "Custom description"
 
     @pytest.mark.skipif(not PYDANTIC_AVAILABLE, reason="Pydantic not available")
     def test_tool_decorator_pydantic_schema(self):
@@ -255,8 +255,8 @@ class TestToolDecorator:
             return {"name": input.name, "age": input.age}
 
         tool = mcp.server.registry.get_tool("create_user")
-        assert "name" in tool["input_schema"]["properties"]
-        assert "age" in tool["input_schema"]["properties"]
+        assert "name" in tool.input_schema["properties"]
+        assert "age" in tool.input_schema["properties"]
 
 
 class TestAddPrompt:
@@ -281,10 +281,10 @@ class TestAddPrompt:
         # Check prompt config
         prompt = mcp.server.registry.get_prompt("greet")
         assert prompt is not None
-        assert prompt["name"] == "greet"
-        assert prompt["description"] == "Generate a greeting."
-        assert prompt["arguments"] == ["name"]
-        assert prompt["handler"] == greet
+        assert prompt.name == "greet"
+        assert prompt.description == "Generate a greeting."
+        assert prompt.arguments == ["name"]
+        assert prompt.handler == greet
 
     def test_add_prompt_custom_description(self):
         """Test add_prompt with custom description."""
@@ -296,7 +296,7 @@ class TestAddPrompt:
         mcp.add_prompt("code_review", code_review, description="Custom code review")
 
         prompt = mcp.server.registry.get_prompt("code_review")
-        assert prompt["description"] == "Custom code review"
+        assert prompt.description == "Custom code review"
 
     def test_add_prompt_explicit_arguments(self):
         """Test add_prompt with explicit arguments."""
@@ -308,7 +308,7 @@ class TestAddPrompt:
         mcp.add_prompt("generate_text", generate_text, arguments=["topic"])
 
         prompt = mcp.server.registry.get_prompt("generate_text")
-        assert prompt["arguments"] == ["topic"]
+        assert prompt.arguments == ["topic"]
 
     def test_add_prompt_no_arguments(self):
         """Test add_prompt with no arguments."""
@@ -321,8 +321,8 @@ class TestAddPrompt:
         mcp.add_prompt("static", static_prompt)
 
         prompt = mcp.server.registry.get_prompt("static")
-        # When there are no arguments, the list should be empty or the key may not be present
-        assert prompt.get("arguments", []) == []
+        # When there are no arguments, the list should be empty
+        assert prompt.arguments == []
 
     def test_add_prompt_duplicate_raises_error(self):
         """Test add_prompt raises error for duplicate prompt name."""
@@ -354,7 +354,7 @@ class TestPromptDecorator:
 
         assert "code_review" in mcp.list_prompts()
         prompt = mcp.server.registry.get_prompt("code_review")
-        assert prompt["arguments"] == ["language"]
+        assert prompt.arguments == ["language"]
 
     def test_prompt_decorator_custom_name(self):
         """Test @mcp.prompt with custom name."""
@@ -376,7 +376,7 @@ class TestPromptDecorator:
             return f"Write about {topic} in {style} style"
 
         prompt = mcp.server.registry.get_prompt("generate_prompt")
-        assert prompt["arguments"] == ["topic", "style"]
+        assert prompt.arguments == ["topic", "style"]
 
 
 class TestAddResource:
@@ -401,11 +401,11 @@ class TestAddResource:
         # Check resource config
         resource = mcp.server.registry.get_resource("config://app")
         assert resource is not None
-        assert resource["uri"] == "config://app"
-        assert resource["name"] == "get_config"
-        assert resource["description"] == "Get application config."
-        assert resource["mime_type"] == "application/json"
-        assert resource["handler"] == get_config
+        assert resource.uri == "config://app"
+        assert resource.name == "get_config"
+        assert resource.description == "Get application config."
+        assert resource.mime_type == "application/json"
+        assert resource.handler == get_config
 
     def test_add_resource_custom_name_description(self):
         """Test add_resource with custom name and description."""
@@ -422,8 +422,8 @@ class TestAddResource:
         )
 
         resource = mcp.server.registry.get_resource("data://stats")
-        assert resource["name"] == "statistics"
-        assert resource["description"] == "System statistics"
+        assert resource.name == "statistics"
+        assert resource.description == "System statistics"
 
     def test_add_resource_custom_mime_type(self):
         """Test add_resource with custom MIME type."""
@@ -436,7 +436,7 @@ class TestAddResource:
         mcp.add_resource("data://text", get_text, mime_type="text/plain")
 
         resource = mcp.server.registry.get_resource("data://text")
-        assert resource["mime_type"] == "text/plain"
+        assert resource.mime_type == "text/plain"
 
     def test_add_resource_empty_uri_raises_error(self):
         """Test add_resource raises error for empty URI."""
@@ -487,7 +487,7 @@ class TestResourceDecorator:
             return {"cpu": "50%"}
 
         resource = mcp.server.registry.get_resource("data://stats")
-        assert resource["name"] == "statistics"
+        assert resource.name == "statistics"
 
     def test_resource_decorator_custom_mime_type(self):
         """Test @mcp.resource with custom MIME type."""
@@ -498,7 +498,7 @@ class TestResourceDecorator:
             return "Plain text"
 
         resource = mcp.server.registry.get_resource("data://text")
-        assert resource["mime_type"] == "text/plain"
+        assert resource.mime_type == "text/plain"
 
     def test_resource_decorator_empty_uri_raises_error(self):
         """Test @mcp.resource raises error for empty URI."""
@@ -747,7 +747,7 @@ class TestEdgeCases:
         mcp.add_tool("no_params", no_params)
 
         tool = mcp.server.registry.get_tool("no_params")
-        schema = tool["input_schema"]
+        schema = tool.input_schema
         assert schema["type"] == "object"
         assert len(schema["properties"]) == 0
 
@@ -762,7 +762,7 @@ class TestEdgeCases:
         mcp.add_tool("greet", with_optional)
 
         tool = mcp.server.registry.get_tool("greet")
-        schema = tool["input_schema"]
+        schema = tool.input_schema
         assert "name" in schema["required"]
         assert "greeting" not in schema.get("required", [])
 
@@ -776,7 +776,7 @@ class TestEdgeCases:
         mcp.add_prompt("static", static_prompt)
 
         prompt = mcp.server.registry.get_prompt("static")
-        assert prompt.get("arguments", []) == []
+        assert prompt.arguments == []
 
     def test_tool_without_docstring(self):
         """Test add_tool with function without docstring."""
@@ -788,7 +788,7 @@ class TestEdgeCases:
         mcp.add_tool("no_doc", no_doc)
 
         tool = mcp.server.registry.get_tool("no_doc")
-        assert tool["description"] == "Tool: no_doc"
+        assert tool.description == "Tool: no_doc"
 
     def test_async_tool_function(self):
         """Test add_tool with async function."""
@@ -801,8 +801,8 @@ class TestEdgeCases:
         mcp.add_tool("async_tool", async_tool)
 
         tool = mcp.server.registry.get_tool("async_tool")
-        assert tool["name"] == "async_tool"
-        assert tool["handler"] == async_tool
+        assert tool.name == "async_tool"
+        assert tool.handler == async_tool
 
 
 class TestIntegration:
@@ -867,7 +867,7 @@ class TestIntegration:
 
         assert len(mcp.list_tools()) == 2
         search_tool = mcp.server.registry.get_tool("search")
-        assert "query" in search_tool["input_schema"]["properties"]
+        assert "query" in search_tool.input_schema["properties"]
 
     def test_method_chaining_fluent_api(self):
         """Test fluent API with extensive method chaining."""

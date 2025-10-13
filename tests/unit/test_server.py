@@ -24,7 +24,7 @@ from simply_mcp.core.errors import (
     ValidationError,
 )
 from simply_mcp.core.server import SimplyMCPServer
-from simply_mcp.core.types import PromptConfig, ResourceConfig, ToolConfig
+from simply_mcp.core.types import PromptConfigModel, ResourceConfigModel, ToolConfigModel
 
 
 class TestSimplyMCPServerInit:
@@ -119,16 +119,16 @@ class TestSimplyMCPServerToolRegistration:
         def add(a: int, b: int) -> int:
             return a + b
 
-        tool_config: ToolConfig = {
-            "name": "add",
-            "description": "Add two numbers",
-            "input_schema": {
+        tool_config = ToolConfigModel(
+            name="add",
+            description="Add two numbers",
+            input_schema={
                 "type": "object",
                 "properties": {"a": {"type": "integer"}, "b": {"type": "integer"}},
                 "required": ["a", "b"],
             },
-            "handler": add,
-        }
+            handler=add,
+        )
 
         server.register_tool(tool_config)
 
@@ -136,8 +136,8 @@ class TestSimplyMCPServerToolRegistration:
         assert server.registry.has_tool("add")
         retrieved_tool = server.registry.get_tool("add")
         assert retrieved_tool is not None
-        assert retrieved_tool["name"] == "add"
-        assert retrieved_tool["handler"] == add
+        assert retrieved_tool.name == "add"
+        assert retrieved_tool.handler == add
 
     def test_register_duplicate_tool_raises_error(self) -> None:
         """Test that registering duplicate tool raises error."""
@@ -146,12 +146,12 @@ class TestSimplyMCPServerToolRegistration:
         def add(a: int, b: int) -> int:
             return a + b
 
-        tool_config: ToolConfig = {
-            "name": "add",
-            "description": "Add two numbers",
-            "input_schema": {"type": "object"},
-            "handler": add,
-        }
+        tool_config = ToolConfigModel(
+            name="add",
+            description="Add two numbers",
+            input_schema={"type": "object"},
+            handler=add,
+        )
 
         server.register_tool(tool_config)
 
@@ -169,20 +169,20 @@ class TestSimplyMCPServerToolRegistration:
             return a * b
 
         server.register_tool(
-            {
-                "name": "add",
-                "description": "Add",
-                "input_schema": {"type": "object"},
-                "handler": add,
-            }
+            ToolConfigModel(
+                name="add",
+                description="Add",
+                input_schema={"type": "object"},
+                handler=add,
+            )
         )
         server.register_tool(
-            {
-                "name": "multiply",
-                "description": "Multiply",
-                "input_schema": {"type": "object"},
-                "handler": multiply,
-            }
+            ToolConfigModel(
+                name="multiply",
+                description="Multiply",
+                input_schema={"type": "object"},
+                handler=multiply,
+            )
         )
 
         assert server.registry.has_tool("add")
@@ -196,20 +196,20 @@ class TestSimplyMCPServerPromptRegistration:
         """Test registering prompt with static template."""
         server = SimplyMCPServer()
 
-        prompt_config: PromptConfig = {
-            "name": "greeting",
-            "description": "Generate a greeting",
-            "template": "Hello, {name}!",
-            "arguments": ["name"],
-        }
+        prompt_config = PromptConfigModel(
+            name="greeting",
+            description="Generate a greeting",
+            template="Hello, {name}!",
+            arguments=["name"],
+        )
 
         server.register_prompt(prompt_config)
 
         assert server.registry.has_prompt("greeting")
         retrieved = server.registry.get_prompt("greeting")
         assert retrieved is not None
-        assert retrieved["name"] == "greeting"
-        assert retrieved["template"] == "Hello, {name}!"
+        assert retrieved.name == "greeting"
+        assert retrieved.template == "Hello, {name}!"
 
     def test_register_prompt_with_handler(self) -> None:
         """Test registering prompt with dynamic handler."""
@@ -218,12 +218,12 @@ class TestSimplyMCPServerPromptRegistration:
         def generate_greeting(name: str) -> str:
             return f"Hello, {name}!"
 
-        prompt_config: PromptConfig = {
-            "name": "greeting",
-            "description": "Generate a greeting",
-            "handler": generate_greeting,
-            "arguments": ["name"],
-        }
+        prompt_config = PromptConfigModel(
+            name="greeting",
+            description="Generate a greeting",
+            handler=generate_greeting,
+            arguments=["name"],
+        )
 
         server.register_prompt(prompt_config)
 
@@ -233,11 +233,11 @@ class TestSimplyMCPServerPromptRegistration:
         """Test that registering duplicate prompt raises error."""
         server = SimplyMCPServer()
 
-        prompt_config: PromptConfig = {
-            "name": "greeting",
-            "description": "Generate a greeting",
-            "template": "Hello!",
-        }
+        prompt_config = PromptConfigModel(
+            name="greeting",
+            description="Generate a greeting",
+            template="Hello!",
+        )
 
         server.register_prompt(prompt_config)
 
@@ -255,13 +255,13 @@ class TestSimplyMCPServerResourceRegistration:
         def load_config() -> Dict[str, Any]:
             return {"key": "value"}
 
-        resource_config: ResourceConfig = {
-            "uri": "config://app",
-            "name": "config",
-            "description": "App configuration",
-            "mime_type": "application/json",
-            "handler": load_config,
-        }
+        resource_config = ResourceConfigModel(
+            uri="config://app",
+            name="config",
+            description="App configuration",
+            mime_type="application/json",
+            handler=load_config,
+        )
 
         server.register_resource(resource_config)
 
@@ -274,13 +274,13 @@ class TestSimplyMCPServerResourceRegistration:
         def load_config() -> Dict[str, Any]:
             return {"key": "value"}
 
-        resource_config: ResourceConfig = {
-            "uri": "config://app",
-            "name": "config",
-            "description": "App configuration",
-            "mime_type": "application/json",
-            "handler": load_config,
-        }
+        resource_config = ResourceConfigModel(
+            uri="config://app",
+            name="config",
+            description="App configuration",
+            mime_type="application/json",
+            handler=load_config,
+        )
 
         server.register_resource(resource_config)
 
@@ -322,26 +322,26 @@ class TestSimplyMCPServerListTools:
             return a * b
 
         server.register_tool(
-            {
-                "name": "add",
-                "description": "Add two numbers",
-                "input_schema": {
+            ToolConfigModel(
+                name="add",
+                description="Add two numbers",
+                input_schema={
                     "type": "object",
                     "properties": {"a": {"type": "integer"}, "b": {"type": "integer"}},
                 },
-                "handler": add,
-            }
+                handler=add,
+            )
         )
         server.register_tool(
-            {
-                "name": "multiply",
-                "description": "Multiply two numbers",
-                "input_schema": {
+            ToolConfigModel(
+                name="multiply",
+                description="Multiply two numbers",
+                input_schema={
                     "type": "object",
                     "properties": {"a": {"type": "integer"}, "b": {"type": "integer"}},
                 },
-                "handler": multiply,
-            }
+                handler=multiply,
+            )
         )
 
         await server.initialize()
@@ -376,12 +376,12 @@ class TestSimplyMCPServerCallTool:
             return a + b
 
         server.register_tool(
-            {
-                "name": "add",
-                "description": "Add two numbers",
-                "input_schema": {"type": "object"},
-                "handler": add,
-            }
+            ToolConfigModel(
+                name="add",
+                description="Add two numbers",
+                input_schema={"type": "object"},
+                handler=add,
+            )
         )
 
         await server.initialize()
@@ -433,12 +433,12 @@ class TestSimplyMCPServerCallTool:
             raise ValueError("Intentional error")
 
         server.register_tool(
-            {
-                "name": "failing",
-                "description": "A tool that fails",
-                "input_schema": {"type": "object"},
-                "handler": failing_tool,
-            }
+            ToolConfigModel(
+                name="failing",
+                description="A tool that fails",
+                input_schema={"type": "object"},
+                handler=failing_tool,
+            )
         )
 
         await server.initialize()
@@ -469,12 +469,12 @@ class TestSimplyMCPServerCallTool:
             return a + b
 
         server.register_tool(
-            {
-                "name": "async_add",
-                "description": "Async add",
-                "input_schema": {"type": "object"},
-                "handler": async_add,
-            }
+            ToolConfigModel(
+                name="async_add",
+                description="Async add",
+                input_schema={"type": "object"},
+                handler=async_add,
+            )
         )
 
         await server.initialize()
@@ -505,12 +505,12 @@ class TestSimplyMCPServerCallTool:
             return {"name": "John", "age": 30}
 
         server.register_tool(
-            {
-                "name": "get_user",
-                "description": "Get user info",
-                "input_schema": {"type": "object"},
-                "handler": get_user,
-            }
+            ToolConfigModel(
+                name="get_user",
+                description="Get user info",
+                input_schema={"type": "object"},
+                handler=get_user,
+            )
         )
 
         await server.initialize()
@@ -560,18 +560,18 @@ class TestSimplyMCPServerListPrompts:
         server = SimplyMCPServer()
 
         server.register_prompt(
-            {
-                "name": "greeting",
-                "description": "Generate greeting",
-                "template": "Hello!",
-            }
+            PromptConfigModel(
+                name="greeting",
+                description="Generate greeting",
+                template="Hello!",
+            )
         )
         server.register_prompt(
-            {
-                "name": "farewell",
-                "description": "Generate farewell",
-                "template": "Goodbye!",
-            }
+            PromptConfigModel(
+                name="farewell",
+                description="Generate farewell",
+                template="Goodbye!",
+            )
         )
 
         await server.initialize()
@@ -602,12 +602,12 @@ class TestSimplyMCPServerGetPrompt:
         server = SimplyMCPServer()
 
         server.register_prompt(
-            {
-                "name": "greeting",
-                "description": "Generate greeting",
-                "template": "Hello, {name}!",
-                "arguments": ["name"],
-            }
+            PromptConfigModel(
+                name="greeting",
+                description="Generate greeting",
+                template="Hello, {name}!",
+                arguments=["name"],
+            )
         )
 
         await server.initialize()
@@ -638,12 +638,12 @@ class TestSimplyMCPServerGetPrompt:
             return f"Greetings, {name}!"
 
         server.register_prompt(
-            {
-                "name": "greeting",
-                "description": "Generate greeting",
-                "handler": generate_greeting,
-                "arguments": ["name"],
-            }
+            PromptConfigModel(
+                name="greeting",
+                description="Generate greeting",
+                handler=generate_greeting,
+                arguments=["name"],
+            )
         )
 
         await server.initialize()
@@ -692,12 +692,12 @@ class TestSimplyMCPServerGetPrompt:
             return f"Async hello, {name}!"
 
         server.register_prompt(
-            {
-                "name": "greeting",
-                "description": "Generate greeting",
-                "handler": async_greeting,
-                "arguments": ["name"],
-            }
+            PromptConfigModel(
+                name="greeting",
+                description="Generate greeting",
+                handler=async_greeting,
+                arguments=["name"],
+            )
         )
 
         await server.initialize()
@@ -751,22 +751,22 @@ class TestSimplyMCPServerListResources:
             return {"type": "object"}
 
         server.register_resource(
-            {
-                "uri": "config://app",
-                "name": "config",
-                "description": "App config",
-                "mime_type": "application/json",
-                "handler": load_config,
-            }
+            ResourceConfigModel(
+                uri="config://app",
+                name="config",
+                description="App config",
+                mime_type="application/json",
+                handler=load_config,
+            )
         )
         server.register_resource(
-            {
-                "uri": "schema://app",
-                "name": "schema",
-                "description": "App schema",
-                "mime_type": "application/json",
-                "handler": load_schema,
-            }
+            ResourceConfigModel(
+                uri="schema://app",
+                name="schema",
+                description="App schema",
+                mime_type="application/json",
+                handler=load_schema,
+            )
         )
 
         await server.initialize()
@@ -800,13 +800,13 @@ class TestSimplyMCPServerReadResource:
             return {"key": "value"}
 
         server.register_resource(
-            {
-                "uri": "config://app",
-                "name": "config",
-                "description": "App config",
-                "mime_type": "application/json",
-                "handler": load_config,
-            }
+            ResourceConfigModel(
+                uri="config://app",
+                name="config",
+                description="App config",
+                mime_type="application/json",
+                handler=load_config,
+            )
         )
 
         await server.initialize()
@@ -822,10 +822,11 @@ class TestSimplyMCPServerReadResource:
         )
         result = await handler(request)
 
-        # Check result
-        assert isinstance(result, str)
-        assert "key" in result
-        assert "value" in result
+        # Check result (MCP SDK wraps result in ServerResult)
+        assert isinstance(result, types.ServerResult)
+        content = result.root.contents[0].text
+        assert "key" in content
+        assert "value" in content
 
     @pytest.mark.asyncio
     async def test_read_resource_not_found(self) -> None:
@@ -855,13 +856,13 @@ class TestSimplyMCPServerReadResource:
             return "Hello, world!"
 
         server.register_resource(
-            {
-                "uri": "text://greeting",
-                "name": "greeting",
-                "description": "Greeting text",
-                "mime_type": "text/plain",
-                "handler": load_text,
-            }
+            ResourceConfigModel(
+                uri="text://greeting",
+                name="greeting",
+                description="Greeting text",
+                mime_type="text/plain",
+                handler=load_text,
+            )
         )
 
         await server.initialize()
@@ -877,7 +878,9 @@ class TestSimplyMCPServerReadResource:
         )
         result = await handler(request)
 
-        assert result == "Hello, world!"
+        # Check result (MCP SDK wraps result in ServerResult)
+        assert isinstance(result, types.ServerResult)
+        assert result.root.contents[0].text == "Hello, world!"
 
     @pytest.mark.asyncio
     async def test_read_resource_async_handler(self) -> None:
@@ -889,13 +892,13 @@ class TestSimplyMCPServerReadResource:
             return "Async content"
 
         server.register_resource(
-            {
-                "uri": "async://content",
-                "name": "content",
-                "description": "Async content",
-                "mime_type": "text/plain",
-                "handler": async_load,
-            }
+            ResourceConfigModel(
+                uri="async://content",
+                name="content",
+                description="Async content",
+                mime_type="text/plain",
+                handler=async_load,
+            )
         )
 
         await server.initialize()
@@ -911,7 +914,9 @@ class TestSimplyMCPServerReadResource:
         )
         result = await handler(request)
 
-        assert result == "Async content"
+        # Check result (MCP SDK wraps result in ServerResult)
+        assert isinstance(result, types.ServerResult)
+        assert result.root.contents[0].text == "Async content"
 
 
 class TestSimplyMCPServerLifecycle:
@@ -1021,10 +1026,10 @@ class TestSimplyMCPServerIntegration:
                 raise ValueError(f"Unknown operation: {operation}")
 
         server.register_tool(
-            {
-                "name": "calculate",
-                "description": "Perform calculations",
-                "input_schema": {
+            ToolConfigModel(
+                name="calculate",
+                description="Perform calculations",
+                input_schema={
                     "type": "object",
                     "properties": {
                         "x": {"type": "integer"},
@@ -1033,8 +1038,8 @@ class TestSimplyMCPServerIntegration:
                     },
                     "required": ["x", "y", "operation"],
                 },
-                "handler": calculate,
-            }
+                handler=calculate,
+            )
         )
 
         await server.initialize()
@@ -1082,12 +1087,12 @@ class TestSimplyMCPServerIntegration:
 
         # Register prompt
         server.register_prompt(
-            {
-                "name": "summarize",
-                "description": "Generate a summary prompt",
-                "template": "Please summarize the following text: {text}",
-                "arguments": ["text"],
-            }
+            PromptConfigModel(
+                name="summarize",
+                description="Generate a summary prompt",
+                template="Please summarize the following text: {text}",
+                arguments=["text"],
+            )
         )
 
         await server.initialize()
@@ -1127,13 +1132,13 @@ class TestSimplyMCPServerIntegration:
             return {"users": ["alice", "bob"], "count": 2}
 
         server.register_resource(
-            {
-                "uri": "data://users",
-                "name": "users",
-                "description": "User data",
-                "mime_type": "application/json",
-                "handler": load_data,
-            }
+            ResourceConfigModel(
+                uri="data://users",
+                name="users",
+                description="User data",
+                mime_type="application/json",
+                handler=load_data,
+            )
         )
 
         await server.initialize()
@@ -1156,8 +1161,11 @@ class TestSimplyMCPServerIntegration:
                 params=types.ReadResourceRequestParams(uri=AnyUrl("data://users")),
             )
         )
-        assert "alice" in read_result
-        assert "bob" in read_result
+        # Check result (MCP SDK wraps result in ServerResult)
+        assert isinstance(read_result, types.ServerResult)
+        content = read_result.root.contents[0].text
+        assert "alice" in content
+        assert "bob" in content
 
         # Verify request count
         assert server.request_count == 1

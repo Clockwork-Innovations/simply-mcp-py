@@ -6,14 +6,13 @@ components (tools, prompts, resources) from an MCP server file.
 
 import json
 import sys
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import click
 from rich.table import Table
 
 from simply_mcp.cli.utils import (
     console,
-    create_components_table,
     detect_api_style,
     format_error,
     format_info,
@@ -112,7 +111,7 @@ def list_components(
         resources_list = server.registry.list_resources()
 
         # Determine what to show
-        filter_type: Optional[str] = None
+        filter_type: str | None = None
         if tools and not prompts and not resources:
             filter_type = "tools"
             components_to_show = tools_list
@@ -162,10 +161,10 @@ def list_components(
 
 
 def _output_json(
-    tools_list: List[Dict[str, Any]],
-    prompts_list: List[Dict[str, Any]],
-    resources_list: List[Dict[str, Any]],
-    filter_type: Optional[str]
+    tools_list: list[Any],
+    prompts_list: list[Any],
+    resources_list: list[Any],
+    filter_type: str | None
 ) -> None:
     """Output components as JSON.
 
@@ -180,9 +179,9 @@ def _output_json(
     if filter_type is None or filter_type == "tools":
         output["tools"] = [
             {
-                "name": tool["name"],
-                "description": tool.get("description", ""),
-                "input_schema": tool.get("input_schema", {}),
+                "name": tool.name,
+                "description": tool.description,
+                "input_schema": tool.input_schema,
             }
             for tool in tools_list
         ]
@@ -190,9 +189,9 @@ def _output_json(
     if filter_type is None or filter_type == "prompts":
         output["prompts"] = [
             {
-                "name": prompt["name"],
-                "description": prompt.get("description", ""),
-                "arguments": prompt.get("arguments", []),
+                "name": prompt.name,
+                "description": prompt.description,
+                "arguments": prompt.arguments,
             }
             for prompt in prompts_list
         ]
@@ -200,10 +199,10 @@ def _output_json(
     if filter_type is None or filter_type == "resources":
         output["resources"] = [
             {
-                "uri": resource["uri"],
-                "name": resource["name"],
-                "description": resource.get("description", ""),
-                "mime_type": resource.get("mime_type", ""),
+                "uri": resource.uri,
+                "name": resource.name,
+                "description": resource.description,
+                "mime_type": resource.mime_type,
             }
             for resource in resources_list
         ]
@@ -213,10 +212,10 @@ def _output_json(
 
 
 def _output_table(
-    tools_list: List[Dict[str, Any]],
-    prompts_list: List[Dict[str, Any]],
-    resources_list: List[Dict[str, Any]],
-    filter_type: Optional[str]
+    tools_list: list[Any],
+    prompts_list: list[Any],
+    resources_list: list[Any],
+    filter_type: str | None
 ) -> None:
     """Output components as a Rich table.
 
@@ -244,28 +243,28 @@ def _output_table(
     for tool in tools_list:
         table.add_row(
             "[cyan]Tool[/cyan]",
-            tool["name"],
-            tool.get("description", "")[:80]  # Truncate long descriptions
+            tool.name,
+            tool.description[:80] if tool.description else ""  # Truncate long descriptions
         )
 
     # Add prompts
     for prompt in prompts_list:
         args_str = ""
-        if prompt.get("arguments"):
-            args_str = f" ({', '.join(prompt['arguments'])})"
+        if prompt.arguments:
+            args_str = f" ({', '.join(prompt.arguments)})"
 
         table.add_row(
             "[yellow]Prompt[/yellow]",
-            prompt["name"] + args_str,
-            prompt.get("description", "")[:80]
+            prompt.name + args_str,
+            prompt.description[:80] if prompt.description else ""
         )
 
     # Add resources
     for resource in resources_list:
         table.add_row(
             "[magenta]Resource[/magenta]",
-            f"{resource['name']} [{resource.get('mime_type', 'unknown')}]",
-            resource.get("description", "")[:80]
+            f"{resource.name} [{resource.mime_type}]",
+            resource.description[:80] if resource.description else ""
         )
 
     console.print("\n")

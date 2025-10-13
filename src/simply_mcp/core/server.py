@@ -14,16 +14,17 @@ The server provides:
 """
 
 import asyncio
+import inspect
 import time
 import uuid
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import Any, AsyncIterator, Dict, List, Optional
+from typing import Any
 
 import mcp.types as types
 from anyio.streams.memory import MemoryObjectReceiveStream, MemoryObjectSendStream
-from mcp.server.lowlevel.server import Server as MCPServer
 from mcp.server.lowlevel.server import NotificationOptions
-from mcp.server.models import InitializationOptions
+from mcp.server.lowlevel.server import Server as MCPServer
 from mcp.server.stdio import stdio_server
 from mcp.shared.message import SessionMessage
 from pydantic import AnyUrl
@@ -38,9 +39,9 @@ from simply_mcp.core.logger import LoggerContext, get_logger
 from simply_mcp.core.registry import ComponentRegistry
 from simply_mcp.core.types import (
     HandlerFunction,
-    PromptConfig,
-    ResourceConfig,
-    ToolConfig,
+    PromptConfigModel,
+    ResourceConfigModel,
+    ToolConfigModel,
 )
 
 # Module-level logger
@@ -97,7 +98,7 @@ class SimplyMCPServer:
         >>> await server.run_stdio()
     """
 
-    def __init__(self, config: Optional[SimplyMCPConfig] = None) -> None:
+    def __init__(self, config: SimplyMCPConfig | None = None) -> None:
         """Initialize the Simply-MCP server.
 
         Args:
@@ -115,8 +116,18 @@ class SimplyMCPServer:
         self._running = False
         self._request_count = 0
 
+        # Initialize progress tracker if progress is enabled
+        self.progress_tracker: Any = None
+        if self.config.features.enable_progress:
+            from simply_mcp.features.progress import ProgressTracker
+
+            # Create progress tracker with notification callback
+            self.progress_tracker = ProgressTracker(
+                default_callback=self._send_progress_notification
+            )
+
         # Create MCP server instance with lifespan
-        self.mcp_server: MCPServer[Dict[str, Any], Any] = MCPServer(
+        self.mcp_server: MCPServer[dict[str, Any], Any] = MCPServer(
             name=self.config.server.name,
             version=self.config.server.version,
             instructions=self.config.server.description,
@@ -130,14 +141,56 @@ class SimplyMCPServer:
                 "context": {
                     "server_name": self.config.server.name,
                     "server_version": self.config.server.version,
+                    "progress_enabled": self.config.features.enable_progress,
                 }
             },
         )
 
+    async def _send_progress_notification(
+        self, update: dict[str, Any]
+    ) -> None:
+        """Send progress notification to MCP client.
+
+        This method sends progress updates via the MCP protocol's progress
+        notification mechanism.
+
+        Args:
+            update: Progress update dict containing percentage, message, etc.
+        """
+        try:
+            # Send progress notification via MCP server
+            # Note: The MCP SDK doesn't yet have built-in progress notification support,
+            # so we log it for now and prepare the structure for when it's available
+            logger.debug(
+                "Progress update",
+                extra={
+                    "context": {
+                        "percentage": update.get("percentage"),
+                        "message": update.get("message"),
+                        "current": update.get("current"),
+                        "total": update.get("total"),
+                    }
+                },
+            )
+
+            # When MCP SDK adds progress notification support, use:
+            # await self.mcp_server.send_progress_notification(
+            #     progress_token=update.get("operation_id"),
+            #     progress=update["percentage"],
+            #     total=100.0,
+            #     message=update.get("message"),
+            # )
+
+        except Exception as e:
+            logger.error(
+                f"Error sending progress notification: {e}",
+                extra={"context": {"error": str(e)}},
+            )
+
     @asynccontextmanager
     async def _lifespan(
-        self, server: MCPServer[Dict[str, Any], Any]
-    ) -> AsyncIterator[Dict[str, Any]]:
+        self, server: MCPServer[dict[str, Any], Any]
+    ) -> AsyncIterator[dict[str, Any]]:
         """Lifespan context manager for MCP server.
 
         This is called by the MCP SDK during server startup and shutdown.
@@ -157,12 +210,21 @@ class SimplyMCPServer:
             "registry": self.registry,
             "config": self.config,
             "server": self,
+            "progress_tracker": self.progress_tracker,
         }
 
         try:
             yield context
         finally:
             self._running = False
+
+            # Clean up progress operations if tracker exists
+            if self.progress_tracker:
+                try:
+                    await self.progress_tracker.cleanup_completed()
+                except Exception as e:
+                    logger.warning(f"Error cleaning up progress operations: {e}")
+
             logger.info(
                 "Server lifespan ending",
                 extra={"context": {"requests_handled": self._request_count}},
@@ -201,7 +263,7 @@ class SimplyMCPServer:
         """Register handler for listing tools."""
 
         @self.mcp_server.list_tools()  # type: ignore[misc, no-untyped-call]
-        async def handle_list_tools() -> List[types.Tool]:
+        async def handle_list_tools() -> list[types.Tool]:
             """Handle list_tools request from MCP client."""
             request_id = f"req-{uuid.uuid4().hex[:8]}"
 
@@ -216,9 +278,9 @@ class SimplyMCPServer:
                     # Convert to MCP Tool types
                     tools = [
                         types.Tool(
-                            name=config["name"],
-                            description=config["description"],
-                            inputSchema=config["input_schema"],
+                            name=config.name,
+                            description=config.description,
+                            inputSchema=config.input_schema,
                         )
                         for config in tool_configs
                     ]
@@ -254,8 +316,8 @@ class SimplyMCPServer:
 
         @self.mcp_server.call_tool()  # type: ignore[misc]
         async def handle_call_tool(
-            name: str, arguments: Dict[str, Any]
-        ) -> List[types.TextContent | types.ImageContent | types.EmbeddedResource]:
+            name: str, arguments: dict[str, Any]
+        ) -> list[types.TextContent | types.ImageContent | types.EmbeddedResource]:
             """Handle call_tool request from MCP client."""
             request_id = f"req-{uuid.uuid4().hex[:8]}"
 
@@ -272,7 +334,18 @@ class SimplyMCPServer:
                         raise HandlerNotFoundError(name, "tool")
 
                     # Get handler function
-                    handler: HandlerFunction = tool_config["handler"]
+                    handler: HandlerFunction = tool_config.handler
+
+                    # Check if handler accepts a progress parameter
+                    progress_reporter = None
+                    sig = inspect.signature(handler)
+                    if "progress" in sig.parameters and self.progress_tracker:
+                        # Create a progress reporter for this operation
+                        operation_id = f"{name}-{request_id}"
+                        progress_reporter = await self.progress_tracker.create_operation(
+                            operation_id=operation_id
+                        )
+                        arguments["progress"] = progress_reporter
 
                     # Execute handler
                     logger.debug(f"Executing tool handler: {name}")
@@ -281,11 +354,25 @@ class SimplyMCPServer:
                         # Handle async handlers
                         if asyncio.iscoroutine(result):
                             result = await result
+
+                        # Complete progress if reporter was created
+                        if progress_reporter and not progress_reporter.is_completed:
+                            await progress_reporter.complete()
+
                     except Exception as e:
-                        raise HandlerExecutionError(name, e)
+                        # Fail progress if reporter was created
+                        if progress_reporter and not progress_reporter.is_completed:
+                            await progress_reporter.fail(str(e))
+                        raise HandlerExecutionError(name, e) from e
+                    finally:
+                        # Clean up progress operation
+                        if progress_reporter and self.progress_tracker:
+                            await self.progress_tracker.remove_operation(
+                                progress_reporter.operation_id
+                            )
 
                     # Convert result to MCP content
-                    content: List[
+                    content: list[
                         types.TextContent | types.ImageContent | types.EmbeddedResource
                     ]
                     if isinstance(result, str):
@@ -368,7 +455,7 @@ class SimplyMCPServer:
         """Register handler for listing prompts."""
 
         @self.mcp_server.list_prompts()  # type: ignore[misc, no-untyped-call]
-        async def handle_list_prompts() -> List[types.Prompt]:
+        async def handle_list_prompts() -> list[types.Prompt]:
             """Handle list_prompts request from MCP client."""
             request_id = f"req-{uuid.uuid4().hex[:8]}"
 
@@ -383,13 +470,13 @@ class SimplyMCPServer:
                     # Convert to MCP Prompt types
                     prompts = [
                         types.Prompt(
-                            name=config["name"],
-                            description=config.get("description"),
+                            name=config.name,
+                            description=config.description,
                             arguments=[
                                 types.PromptArgument(name=arg, required=True)
-                                for arg in config.get("arguments", [])
+                                for arg in config.arguments
                             ]
-                            if config.get("arguments")
+                            if config.arguments
                             else None,
                         )
                         for config in prompt_configs
@@ -426,7 +513,7 @@ class SimplyMCPServer:
 
         @self.mcp_server.get_prompt()  # type: ignore[misc, no-untyped-call]
         async def handle_get_prompt(
-            name: str, arguments: Optional[Dict[str, str]]
+            name: str, arguments: dict[str, str] | None
         ) -> types.GetPromptResult:
             """Handle get_prompt request from MCP client."""
             request_id = f"req-{uuid.uuid4().hex[:8]}"
@@ -444,9 +531,9 @@ class SimplyMCPServer:
                         raise HandlerNotFoundError(name, "prompt")
 
                     # Generate prompt content
-                    if "handler" in prompt_config:
+                    if prompt_config.handler:
                         # Dynamic prompt with handler
-                        handler: HandlerFunction = prompt_config["handler"]
+                        handler: HandlerFunction = prompt_config.handler
                         try:
                             result = handler(**(arguments or {}))
                             # Handle async handlers
@@ -454,10 +541,10 @@ class SimplyMCPServer:
                                 result = await result
                             prompt_text = str(result)
                         except Exception as e:
-                            raise HandlerExecutionError(name, e)
-                    elif "template" in prompt_config:
+                            raise HandlerExecutionError(name, e) from e
+                    elif prompt_config.template:
                         # Static template
-                        template = prompt_config["template"]
+                        template = prompt_config.template
                         if arguments:
                             # Simple template substitution
                             prompt_text = template.format(**arguments)
@@ -471,7 +558,7 @@ class SimplyMCPServer:
 
                     # Create prompt result
                     result = types.GetPromptResult(
-                        description=prompt_config.get("description"),
+                        description=prompt_config.description,
                         messages=[
                             types.PromptMessage(
                                 role="user",
@@ -526,7 +613,7 @@ class SimplyMCPServer:
         """Register handler for listing resources."""
 
         @self.mcp_server.list_resources()  # type: ignore[misc, no-untyped-call]
-        async def handle_list_resources() -> List[types.Resource]:
+        async def handle_list_resources() -> list[types.Resource]:
             """Handle list_resources request from MCP client."""
             request_id = f"req-{uuid.uuid4().hex[:8]}"
 
@@ -541,10 +628,10 @@ class SimplyMCPServer:
                     # Convert to MCP Resource types
                     resources = [
                         types.Resource(
-                            uri=AnyUrl(config["uri"]),
-                            name=config["name"],
-                            description=config.get("description"),
-                            mimeType=config.get("mime_type", "text/plain"),
+                            uri=AnyUrl(config.uri),
+                            name=config.name,
+                            description=config.description,
+                            mimeType=config.mime_type,
                         )
                         for config in resource_configs
                     ]
@@ -596,7 +683,7 @@ class SimplyMCPServer:
                         raise HandlerNotFoundError(str(uri), "resource")
 
                     # Get handler function
-                    handler: HandlerFunction = resource_config["handler"]
+                    handler: HandlerFunction = resource_config.handler
 
                     # Execute handler
                     logger.debug(f"Executing resource handler: {uri}")
@@ -606,19 +693,53 @@ class SimplyMCPServer:
                         if asyncio.iscoroutine(result):
                             result = await result
                     except Exception as e:
-                        raise HandlerExecutionError(str(uri), e)
+                        raise HandlerExecutionError(str(uri), e) from e
 
-                    # Convert result to string
+                    # Convert result to string, handling binary content
                     if isinstance(result, str):
                         content = result
                     elif isinstance(result, bytes):
-                        content = result.decode("utf-8")
+                        # Check if binary content is enabled
+                        if self.config.features.enable_binary_content:
+                            # Import here to avoid circular dependency
+                            from simply_mcp.features.binary import BinaryContent
+
+                            # Wrap bytes in BinaryContent and encode
+                            binary = BinaryContent(
+                                result,
+                                mime_type=resource_config.mime_type,
+                            )
+                            content = binary.to_base64()
+                            logger.debug(
+                                f"Encoded binary resource as base64: {len(content)} chars"
+                            )
+                        else:
+                            # Try UTF-8 decode for backwards compatibility
+                            content = result.decode("utf-8")
                     elif isinstance(result, dict):
                         import json
 
                         content = json.dumps(result, indent=2)
                     else:
-                        content = str(result)
+                        # Check if it's a BinaryContent instance
+                        try:
+                            from simply_mcp.features.binary import BinaryContent
+
+                            if isinstance(result, BinaryContent):
+                                if self.config.features.enable_binary_content:
+                                    content = result.to_base64()
+                                    logger.debug(
+                                        f"Encoded BinaryContent as base64: {len(content)} chars"
+                                    )
+                                else:
+                                    raise ValidationError(
+                                        "Binary content is disabled in configuration",
+                                        code="BINARY_CONTENT_DISABLED",
+                                    )
+                            else:
+                                content = str(result)
+                        except ImportError:
+                            content = str(result)
 
                     elapsed = time.time() - start_time
                     logger.info(
@@ -663,7 +784,7 @@ class SimplyMCPServer:
                     )
                     raise
 
-    def register_tool(self, config: ToolConfig) -> None:
+    def register_tool(self, config: ToolConfigModel) -> None:
         """Register a tool with the server.
 
         Args:
@@ -692,11 +813,11 @@ class SimplyMCPServer:
         """
         self.registry.register_tool(config)
         logger.info(
-            f"Registered tool: {config['name']}",
-            extra={"context": {"tool_name": config["name"]}},
+            f"Registered tool: {config.name}",
+            extra={"context": {"tool_name": config.name}},
         )
 
-    def register_prompt(self, config: PromptConfig) -> None:
+    def register_prompt(self, config: PromptConfigModel) -> None:
         """Register a prompt with the server.
 
         Args:
@@ -714,11 +835,11 @@ class SimplyMCPServer:
         """
         self.registry.register_prompt(config)
         logger.info(
-            f"Registered prompt: {config['name']}",
-            extra={"context": {"prompt_name": config["name"]}},
+            f"Registered prompt: {config.name}",
+            extra={"context": {"prompt_name": config.name}},
         )
 
-    def register_resource(self, config: ResourceConfig) -> None:
+    def register_resource(self, config: ResourceConfigModel) -> None:
         """Register a resource with the server.
 
         Args:
@@ -741,16 +862,16 @@ class SimplyMCPServer:
         """
         self.registry.register_resource(config)
         logger.info(
-            f"Registered resource: {config['uri']}",
+            f"Registered resource: {config.uri}",
             extra={
                 "context": {
-                    "resource_uri": config["uri"],
-                    "resource_name": config["name"],
+                    "resource_uri": config.uri,
+                    "resource_name": config.name,
                 }
             },
         )
 
-    def get_mcp_server(self) -> MCPServer[Dict[str, Any], Any]:
+    def get_mcp_server(self) -> MCPServer[dict[str, Any], Any]:
         """Get the underlying MCP SDK server instance.
 
         Returns:
@@ -842,7 +963,7 @@ class SimplyMCPServer:
         host: str = "0.0.0.0",
         port: int = 3000,
         cors_enabled: bool = True,
-        cors_origins: Optional[List[str]] = None,
+        cors_origins: list[str] | None = None,
     ) -> None:
         """Run the server with HTTP transport.
 
@@ -899,7 +1020,7 @@ class SimplyMCPServer:
         host: str = "0.0.0.0",
         port: int = 3000,
         cors_enabled: bool = True,
-        cors_origins: Optional[List[str]] = None,
+        cors_origins: list[str] | None = None,
     ) -> None:
         """Run the server with SSE transport.
 

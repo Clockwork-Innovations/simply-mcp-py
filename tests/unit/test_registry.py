@@ -7,7 +7,7 @@ import pytest
 
 from simply_mcp.core.errors import ValidationError
 from simply_mcp.core.registry import ComponentRegistry
-from simply_mcp.core.types import PromptConfig, ResourceConfig, ToolConfig
+from simply_mcp.core.types import PromptConfigModel, ResourceConfigModel, ToolConfigModel
 
 
 # Test fixtures
@@ -20,9 +20,9 @@ def registry() -> ComponentRegistry:
 
 
 @pytest.fixture
-def sample_tool_config() -> ToolConfig:
+def sample_tool_config() -> ToolConfigModel:
     """Create a sample tool configuration."""
-    return ToolConfig(
+    return ToolConfigModel(
         name="add",
         description="Add two numbers",
         input_schema={
@@ -38,9 +38,9 @@ def sample_tool_config() -> ToolConfig:
 
 
 @pytest.fixture
-def sample_prompt_config() -> PromptConfig:
+def sample_prompt_config() -> PromptConfigModel:
     """Create a sample prompt configuration."""
-    return PromptConfig(
+    return PromptConfigModel(
         name="greeting",
         description="Generate a greeting message",
         template="Hello, {name}!",
@@ -49,9 +49,9 @@ def sample_prompt_config() -> PromptConfig:
 
 
 @pytest.fixture
-def sample_resource_config() -> ResourceConfig:
+def sample_resource_config() -> ResourceConfigModel:
     """Create a sample resource configuration."""
-    return ResourceConfig(
+    return ResourceConfigModel(
         uri="file:///data/config.json",
         name="config",
         description="Configuration file",
@@ -89,7 +89,7 @@ class TestToolRegistration:
     """Tests for tool registration."""
 
     def test_register_tool(
-        self, registry: ComponentRegistry, sample_tool_config: ToolConfig
+        self, registry: ComponentRegistry, sample_tool_config: ToolConfigModel
     ) -> None:
         """Test registering a tool."""
         registry.register_tool(sample_tool_config)
@@ -97,18 +97,18 @@ class TestToolRegistration:
 
     def test_register_multiple_tools(self, registry: ComponentRegistry) -> None:
         """Test registering multiple tools."""
-        tool1: ToolConfig = {
-            "name": "add",
-            "description": "Add numbers",
-            "input_schema": {"type": "object"},
-            "handler": lambda a, b: a + b,
-        }
-        tool2: ToolConfig = {
-            "name": "multiply",
-            "description": "Multiply numbers",
-            "input_schema": {"type": "object"},
-            "handler": lambda a, b: a * b,
-        }
+        tool1 = ToolConfigModel(
+            name="add",
+            description="Add numbers",
+            input_schema={"type": "object"},
+            handler=lambda a, b: a + b,
+        )
+        tool2 = ToolConfigModel(
+            name="multiply",
+            description="Multiply numbers",
+            input_schema={"type": "object"},
+            handler=lambda a, b: a * b,
+        )
 
         registry.register_tool(tool1)
         registry.register_tool(tool2)
@@ -118,7 +118,7 @@ class TestToolRegistration:
         assert len(registry.list_tools()) == 2
 
     def test_register_duplicate_tool(
-        self, registry: ComponentRegistry, sample_tool_config: ToolConfig
+        self, registry: ComponentRegistry, sample_tool_config: ToolConfigModel
     ) -> None:
         """Test that registering a duplicate tool raises ValidationError."""
         registry.register_tool(sample_tool_config)
@@ -131,18 +131,18 @@ class TestToolRegistration:
         assert exc_info.value.context["tool_name"] == "add"
 
     def test_register_tool_case_insensitive(
-        self, registry: ComponentRegistry, sample_tool_config: ToolConfig
+        self, registry: ComponentRegistry, sample_tool_config: ToolConfigModel
     ) -> None:
         """Test that tool registration is case-insensitive."""
         registry.register_tool(sample_tool_config)
 
         # Try to register with different case
-        duplicate_config: ToolConfig = {
-            "name": "ADD",
-            "description": "Add numbers",
-            "input_schema": {"type": "object"},
-            "handler": lambda a, b: a + b,
-        }
+        duplicate_config = ToolConfigModel(
+            name="ADD",
+            description="Add numbers",
+            input_schema={"type": "object"},
+            handler=lambda a, b: a + b,
+        )
 
         with pytest.raises(ValidationError) as exc_info:
             registry.register_tool(duplicate_config)
@@ -151,28 +151,28 @@ class TestToolRegistration:
 
     def test_register_tool_with_metadata(self, registry: ComponentRegistry) -> None:
         """Test registering a tool with metadata."""
-        tool_config: ToolConfig = {
-            "name": "calculate",
-            "description": "Perform calculations",
-            "input_schema": {"type": "object"},
-            "handler": lambda: None,
-            "metadata": {"version": "1.0", "author": "test"},
-        }
+        tool_config = ToolConfigModel(
+            name="calculate",
+            description="Perform calculations",
+            input_schema={"type": "object"},
+            handler=lambda: None,
+            metadata={"version": "1.0", "author": "test"},
+        )
 
         registry.register_tool(tool_config)
         retrieved = registry.get_tool("calculate")
 
         assert retrieved is not None
-        assert "metadata" in retrieved
-        assert retrieved["metadata"]["version"] == "1.0"
-        assert retrieved["metadata"]["author"] == "test"
+        assert hasattr(retrieved, "metadata")
+        assert retrieved.metadata["version"] == "1.0"
+        assert retrieved.metadata["author"] == "test"
 
 
 class TestPromptRegistration:
     """Tests for prompt registration."""
 
     def test_register_prompt(
-        self, registry: ComponentRegistry, sample_prompt_config: PromptConfig
+        self, registry: ComponentRegistry, sample_prompt_config: PromptConfigModel
     ) -> None:
         """Test registering a prompt."""
         registry.register_prompt(sample_prompt_config)
@@ -180,16 +180,16 @@ class TestPromptRegistration:
 
     def test_register_multiple_prompts(self, registry: ComponentRegistry) -> None:
         """Test registering multiple prompts."""
-        prompt1: PromptConfig = {
-            "name": "greeting",
-            "description": "Greet user",
-            "template": "Hello, {name}!",
-        }
-        prompt2: PromptConfig = {
-            "name": "farewell",
-            "description": "Say goodbye",
-            "template": "Goodbye, {name}!",
-        }
+        prompt1 = PromptConfigModel(
+            name="greeting",
+            description="Greet user",
+            template="Hello, {name}!",
+        )
+        prompt2 = PromptConfigModel(
+            name="farewell",
+            description="Say goodbye",
+            template="Goodbye, {name}!",
+        )
 
         registry.register_prompt(prompt1)
         registry.register_prompt(prompt2)
@@ -199,7 +199,7 @@ class TestPromptRegistration:
         assert len(registry.list_prompts()) == 2
 
     def test_register_duplicate_prompt(
-        self, registry: ComponentRegistry, sample_prompt_config: PromptConfig
+        self, registry: ComponentRegistry, sample_prompt_config: PromptConfigModel
     ) -> None:
         """Test that registering a duplicate prompt raises ValidationError."""
         registry.register_prompt(sample_prompt_config)
@@ -212,17 +212,17 @@ class TestPromptRegistration:
         assert exc_info.value.context["prompt_name"] == "greeting"
 
     def test_register_prompt_case_insensitive(
-        self, registry: ComponentRegistry, sample_prompt_config: PromptConfig
+        self, registry: ComponentRegistry, sample_prompt_config: PromptConfigModel
     ) -> None:
         """Test that prompt registration is case-insensitive."""
         registry.register_prompt(sample_prompt_config)
 
         # Try to register with different case
-        duplicate_config: PromptConfig = {
-            "name": "GREETING",
-            "description": "Greet user",
-            "template": "Hello!",
-        }
+        duplicate_config = PromptConfigModel(
+            name="GREETING",
+            description="Greet user",
+            template="Hello!",
+        )
 
         with pytest.raises(ValidationError) as exc_info:
             registry.register_prompt(duplicate_config)
@@ -231,25 +231,25 @@ class TestPromptRegistration:
 
     def test_register_prompt_with_handler(self, registry: ComponentRegistry) -> None:
         """Test registering a prompt with a handler function."""
-        prompt_config: PromptConfig = {
-            "name": "dynamic",
-            "description": "Dynamic prompt",
-            "handler": lambda name: f"Hello, {name}!",
-        }
+        prompt_config = PromptConfigModel(
+            name="dynamic",
+            description="Dynamic prompt",
+            handler=lambda name: f"Hello, {name}!",
+        )
 
         registry.register_prompt(prompt_config)
         retrieved = registry.get_prompt("dynamic")
 
         assert retrieved is not None
-        assert "handler" in retrieved
-        assert callable(retrieved["handler"])
+        assert hasattr(retrieved, "handler")
+        assert callable(retrieved.handler)
 
 
 class TestResourceRegistration:
     """Tests for resource registration."""
 
     def test_register_resource(
-        self, registry: ComponentRegistry, sample_resource_config: ResourceConfig
+        self, registry: ComponentRegistry, sample_resource_config: ResourceConfigModel
     ) -> None:
         """Test registering a resource."""
         registry.register_resource(sample_resource_config)
@@ -257,20 +257,20 @@ class TestResourceRegistration:
 
     def test_register_multiple_resources(self, registry: ComponentRegistry) -> None:
         """Test registering multiple resources."""
-        resource1: ResourceConfig = {
-            "uri": "file:///data/config.json",
-            "name": "config",
-            "description": "Config file",
-            "mime_type": "application/json",
-            "handler": lambda: {},
-        }
-        resource2: ResourceConfig = {
-            "uri": "file:///data/schema.json",
-            "name": "schema",
-            "description": "Schema file",
-            "mime_type": "application/json",
-            "handler": lambda: {},
-        }
+        resource1 = ResourceConfigModel(
+            uri="file:///data/config.json",
+            name="config",
+            description="Config file",
+            mime_type="application/json",
+            handler=lambda: {},
+        )
+        resource2 = ResourceConfigModel(
+            uri="file:///data/schema.json",
+            name="schema",
+            description="Schema file",
+            mime_type="application/json",
+            handler=lambda: {},
+        )
 
         registry.register_resource(resource1)
         registry.register_resource(resource2)
@@ -280,7 +280,7 @@ class TestResourceRegistration:
         assert len(registry.list_resources()) == 2
 
     def test_register_duplicate_resource(
-        self, registry: ComponentRegistry, sample_resource_config: ResourceConfig
+        self, registry: ComponentRegistry, sample_resource_config: ResourceConfigModel
     ) -> None:
         """Test that registering a duplicate resource raises ValidationError."""
         registry.register_resource(sample_resource_config)
@@ -294,20 +294,20 @@ class TestResourceRegistration:
 
     def test_register_resource_uri_exact_match(self, registry: ComponentRegistry) -> None:
         """Test that resource URIs must match exactly (case-sensitive)."""
-        resource1: ResourceConfig = {
-            "uri": "file:///data/config.json",
-            "name": "config",
-            "description": "Config file",
-            "mime_type": "application/json",
-            "handler": lambda: {},
-        }
-        resource2: ResourceConfig = {
-            "uri": "file:///data/Config.json",
-            "name": "config2",
-            "description": "Config file 2",
-            "mime_type": "application/json",
-            "handler": lambda: {},
-        }
+        resource1 = ResourceConfigModel(
+            uri="file:///data/config.json",
+            name="config",
+            description="Config file",
+            mime_type="application/json",
+            handler=lambda: {},
+        )
+        resource2 = ResourceConfigModel(
+            uri="file:///data/Config.json",
+            name="config2",
+            description="Config file 2",
+            mime_type="application/json",
+            handler=lambda: {},
+        )
 
         registry.register_resource(resource1)
         registry.register_resource(resource2)  # Should succeed, different URI
@@ -321,18 +321,18 @@ class TestQueryMethods:
     """Tests for query methods."""
 
     def test_get_tool(
-        self, registry: ComponentRegistry, sample_tool_config: ToolConfig
+        self, registry: ComponentRegistry, sample_tool_config: ToolConfigModel
     ) -> None:
         """Test getting a tool by name."""
         registry.register_tool(sample_tool_config)
         tool = registry.get_tool("add")
 
         assert tool is not None
-        assert tool["name"] == "add"
-        assert tool["description"] == "Add two numbers"
+        assert tool.name == "add"
+        assert tool.description == "Add two numbers"
 
     def test_get_tool_case_insensitive(
-        self, registry: ComponentRegistry, sample_tool_config: ToolConfig
+        self, registry: ComponentRegistry, sample_tool_config: ToolConfigModel
     ) -> None:
         """Test that tool lookup is case-insensitive."""
         registry.register_tool(sample_tool_config)
@@ -347,18 +347,18 @@ class TestQueryMethods:
         assert tool is None
 
     def test_get_prompt(
-        self, registry: ComponentRegistry, sample_prompt_config: PromptConfig
+        self, registry: ComponentRegistry, sample_prompt_config: PromptConfigModel
     ) -> None:
         """Test getting a prompt by name."""
         registry.register_prompt(sample_prompt_config)
         prompt = registry.get_prompt("greeting")
 
         assert prompt is not None
-        assert prompt["name"] == "greeting"
-        assert prompt["description"] == "Generate a greeting message"
+        assert prompt.name == "greeting"
+        assert prompt.description == "Generate a greeting message"
 
     def test_get_prompt_case_insensitive(
-        self, registry: ComponentRegistry, sample_prompt_config: PromptConfig
+        self, registry: ComponentRegistry, sample_prompt_config: PromptConfigModel
     ) -> None:
         """Test that prompt lookup is case-insensitive."""
         registry.register_prompt(sample_prompt_config)
@@ -373,15 +373,15 @@ class TestQueryMethods:
         assert prompt is None
 
     def test_get_resource(
-        self, registry: ComponentRegistry, sample_resource_config: ResourceConfig
+        self, registry: ComponentRegistry, sample_resource_config: ResourceConfigModel
     ) -> None:
         """Test getting a resource by URI."""
         registry.register_resource(sample_resource_config)
         resource = registry.get_resource("file:///data/config.json")
 
         assert resource is not None
-        assert resource["uri"] == "file:///data/config.json"
-        assert resource["name"] == "config"
+        assert resource.uri == "file:///data/config.json"
+        assert resource.name == "config"
 
     def test_get_resource_not_found(self, registry: ComponentRegistry) -> None:
         """Test getting a non-existent resource."""
@@ -400,18 +400,18 @@ class TestListMethods:
 
     def test_list_tools(self, registry: ComponentRegistry) -> None:
         """Test listing multiple tools."""
-        tool1: ToolConfig = {
-            "name": "add",
-            "description": "Add",
-            "input_schema": {"type": "object"},
-            "handler": lambda: None,
-        }
-        tool2: ToolConfig = {
-            "name": "subtract",
-            "description": "Subtract",
-            "input_schema": {"type": "object"},
-            "handler": lambda: None,
-        }
+        tool1 = ToolConfigModel(
+            name="add",
+            description="Add",
+            input_schema={"type": "object"},
+            handler=lambda: None,
+        )
+        tool2 = ToolConfigModel(
+            name="subtract",
+            description="Subtract",
+            input_schema={"type": "object"},
+            handler=lambda: None,
+        )
 
         registry.register_tool(tool1)
         registry.register_tool(tool2)
@@ -419,7 +419,7 @@ class TestListMethods:
         tools = registry.list_tools()
         assert len(tools) == 2
 
-        tool_names = {tool["name"] for tool in tools}
+        tool_names = {tool.name for tool in tools}
         assert "add" in tool_names
         assert "subtract" in tool_names
 
@@ -431,16 +431,16 @@ class TestListMethods:
 
     def test_list_prompts(self, registry: ComponentRegistry) -> None:
         """Test listing multiple prompts."""
-        prompt1: PromptConfig = {
-            "name": "greeting",
-            "description": "Greet",
-            "template": "Hello",
-        }
-        prompt2: PromptConfig = {
-            "name": "farewell",
-            "description": "Goodbye",
-            "template": "Bye",
-        }
+        prompt1 = PromptConfigModel(
+            name="greeting",
+            description="Greet",
+            template="Hello",
+        )
+        prompt2 = PromptConfigModel(
+            name="farewell",
+            description="Goodbye",
+            template="Bye",
+        )
 
         registry.register_prompt(prompt1)
         registry.register_prompt(prompt2)
@@ -448,7 +448,7 @@ class TestListMethods:
         prompts = registry.list_prompts()
         assert len(prompts) == 2
 
-        prompt_names = {prompt["name"] for prompt in prompts}
+        prompt_names = {prompt.name for prompt in prompts}
         assert "greeting" in prompt_names
         assert "farewell" in prompt_names
 
@@ -460,20 +460,20 @@ class TestListMethods:
 
     def test_list_resources(self, registry: ComponentRegistry) -> None:
         """Test listing multiple resources."""
-        resource1: ResourceConfig = {
-            "uri": "file:///data/config.json",
-            "name": "config",
-            "description": "Config",
-            "mime_type": "application/json",
-            "handler": lambda: {},
-        }
-        resource2: ResourceConfig = {
-            "uri": "file:///data/schema.json",
-            "name": "schema",
-            "description": "Schema",
-            "mime_type": "application/json",
-            "handler": lambda: {},
-        }
+        resource1 = ResourceConfigModel(
+            uri="file:///data/config.json",
+            name="config",
+            description="Config",
+            mime_type="application/json",
+            handler=lambda: {},
+        )
+        resource2 = ResourceConfigModel(
+            uri="file:///data/schema.json",
+            name="schema",
+            description="Schema",
+            mime_type="application/json",
+            handler=lambda: {},
+        )
 
         registry.register_resource(resource1)
         registry.register_resource(resource2)
@@ -481,7 +481,7 @@ class TestListMethods:
         resources = registry.list_resources()
         assert len(resources) == 2
 
-        resource_uris = {resource["uri"] for resource in resources}
+        resource_uris = {resource.uri for resource in resources}
         assert "file:///data/config.json" in resource_uris
         assert "file:///data/schema.json" in resource_uris
 
@@ -490,7 +490,7 @@ class TestHasMethods:
     """Tests for has_* methods."""
 
     def test_has_tool_exists(
-        self, registry: ComponentRegistry, sample_tool_config: ToolConfig
+        self, registry: ComponentRegistry, sample_tool_config: ToolConfigModel
     ) -> None:
         """Test has_tool when tool exists."""
         registry.register_tool(sample_tool_config)
@@ -501,7 +501,7 @@ class TestHasMethods:
         assert registry.has_tool("nonexistent") is False
 
     def test_has_tool_case_insensitive(
-        self, registry: ComponentRegistry, sample_tool_config: ToolConfig
+        self, registry: ComponentRegistry, sample_tool_config: ToolConfigModel
     ) -> None:
         """Test has_tool is case-insensitive."""
         registry.register_tool(sample_tool_config)
@@ -510,7 +510,7 @@ class TestHasMethods:
         assert registry.has_tool("Add") is True
 
     def test_has_prompt_exists(
-        self, registry: ComponentRegistry, sample_prompt_config: PromptConfig
+        self, registry: ComponentRegistry, sample_prompt_config: PromptConfigModel
     ) -> None:
         """Test has_prompt when prompt exists."""
         registry.register_prompt(sample_prompt_config)
@@ -521,7 +521,7 @@ class TestHasMethods:
         assert registry.has_prompt("nonexistent") is False
 
     def test_has_prompt_case_insensitive(
-        self, registry: ComponentRegistry, sample_prompt_config: PromptConfig
+        self, registry: ComponentRegistry, sample_prompt_config: PromptConfigModel
     ) -> None:
         """Test has_prompt is case-insensitive."""
         registry.register_prompt(sample_prompt_config)
@@ -530,7 +530,7 @@ class TestHasMethods:
         assert registry.has_prompt("Greeting") is True
 
     def test_has_resource_exists(
-        self, registry: ComponentRegistry, sample_resource_config: ResourceConfig
+        self, registry: ComponentRegistry, sample_resource_config: ResourceConfigModel
     ) -> None:
         """Test has_resource when resource exists."""
         registry.register_resource(sample_resource_config)
@@ -545,7 +545,7 @@ class TestUnregisterMethods:
     """Tests for unregister methods."""
 
     def test_unregister_tool_success(
-        self, registry: ComponentRegistry, sample_tool_config: ToolConfig
+        self, registry: ComponentRegistry, sample_tool_config: ToolConfigModel
     ) -> None:
         """Test successfully unregistering a tool."""
         registry.register_tool(sample_tool_config)
@@ -561,7 +561,7 @@ class TestUnregisterMethods:
         assert result is False
 
     def test_unregister_tool_case_insensitive(
-        self, registry: ComponentRegistry, sample_tool_config: ToolConfig
+        self, registry: ComponentRegistry, sample_tool_config: ToolConfigModel
     ) -> None:
         """Test unregistering a tool is case-insensitive."""
         registry.register_tool(sample_tool_config)
@@ -571,7 +571,7 @@ class TestUnregisterMethods:
         assert not registry.has_tool("add")
 
     def test_unregister_prompt_success(
-        self, registry: ComponentRegistry, sample_prompt_config: PromptConfig
+        self, registry: ComponentRegistry, sample_prompt_config: PromptConfigModel
     ) -> None:
         """Test successfully unregistering a prompt."""
         registry.register_prompt(sample_prompt_config)
@@ -587,7 +587,7 @@ class TestUnregisterMethods:
         assert result is False
 
     def test_unregister_prompt_case_insensitive(
-        self, registry: ComponentRegistry, sample_prompt_config: PromptConfig
+        self, registry: ComponentRegistry, sample_prompt_config: PromptConfigModel
     ) -> None:
         """Test unregistering a prompt is case-insensitive."""
         registry.register_prompt(sample_prompt_config)
@@ -597,7 +597,7 @@ class TestUnregisterMethods:
         assert not registry.has_prompt("greeting")
 
     def test_unregister_resource_success(
-        self, registry: ComponentRegistry, sample_resource_config: ResourceConfig
+        self, registry: ComponentRegistry, sample_resource_config: ResourceConfigModel
     ) -> None:
         """Test successfully unregistering a resource."""
         registry.register_resource(sample_resource_config)
@@ -625,9 +625,9 @@ class TestClearMethod:
     def test_clear_populated_registry(
         self,
         registry: ComponentRegistry,
-        sample_tool_config: ToolConfig,
-        sample_prompt_config: PromptConfig,
-        sample_resource_config: ResourceConfig,
+        sample_tool_config: ToolConfigModel,
+        sample_prompt_config: PromptConfigModel,
+        sample_resource_config: ResourceConfigModel,
     ) -> None:
         """Test clearing a populated registry."""
         registry.register_tool(sample_tool_config)
@@ -644,7 +644,7 @@ class TestClearMethod:
         assert registry.get_stats()["total"] == 0
 
     def test_clear_and_re_register(
-        self, registry: ComponentRegistry, sample_tool_config: ToolConfig
+        self, registry: ComponentRegistry, sample_tool_config: ToolConfigModel
     ) -> None:
         """Test registering components after clearing."""
         registry.register_tool(sample_tool_config)
@@ -669,9 +669,9 @@ class TestGetStatsMethod:
     def test_get_stats_with_components(
         self,
         registry: ComponentRegistry,
-        sample_tool_config: ToolConfig,
-        sample_prompt_config: PromptConfig,
-        sample_resource_config: ResourceConfig,
+        sample_tool_config: ToolConfigModel,
+        sample_prompt_config: PromptConfigModel,
+        sample_resource_config: ResourceConfigModel,
     ) -> None:
         """Test get_stats with registered components."""
         registry.register_tool(sample_tool_config)
@@ -688,31 +688,31 @@ class TestGetStatsMethod:
         """Test get_stats with multiple components of each type."""
         # Register 3 tools
         for i in range(3):
-            tool: ToolConfig = {
-                "name": f"tool{i}",
-                "description": f"Tool {i}",
-                "input_schema": {"type": "object"},
-                "handler": lambda: None,
-            }
+            tool = ToolConfigModel(
+                name=f"tool{i}",
+                description=f"Tool {i}",
+                input_schema={"type": "object"},
+                handler=lambda: None,
+            )
             registry.register_tool(tool)
 
         # Register 2 prompts
         for i in range(2):
-            prompt: PromptConfig = {
-                "name": f"prompt{i}",
-                "description": f"Prompt {i}",
-                "template": "Template",
-            }
+            prompt = PromptConfigModel(
+                name=f"prompt{i}",
+                description=f"Prompt {i}",
+                template="Template",
+            )
             registry.register_prompt(prompt)
 
         # Register 1 resource
-        resource: ResourceConfig = {
-            "uri": "file:///data/test.json",
-            "name": "test",
-            "description": "Test",
-            "mime_type": "application/json",
-            "handler": lambda: {},
-        }
+        resource = ResourceConfigModel(
+            uri="file:///data/test.json",
+            name="test",
+            description="Test",
+            mime_type="application/json",
+            handler=lambda: {},
+        )
         registry.register_resource(resource)
 
         stats = registry.get_stats()
@@ -733,12 +733,12 @@ class TestThreadSafety:
 
         def register_tools(thread_id: int) -> None:
             for i in range(tools_per_thread):
-                tool: ToolConfig = {
-                    "name": f"tool_{thread_id}_{i}",
-                    "description": f"Tool {thread_id}-{i}",
-                    "input_schema": {"type": "object"},
-                    "handler": lambda: None,
-                }
+                tool = ToolConfigModel(
+                    name=f"tool_{thread_id}_{i}",
+                    description=f"Tool {thread_id}-{i}",
+                    input_schema={"type": "object"},
+                    handler=lambda: None,
+                )
                 registry.register_tool(tool)
 
         for i in range(num_threads):
@@ -759,12 +759,12 @@ class TestThreadSafety:
 
         def mixed_operations(thread_id: int) -> None:
             # Register
-            tool: ToolConfig = {
-                "name": f"tool_{thread_id}",
-                "description": f"Tool {thread_id}",
-                "input_schema": {"type": "object"},
-                "handler": lambda: None,
-            }
+            tool = ToolConfigModel(
+                name=f"tool_{thread_id}",
+                description=f"Tool {thread_id}",
+                input_schema={"type": "object"},
+                handler=lambda: None,
+            )
             registry.register_tool(tool)
 
             # Get
@@ -791,12 +791,12 @@ class TestThreadSafety:
         # Register tools first
         num_tools = 20
         for i in range(num_tools):
-            tool: ToolConfig = {
-                "name": f"tool_{i}",
-                "description": f"Tool {i}",
-                "input_schema": {"type": "object"},
-                "handler": lambda: None,
-            }
+            tool = ToolConfigModel(
+                name=f"tool_{i}",
+                description=f"Tool {i}",
+                input_schema={"type": "object"},
+                handler=lambda: None,
+            )
             registry.register_tool(tool)
 
         assert registry.get_stats()["tools"] == num_tools
@@ -821,12 +821,12 @@ class TestThreadSafety:
         """Test concurrent clear operations."""
         # Register some components
         for i in range(10):
-            tool: ToolConfig = {
-                "name": f"tool_{i}",
-                "description": f"Tool {i}",
-                "input_schema": {"type": "object"},
-                "handler": lambda: None,
-            }
+            tool = ToolConfigModel(
+                name=f"tool_{i}",
+                description=f"Tool {i}",
+                input_schema={"type": "object"},
+                handler=lambda: None,
+            )
             registry.register_tool(tool)
 
         threads = []
@@ -850,38 +850,37 @@ class TestEdgeCases:
     """Tests for edge cases and error conditions."""
 
     def test_empty_name_handling(self, registry: ComponentRegistry) -> None:
-        """Test handling of empty names."""
-        tool: ToolConfig = {
-            "name": "",
-            "description": "Empty name tool",
-            "input_schema": {"type": "object"},
-            "handler": lambda: None,
-        }
+        """Test handling of empty names - should fail validation."""
+        from pydantic import ValidationError as PydanticValidationError
 
-        registry.register_tool(tool)
-        assert registry.has_tool("")
-        assert registry.get_tool("") is not None
+        with pytest.raises(PydanticValidationError):
+            tool = ToolConfigModel(
+                name="",
+                description="Empty name tool",
+                input_schema={"type": "object"},
+                handler=lambda: None,
+            )
 
     def test_special_characters_in_names(self, registry: ComponentRegistry) -> None:
         """Test handling of special characters in names."""
-        tool: ToolConfig = {
-            "name": "tool-with-dashes_and_underscores.and.dots",
-            "description": "Special chars",
-            "input_schema": {"type": "object"},
-            "handler": lambda: None,
-        }
+        tool = ToolConfigModel(
+            name="tool-with-dashes_and_underscores.and.dots",
+            description="Special chars",
+            input_schema={"type": "object"},
+            handler=lambda: None,
+        )
 
         registry.register_tool(tool)
         assert registry.has_tool("tool-with-dashes_and_underscores.and.dots")
 
     def test_unicode_in_names(self, registry: ComponentRegistry) -> None:
         """Test handling of Unicode characters in names."""
-        tool: ToolConfig = {
-            "name": "计算器",
-            "description": "Calculator in Chinese",
-            "input_schema": {"type": "object"},
-            "handler": lambda: None,
-        }
+        tool = ToolConfigModel(
+            name="计算器",
+            description="Calculator in Chinese",
+            input_schema={"type": "object"},
+            handler=lambda: None,
+        )
 
         registry.register_tool(tool)
         assert registry.has_tool("计算器")
@@ -898,13 +897,13 @@ class TestEdgeCases:
         ]
 
         for uri in uris:
-            resource: ResourceConfig = {
-                "uri": uri,
-                "name": f"resource_{uri}",
-                "description": "Test resource",
-                "mime_type": "application/json",
-                "handler": lambda: {},
-            }
+            resource = ResourceConfigModel(
+                uri=uri,
+                name=f"resource_{uri}",
+                description="Test resource",
+                mime_type="application/json",
+                handler=lambda: {},
+            )
             registry.register_resource(resource)
 
         for uri in uris:
@@ -916,12 +915,12 @@ class TestEdgeCases:
 
         # Register many tools
         for i in range(num_components):
-            tool: ToolConfig = {
-                "name": f"tool_{i:04d}",
-                "description": f"Tool {i}",
-                "input_schema": {"type": "object"},
-                "handler": lambda: None,
-            }
+            tool = ToolConfigModel(
+                name=f"tool_{i:04d}",
+                description=f"Tool {i}",
+                input_schema={"type": "object"},
+                handler=lambda: None,
+            )
             registry.register_tool(tool)
 
         stats = registry.get_stats()

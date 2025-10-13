@@ -423,15 +423,26 @@ def test_list_command_all_components(mock_detect, mock_load, runner, tmp_path):
     # Create mock server with components
     mock_server = MagicMock()
     mock_registry = MagicMock()
-    mock_registry.list_tools.return_value = [
-        {"name": "add", "description": "Add numbers"}
-    ]
-    mock_registry.list_prompts.return_value = [
-        {"name": "greet", "description": "Greet user"}
-    ]
-    mock_registry.list_resources.return_value = [
-        {"uri": "config://test", "name": "config", "description": "Config", "mime_type": "application/json"}
-    ]
+
+    # Create mock objects with attribute access
+    mock_tool = MagicMock()
+    mock_tool.name = "add"
+    mock_tool.description = "Add numbers"
+
+    mock_prompt = MagicMock()
+    mock_prompt.name = "greet"
+    mock_prompt.description = "Greet user"
+    mock_prompt.arguments = []
+
+    mock_resource = MagicMock()
+    mock_resource.uri = "config://test"
+    mock_resource.name = "config"
+    mock_resource.description = "Config"
+    mock_resource.mime_type = "application/json"
+
+    mock_registry.list_tools.return_value = [mock_tool]
+    mock_registry.list_prompts.return_value = [mock_prompt]
+    mock_registry.list_resources.return_value = [mock_resource]
     mock_server.registry = mock_registry
 
     mock_detect.return_value = ("decorator", mock_server)
@@ -455,9 +466,13 @@ def test_list_command_filter_tools(mock_detect, mock_load, runner, tmp_path):
 
     mock_server = MagicMock()
     mock_registry = MagicMock()
-    mock_registry.list_tools.return_value = [
-        {"name": "add", "description": "Add numbers"}
-    ]
+
+    # Create mock tool with attribute access
+    mock_tool = MagicMock()
+    mock_tool.name = "add"
+    mock_tool.description = "Add numbers"
+
+    mock_registry.list_tools.return_value = [mock_tool]
     mock_registry.list_prompts.return_value = []
     mock_registry.list_resources.return_value = []
     mock_server.registry = mock_registry
@@ -481,9 +496,14 @@ def test_list_command_json_output(mock_detect, mock_load, runner, tmp_path):
 
     mock_server = MagicMock()
     mock_registry = MagicMock()
-    mock_registry.list_tools.return_value = [
-        {"name": "add", "description": "Add numbers", "input_schema": {}}
-    ]
+
+    # Create mock tool with attribute access
+    mock_tool = MagicMock()
+    mock_tool.name = "add"
+    mock_tool.description = "Add numbers"
+    mock_tool.input_schema = {}
+
+    mock_registry.list_tools.return_value = [mock_tool]
     mock_registry.list_prompts.return_value = []
     mock_registry.list_resources.return_value = []
     mock_server.registry = mock_registry

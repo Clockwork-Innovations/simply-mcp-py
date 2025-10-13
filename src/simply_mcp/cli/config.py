@@ -7,14 +7,13 @@ initialization, validation, and display of server configurations.
 import json
 import sys
 from pathlib import Path
-from typing import Optional
 
 import click
 from rich.syntax import Syntax
 from rich.table import Table
 
-from simply_mcp.cli.utils import console, format_error, format_info, format_success
-from simply_mcp.core.config import load_config, validate_config
+from simply_mcp.cli.utils import console, format_error, format_success
+from simply_mcp.core.config import SimplyMCPConfig, load_config, validate_config
 
 
 @click.group()
@@ -129,7 +128,7 @@ def init(output: str, format: str, force: bool) -> None:
     type=click.Path(exists=True),
     required=False,
 )
-def validate(config_file: Optional[str]) -> None:
+def validate(config_file: str | None) -> None:
     """Validate a configuration file.
 
     Checks that a configuration file is valid and displays any
@@ -216,7 +215,7 @@ def validate(config_file: Optional[str]) -> None:
     default="table",
     help="Output format (default: table)",
 )
-def show(config_file: Optional[str], format: str) -> None:
+def show(config_file: str | None, format: str) -> None:
     """Display current configuration.
 
     Shows the active configuration with all settings.
@@ -282,7 +281,7 @@ def show(config_file: Optional[str], format: str) -> None:
         sys.exit(1)
 
 
-def _generate_toml_config(config_obj: "SimplyMCPConfig") -> str:  # type: ignore[name-defined]
+def _generate_toml_config(config_obj: SimplyMCPConfig) -> str:
     """Generate TOML configuration string.
 
     Args:
@@ -291,7 +290,6 @@ def _generate_toml_config(config_obj: "SimplyMCPConfig") -> str:  # type: ignore
     Returns:
         TOML string
     """
-    from simply_mcp.core.config import SimplyMCPConfig
 
     return f"""# Simply-MCP Configuration File
 # This file configures your MCP server settings
@@ -332,7 +330,7 @@ max_request_size = {config_obj.features.max_request_size}
 """
 
 
-def _display_config_table(config_obj: "SimplyMCPConfig") -> None:  # type: ignore[name-defined]
+def _display_config_table(config_obj: SimplyMCPConfig) -> None:
     """Display configuration as a table.
 
     Args:

@@ -65,21 +65,21 @@ class TestToolDecorator:
 
         # Check config
         config = add._mcp_tool_config
-        assert config['name'] == 'add'
-        assert config['description'] == 'Add two numbers.'
-        assert 'input_schema' in config
-        assert config['input_schema']['type'] == 'object'
-        assert 'a' in config['input_schema']['properties']
-        assert 'b' in config['input_schema']['properties']
-        assert config['input_schema']['properties']['a']['type'] == 'integer'
-        assert config['input_schema']['properties']['b']['type'] == 'integer'
-        assert config['handler'] == add
+        assert config.name == 'add'
+        assert config.description == 'Add two numbers.'
+        assert config.input_schema is not None
+        assert config.input_schema['type'] == 'object'
+        assert 'a' in config.input_schema['properties']
+        assert 'b' in config.input_schema['properties']
+        assert config.input_schema['properties']['a']['type'] == 'integer'
+        assert config.input_schema['properties']['b']['type'] == 'integer'
+        assert config.handler == add
 
         # Check registered with global server
         server = get_global_server()
         registered_tool = server.registry.get_tool('add')
         assert registered_tool is not None
-        assert registered_tool['name'] == 'add'
+        assert registered_tool.name == 'add'
 
     def test_tool_decorator_custom_name_description(self, reset_global_server):
         """Test @tool with custom name and description."""
@@ -88,8 +88,8 @@ class TestToolDecorator:
             return a + b
 
         config = add._mcp_tool_config
-        assert config['name'] == 'custom_add'
-        assert config['description'] == 'Custom addition tool'
+        assert config.name == 'custom_add'
+        assert config.description == 'Custom addition tool'
 
         # Check registered with custom name
         server = get_global_server()
@@ -112,7 +112,7 @@ class TestToolDecorator:
             return x * 2
 
         config = process._mcp_tool_config
-        assert config['input_schema'] == schema
+        assert config.input_schema == schema
 
     @pytest.mark.skipif(not PYDANTIC_AVAILABLE, reason="Pydantic not available")
     def test_tool_decorator_pydantic_model(self, reset_global_server):
@@ -127,8 +127,8 @@ class TestToolDecorator:
             return [f"Result for {input.query}"]
 
         config = search._mcp_tool_config
-        assert 'input_schema' in config
-        schema = config['input_schema']
+        assert config.input_schema is not None
+        schema = config.input_schema
         assert schema['type'] == 'object'
         assert 'query' in schema['properties']
         assert 'limit' in schema['properties']
@@ -151,7 +151,7 @@ class TestToolDecorator:
             return x * 2
 
         config = no_doc._mcp_tool_config
-        assert config['description'] == 'Tool: no_doc'
+        assert config.description == 'Tool: no_doc'
 
     def test_tool_decorator_optional_parameters(self, reset_global_server):
         """Test @tool with optional parameters."""
@@ -161,7 +161,7 @@ class TestToolDecorator:
             return f"{greeting}, {name}!"
 
         config = greet._mcp_tool_config
-        schema = config['input_schema']
+        schema = config.input_schema
         assert 'name' in schema['required']
         assert 'greeting' not in schema['required']
         assert schema['properties']['greeting']['default'] == "Hello"
@@ -184,10 +184,10 @@ class TestPromptDecorator:
 
         # Check config
         config = code_review._mcp_prompt_config
-        assert config['name'] == 'code_review'
-        assert config['description'] == 'Generate a code review prompt.'
-        assert config['arguments'] == ['language']
-        assert config['handler'] == code_review
+        assert config.name == 'code_review'
+        assert config.description == 'Generate a code review prompt.'
+        assert config.arguments == ['language']
+        assert config.handler == code_review
 
         # Check registered with global server
         server = get_global_server()
@@ -201,8 +201,8 @@ class TestPromptDecorator:
             return f"Prompt about {topic}"
 
         config = my_prompt._mcp_prompt_config
-        assert config['name'] == 'custom_prompt'
-        assert config['description'] == 'Custom description'
+        assert config.name == 'custom_prompt'
+        assert config.description == 'Custom description'
 
     def test_prompt_decorator_explicit_arguments(self, reset_global_server):
         """Test @prompt with explicit arguments."""
@@ -212,7 +212,7 @@ class TestPromptDecorator:
             return f"Write about {topic} in a {style} style"
 
         config = generate_prompt._mcp_prompt_config
-        assert config['arguments'] == ["topic", "style"]
+        assert config.arguments == ["topic", "style"]
 
     def test_prompt_decorator_no_arguments(self, reset_global_server):
         """Test @prompt with no arguments."""
@@ -222,9 +222,8 @@ class TestPromptDecorator:
             return "This is a static prompt"
 
         config = static_prompt._mcp_prompt_config
-        # When there are no arguments, the arguments key is not present
-        # This is correct behavior - PromptConfig has 'arguments' as NotRequired
-        assert 'arguments' not in config or config.get('arguments') == []
+        # When there are no arguments, the list should be empty
+        assert config.arguments == []
 
     def test_prompt_decorator_without_docstring(self, reset_global_server):
         """Test @prompt without docstring."""
@@ -233,7 +232,7 @@ class TestPromptDecorator:
             return "Prompt text"
 
         config = no_doc._mcp_prompt_config
-        assert config['description'] == 'Prompt: no_doc'
+        assert config.description == 'Prompt: no_doc'
 
 
 class TestResourceDecorator:
@@ -253,11 +252,11 @@ class TestResourceDecorator:
 
         # Check config
         config = get_config._mcp_resource_config
-        assert config['uri'] == 'config://app'
-        assert config['name'] == 'get_config'
-        assert config['description'] == 'Get application config.'
-        assert config['mime_type'] == 'application/json'
-        assert config['handler'] == get_config
+        assert config.uri == 'config://app'
+        assert config.name == 'get_config'
+        assert config.description == 'Get application config.'
+        assert config.mime_type == 'application/json'
+        assert config.handler == get_config
 
         # Check registered with global server
         server = get_global_server()
@@ -275,8 +274,8 @@ class TestResourceDecorator:
             return "CPU: 50%"
 
         config = get_stats._mcp_resource_config
-        assert config['name'] == 'statistics'
-        assert config['description'] == 'System statistics'
+        assert config.name == 'statistics'
+        assert config.description == 'System statistics'
 
     def test_resource_decorator_custom_mime_type(self, reset_global_server):
         """Test @resource with custom MIME type."""
@@ -286,7 +285,7 @@ class TestResourceDecorator:
             return "Plain text content"
 
         config = get_text._mcp_resource_config
-        assert config['mime_type'] == 'text/plain'
+        assert config.mime_type == 'text/plain'
 
     def test_resource_decorator_missing_uri(self, reset_global_server):
         """Test @resource raises error when URI is missing."""
@@ -302,7 +301,7 @@ class TestResourceDecorator:
             return {}
 
         config = no_doc._mcp_resource_config
-        assert config['description'] == 'Resource: no_doc'
+        assert config.description == 'Resource: no_doc'
 
 
 class TestMCPServerDecorator:
@@ -337,11 +336,11 @@ class TestMCPServerDecorator:
         # Check tools are registered
         add_tool = server.registry.get_tool('add')
         assert add_tool is not None
-        assert add_tool['name'] == 'add'
+        assert add_tool.name == 'add'
 
         multiply_tool = server.registry.get_tool('multiply')
         assert multiply_tool is not None
-        assert multiply_tool['name'] == 'multiply'
+        assert multiply_tool.name == 'multiply'
 
     def test_mcp_server_decorator_mixed_components(self, reset_global_server):
         """Test @mcp_server with tools, prompts, and resources."""
@@ -441,7 +440,7 @@ class TestMCPServerDecorator:
         assert tool_config is not None
 
         # The handler should be a bound method
-        handler = tool_config['handler']
+        handler = tool_config.handler
         result1 = handler()
         result2 = handler()
         assert result1 == 1
@@ -546,7 +545,7 @@ class TestEdgeCases:
             return "result"
 
         config = no_params._mcp_tool_config
-        schema = config['input_schema']
+        schema = config.input_schema
         assert schema['type'] == 'object'
         assert len(schema['properties']) == 0
 
@@ -562,7 +561,7 @@ class TestEdgeCases:
             return {}
 
         config = complex_types._mcp_tool_config
-        schema = config['input_schema']
+        schema = config.input_schema
         assert 'items' in schema['properties']
         assert 'mapping' in schema['properties']
         assert 'optional' in schema['properties']
@@ -576,7 +575,7 @@ class TestEdgeCases:
 
         config = variable_args._mcp_prompt_config
         # Should only include 'name', not args/kwargs
-        assert config['arguments'] == ['name']
+        assert config.arguments == ['name']
 
     def test_decorated_async_function(self, reset_global_server):
         """Test decorators work with async functions."""
@@ -586,5 +585,5 @@ class TestEdgeCases:
             return x * 2
 
         config = async_tool._mcp_tool_config
-        assert config['name'] == 'async_tool'
-        assert config['handler'] == async_tool
+        assert config.name == 'async_tool'
+        assert config.handler == async_tool

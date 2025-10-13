@@ -150,6 +150,8 @@ class SSETransport:
         cors_enabled: bool = True,
         cors_origins: list[str] | None = None,
         keepalive_interval: int = 30,
+        auth_provider: Any | None = None,
+        rate_limiter: Any | None = None,
     ) -> None:
         """Initialize SSE transport.
 
@@ -160,6 +162,8 @@ class SSETransport:
             cors_enabled: Whether to enable CORS
             cors_origins: Allowed CORS origins or None for all (*)
             keepalive_interval: Interval for keep-alive pings (seconds)
+            auth_provider: Optional authentication provider
+            rate_limiter: Optional rate limiter
         """
         self.server = server
         self.host = host
@@ -167,6 +171,8 @@ class SSETransport:
         self.cors_enabled = cors_enabled
         self.cors_origins = cors_origins
         self.keepalive_interval = keepalive_interval
+        self.auth_provider = auth_provider
+        self.rate_limiter = rate_limiter
         self.app: web.Application | None = None
         self.runner: web.AppRunner | None = None
         self._site: web.TCPSite | None = None
@@ -181,6 +187,8 @@ class SSETransport:
                     "port": port,
                     "cors_enabled": cors_enabled,
                     "keepalive_interval": keepalive_interval,
+                    "auth_enabled": auth_provider is not None,
+                    "rate_limit_enabled": rate_limiter is not None,
                 }
             },
         )
@@ -206,6 +214,44 @@ class SSETransport:
             logging_enabled=True,
             rate_limit_enabled=False,
         )
+
+        # Add rate limiting middleware if configured
+        if self.rate_limiter is not None:
+            from simply_mcp.transports.middleware import RateLimitMiddleware
+
+            rate_middleware = RateLimitMiddleware(rate_limiter=self.rate_limiter)
+            middlewares.append(rate_middleware)
+
+            # Start cleanup task
+            self.rate_limiter.start_cleanup()
+
+            logger.info(
+                "Rate limiting enabled for SSE transport",
+                extra={
+                    "context": {
+                        "requests_per_minute": self.rate_limiter.requests_per_minute,
+                        "burst_size": self.rate_limiter.burst_size,
+                    }
+                },
+            )
+
+        # Add authentication middleware if configured
+        if self.auth_provider is not None:
+            from simply_mcp.transports.middleware import AuthMiddleware
+
+            auth_middleware = AuthMiddleware(self.auth_provider)
+            middlewares.append(auth_middleware)
+
+            logger.info(
+                "Authentication enabled for SSE transport",
+                extra={
+                    "context": {
+                        "auth_type": getattr(
+                            self.auth_provider, "__class__", type(self.auth_provider)
+                        ).__name__
+                    }
+                },
+            )
 
         # Create aiohttp application
         self.app = web.Application(middlewares=middlewares)
@@ -244,6 +290,10 @@ class SSETransport:
         Closes all connections and cleans up resources.
         """
         logger.info("Stopping SSE transport")
+
+        # Stop rate limiter cleanup if enabled
+        if self.rate_limiter is not None:
+            await self.rate_limiter.stop_cleanup()
 
         # Cancel keep-alive task
         if self._keepalive_task:
@@ -311,8 +361,12 @@ class SSETransport:
         Returns:
             JSON response with health status
         """
+        # For SSE transport, we consider the server healthy if it's initialized
+        # (running state is only relevant for stdio transport with lifespan)
+        is_healthy = self.server.is_initialized
+
         health = {
-            "status": "healthy" if self.server.is_running else "stopped",
+            "status": "healthy" if is_healthy else "stopped",
             "initialized": self.server.is_initialized,
             "running": self.server.is_running,
             "requests_handled": self.server.request_count,
@@ -320,7 +374,7 @@ class SSETransport:
             "components": self.server.registry.get_stats(),
         }
 
-        status = 200 if self.server.is_running else 503
+        status = 200 if is_healthy else 503
 
         return web.json_response(health, status=status)
 
@@ -514,7 +568,7 @@ class SSETransport:
             if not tool_config:
                 raise ValueError(f"Tool not found: {tool_name}")
 
-            handler = tool_config["handler"]
+            handler = tool_config.handler
             result = handler(**arguments)
 
             if asyncio.iscoroutine(result):
@@ -614,12 +668,36 @@ async def create_sse_transport(
     if config is None:
         config = server.config
 
+    # Create rate limiter if configured
+    rate_limiter = None
+    if config.rate_limit.enabled:
+        from simply_mcp.security import RateLimiter
+
+        rate_limiter = RateLimiter(
+            requests_per_minute=config.rate_limit.requests_per_minute,
+            burst_size=config.rate_limit.burst_size,
+        )
+
+    # Create authentication provider if configured
+    auth_provider = None
+    if config.auth.enabled:
+        from simply_mcp.security.auth import create_auth_provider
+
+        auth_provider = create_auth_provider(
+            auth_type=config.auth.type,
+            api_keys=config.auth.api_keys,
+            oauth_config=config.auth.oauth_config,
+            jwt_config=config.auth.jwt_config,
+        )
+
     transport = SSETransport(
         server=server,
         host=config.transport.host,
         port=config.transport.port,
         cors_enabled=config.transport.cors_enabled,
         cors_origins=config.transport.cors_origins,
+        auth_provider=auth_provider,
+        rate_limiter=rate_limiter,
     )
 
     return transport

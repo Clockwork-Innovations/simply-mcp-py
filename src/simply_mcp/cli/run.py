@@ -7,8 +7,6 @@ styles and multiple transport types.
 
 import asyncio
 import sys
-from pathlib import Path
-from typing import Optional
 
 import click
 from rich.panel import Panel
@@ -67,7 +65,7 @@ def run(
     port: int,
     host: str,
     cors: bool,
-    config: Optional[str],
+    config: str | None,
     watch: bool,
 ) -> None:
     """Run an MCP server from a Python file.
@@ -211,7 +209,7 @@ def run(
                             f"  - [cyan]http://{host}:{port}/sse[/cyan] (SSE stream)\n"
                             f"  - [cyan]http://{host}:{port}/mcp[/cyan] (JSON-RPC)\n"
                         )
-                    running_msg += f"\nPress [bold]Ctrl+C[/bold] to stop the server."
+                    running_msg += "\nPress [bold]Ctrl+C[/bold] to stop the server."
 
                 console.print(Panel(
                     running_msg,
