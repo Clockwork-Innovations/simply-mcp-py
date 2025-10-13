@@ -546,9 +546,7 @@ class TestSimplyMCPServerListPrompts:
         handler = mcp_server.request_handlers[types.ListPromptsRequest]
 
         # Call handler
-        request = types.ListPromptsRequest(
-            method="prompts/list", params=types.ListPromptsRequestParams()
-        )
+        request = types.ListPromptsRequest(method="prompts/list")
         result = await handler(request)
 
         # Check result
@@ -583,9 +581,7 @@ class TestSimplyMCPServerListPrompts:
         handler = mcp_server.request_handlers[types.ListPromptsRequest]
 
         # Call handler
-        request = types.ListPromptsRequest(
-            method="prompts/list", params=types.ListPromptsRequestParams()
-        )
+        request = types.ListPromptsRequest(method="prompts/list")
         result = await handler(request)
 
         # Check result
@@ -735,9 +731,7 @@ class TestSimplyMCPServerListResources:
         handler = mcp_server.request_handlers[types.ListResourcesRequest]
 
         # Call handler
-        request = types.ListResourcesRequest(
-            method="resources/list", params=types.ListResourcesRequestParams()
-        )
+        request = types.ListResourcesRequest(method="resources/list")
         result = await handler(request)
 
         # Check result
@@ -782,9 +776,7 @@ class TestSimplyMCPServerListResources:
         handler = mcp_server.request_handlers[types.ListResourcesRequest]
 
         # Call handler
-        request = types.ListResourcesRequest(
-            method="resources/list", params=types.ListResourcesRequestParams()
-        )
+        request = types.ListResourcesRequest(method="resources/list")
         result = await handler(request)
 
         # Check result
@@ -1052,9 +1044,7 @@ class TestSimplyMCPServerIntegration:
         # List tools
         list_handler = mcp_server.request_handlers[types.ListToolsRequest]
         list_result = await list_handler(
-            types.ListToolsRequest(
-                method="tools/list", params=types.ListToolsRequestParams()
-            )
+            types.ListToolsRequest(method="tools/list")
         )
         assert len(list_result.root.tools) == 1
         assert list_result.root.tools[0].name == "calculate"
@@ -1107,9 +1097,7 @@ class TestSimplyMCPServerIntegration:
         # List prompts
         list_handler = mcp_server.request_handlers[types.ListPromptsRequest]
         list_result = await list_handler(
-            types.ListPromptsRequest(
-                method="prompts/list", params=types.ListPromptsRequestParams()
-            )
+            types.ListPromptsRequest(method="prompts/list")
         )
         assert len(list_result.root.prompts) == 1
         assert list_result.root.prompts[0].name == "summarize"
@@ -1155,9 +1143,7 @@ class TestSimplyMCPServerIntegration:
         # List resources
         list_handler = mcp_server.request_handlers[types.ListResourcesRequest]
         list_result = await list_handler(
-            types.ListResourcesRequest(
-                method="resources/list", params=types.ListResourcesRequestParams()
-            )
+            types.ListResourcesRequest(method="resources/list")
         )
         assert len(list_result.root.resources) == 1
         assert str(list_result.root.resources[0].uri) == "data://users"
