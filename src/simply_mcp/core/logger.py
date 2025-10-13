@@ -18,7 +18,7 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
 
-from pythonjsonlogger import jsonlogger  # type: ignore[import-not-found]
+from pythonjsonlogger import jsonlogger
 from rich.console import Console
 from rich.logging import RichHandler
 from rich.text import Text
@@ -43,7 +43,7 @@ SENSITIVE_PATTERNS = [
 ]
 
 
-class ContextualJSONFormatter(jsonlogger.JsonFormatter):  # type: ignore[misc]
+class ContextualJSONFormatter(jsonlogger.JsonFormatter):  # type: ignore[misc, name-defined]
     """JSON formatter that includes contextual information.
 
     Formats log records as JSON with consistent fields including:
