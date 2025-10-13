@@ -1,0 +1,606 @@
+"""Comprehensive tests for Simply-MCP CLI.
+
+Tests all CLI commands including:
+- Main entry point
+- Run command with API auto-detection
+- Config commands (init, validate, show)
+- List command with filters
+- Error handling and edge cases
+"""
+
+import json
+import sys
+from pathlib import Path
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
+
+import pytest
+from click.testing import CliRunner
+
+from simply_mcp.api.builder import SimplyMCP
+from simply_mcp.api.decorators import get_global_server, set_global_server, tool
+from simply_mcp.cli.config import config, init, show, validate
+from simply_mcp.cli.list_cmd import list_components
+from simply_mcp.cli.main import cli
+from simply_mcp.cli.run import run
+from simply_mcp.cli.utils import (
+    create_components_table,
+    detect_api_style,
+    format_error,
+    format_info,
+    format_success,
+    get_server_instance,
+    load_python_module,
+    validate_python_file,
+)
+from simply_mcp.core.config import SimplyMCPConfig, get_default_config
+from simply_mcp.core.server import SimplyMCPServer
+
+
+@pytest.fixture
+def runner():
+    """Create a Click test runner."""
+    return CliRunner()
+
+
+@pytest.fixture
+def temp_server_file(tmp_path):
+    """Create a temporary server file for testing."""
+    server_file = tmp_path / "server.py"
+    server_file.write_text("""
+from simply_mcp import tool, prompt, resource
+
+@tool()
+def add(a: int, b: int) -> int:
+    '''Add two numbers.'''
+    return a + b
+
+@prompt()
+def greet(name: str) -> str:
+    '''Generate a greeting.'''
+    return f"Hello, {name}!"
+
+@resource(uri="config://test")
+def get_config() -> dict:
+    '''Get test config.'''
+    return {"test": True}
+""")
+    return server_file
+
+
+@pytest.fixture
+def temp_builder_file(tmp_path):
+    """Create a temporary builder API server file."""
+    server_file = tmp_path / "builder_server.py"
+    server_file.write_text("""
+from simply_mcp import SimplyMCP
+
+mcp = SimplyMCP(name="test-server", version="1.0.0")
+
+@mcp.tool()
+def multiply(a: int, b: int) -> int:
+    '''Multiply two numbers.'''
+    return a * b
+""")
+    return server_file
+
+
+@pytest.fixture
+def temp_config_file(tmp_path):
+    """Create a temporary config file."""
+    config_file = tmp_path / "test.config.toml"
+    config_file.write_text("""
+[server]
+name = "test-server"
+version = "1.0.0"
+description = "Test server"
+
+[transport]
+type = "stdio"
+port = 3000
+
+[logging]
+level = "INFO"
+format = "json"
+""")
+    return config_file
+
+
+# Test CLI Utils
+
+
+def test_validate_python_file(tmp_path):
+    """Test Python file validation."""
+    # Valid Python file
+    py_file = tmp_path / "test.py"
+    py_file.write_text("# test")
+    assert validate_python_file(str(py_file))
+
+    # Non-Python file
+    txt_file = tmp_path / "test.txt"
+    txt_file.write_text("test")
+    assert not validate_python_file(str(txt_file))
+
+    # Non-existent file
+    assert not validate_python_file(str(tmp_path / "missing.py"))
+
+
+def test_load_python_module(temp_server_file):
+    """Test loading a Python module."""
+    module = load_python_module(str(temp_server_file))
+    assert module is not None
+    assert hasattr(module, 'add')
+    assert hasattr(module, 'greet')
+
+
+def test_load_python_module_not_found():
+    """Test loading non-existent module."""
+    with pytest.raises(FileNotFoundError):
+        load_python_module("/nonexistent/file.py")
+
+
+def test_load_python_module_invalid_file(tmp_path):
+    """Test loading non-Python file."""
+    txt_file = tmp_path / "test.txt"
+    txt_file.write_text("test")
+    with pytest.raises(ValueError):
+        load_python_module(str(txt_file))
+
+
+def test_detect_api_style_decorator(temp_server_file):
+    """Test API style detection for decorator API."""
+    # Reset global server
+    from simply_mcp.api.decorators import _global_server
+    import simply_mcp.api.decorators as decorators
+    decorators._global_server = None
+
+    module = load_python_module(str(temp_server_file))
+    api_style, server = detect_api_style(module)
+
+    assert api_style == "decorator"
+    assert server is not None
+    assert isinstance(server, SimplyMCPServer)
+
+    # Verify components were registered
+    stats = server.registry.get_stats()
+    assert stats['tools'] >= 1
+    assert stats['prompts'] >= 1
+    assert stats['resources'] >= 1
+
+
+def test_detect_api_style_builder(temp_builder_file):
+    """Test API style detection for builder API."""
+    module = load_python_module(str(temp_builder_file))
+    api_style, server = detect_api_style(module)
+
+    assert api_style == "builder"
+    assert server is not None
+    assert isinstance(server, SimplyMCPServer)
+
+
+def test_get_server_instance(temp_server_file):
+    """Test getting server instance from module."""
+    from simply_mcp.api.decorators import _global_server
+    import simply_mcp.api.decorators as decorators
+    decorators._global_server = None
+
+    module = load_python_module(str(temp_server_file))
+    server = get_server_instance(module)
+
+    assert server is not None
+    assert isinstance(server, SimplyMCPServer)
+
+
+def test_create_components_table():
+    """Test creating components table."""
+    tools = [{"name": "add", "description": "Add numbers"}]
+    prompts = [{"name": "greet", "description": "Greet user"}]
+    resources = [{"name": "config", "description": "Config data", "uri": "config://test"}]
+
+    table = create_components_table(tools, prompts, resources)
+    assert table is not None
+    assert table.title == "MCP Server Components"
+
+
+def test_format_functions():
+    """Test formatting utility functions."""
+    # These should not raise exceptions
+    format_error("Test error", "Error")
+    format_success("Test success", "Success")
+    format_info("Test info", "Info")
+
+
+# Test Main CLI
+
+
+def test_cli_version(runner):
+    """Test CLI version command."""
+    result = runner.invoke(cli, ["--version"])
+    assert result.exit_code == 0
+    assert "0.1.0" in result.output
+
+
+def test_cli_help(runner):
+    """Test CLI help command."""
+    result = runner.invoke(cli, ["--help"])
+    assert result.exit_code == 0
+    assert "Simply-MCP" in result.output
+    assert "run" in result.output
+    assert "config" in result.output
+    assert "list" in result.output
+
+
+# Test Run Command
+
+
+def test_run_command_help(runner):
+    """Test run command help."""
+    result = runner.invoke(run, ["--help"])
+    assert result.exit_code == 0
+    assert "Run an MCP server" in result.output
+
+
+@patch('simply_mcp.cli.run.load_python_module')
+@patch('simply_mcp.cli.run.detect_api_style')
+@patch('asyncio.run')
+def test_run_command_stdio(mock_asyncio_run, mock_detect, mock_load, runner, tmp_path):
+    """Test run command with stdio transport."""
+    # Create temp file
+    server_file = tmp_path / "server.py"
+    server_file.write_text("# test")
+
+    # Mock module and server
+    mock_module = MagicMock()
+    mock_load.return_value = mock_module
+
+    # Create proper mock with registry
+    mock_server = MagicMock()
+    mock_server.config = get_default_config()
+    mock_registry = MagicMock()
+    mock_registry.get_stats.return_value = {'tools': 1, 'prompts': 0, 'resources': 0, 'total': 1}
+    mock_server.registry = mock_registry
+    mock_detect.return_value = ("decorator", mock_server)
+
+    # Mock async function to raise KeyboardInterrupt
+    mock_asyncio_run.side_effect = KeyboardInterrupt()
+
+    result = runner.invoke(run, [str(server_file)])
+
+    # Should exit gracefully on KeyboardInterrupt
+    assert result.exit_code == 0
+    mock_load.assert_called_once()
+    mock_detect.assert_called_once()
+
+
+def test_run_command_file_not_found(runner):
+    """Test run command with non-existent file."""
+    result = runner.invoke(run, ["nonexistent_file_12345.py"])
+    # Click returns 2 for usage errors (file not exists)
+    assert result.exit_code in [1, 2]
+
+
+@patch('simply_mcp.cli.run.load_python_module')
+@patch('simply_mcp.cli.run.detect_api_style')
+def test_run_command_no_server(mock_detect, mock_load, runner, tmp_path):
+    """Test run command with no server found."""
+    server_file = tmp_path / "empty.py"
+    server_file.write_text("# empty")
+
+    mock_module = MagicMock()
+    mock_load.return_value = mock_module
+    mock_detect.return_value = ("unknown", None)
+
+    result = runner.invoke(run, [str(server_file)])
+    assert result.exit_code == 1
+    assert "No MCP server found" in result.output
+
+
+def test_run_command_watch_not_implemented(runner, tmp_path):
+    """Test run command with --watch flag."""
+    server_file = tmp_path / "server.py"
+    server_file.write_text("# test")
+
+    result = runner.invoke(run, [str(server_file), "--watch"])
+    assert result.exit_code == 1
+    assert "not yet implemented" in result.output
+
+
+# Test Config Commands
+
+
+def test_config_help(runner):
+    """Test config command help."""
+    result = runner.invoke(config, ["--help"])
+    assert result.exit_code == 0
+    assert "configuration" in result.output.lower()
+
+
+def test_config_init_toml(runner, tmp_path):
+    """Test config init command with TOML format."""
+    output_file = tmp_path / "test.toml"
+
+    result = runner.invoke(init, ["--output", str(output_file)])
+    assert result.exit_code == 0
+    assert output_file.exists()
+
+    content = output_file.read_text()
+    assert "[server]" in content
+    assert "[transport]" in content
+    assert "[logging]" in content
+
+
+def test_config_init_json(runner, tmp_path):
+    """Test config init command with JSON format."""
+    output_file = tmp_path / "test.json"
+
+    result = runner.invoke(init, ["--output", str(output_file), "--format", "json"])
+    assert result.exit_code == 0
+    assert output_file.exists()
+
+    content = output_file.read_text()
+    data = json.loads(content)
+    assert "server" in data
+    assert "transport" in data
+
+
+def test_config_init_file_exists(runner, tmp_path):
+    """Test config init with existing file."""
+    output_file = tmp_path / "test.toml"
+    output_file.write_text("existing")
+
+    result = runner.invoke(init, ["--output", str(output_file)])
+    assert result.exit_code == 1
+    assert "already exists" in result.output
+
+
+def test_config_init_force_overwrite(runner, tmp_path):
+    """Test config init with --force flag."""
+    output_file = tmp_path / "test.toml"
+    output_file.write_text("existing")
+
+    result = runner.invoke(init, ["--output", str(output_file), "--force"])
+    assert result.exit_code == 0
+    assert output_file.exists()
+    content = output_file.read_text()
+    assert "[server]" in content
+
+
+def test_config_validate_valid(runner, temp_config_file):
+    """Test config validate with valid file."""
+    result = runner.invoke(validate, [str(temp_config_file)])
+    assert result.exit_code == 0
+    assert "valid" in result.output.lower()
+
+
+def test_config_validate_not_found(runner):
+    """Test config validate with non-existent file."""
+    result = runner.invoke(validate, ["nonexistent_config_12345.toml"])
+    # Click returns 2 for usage errors (file not exists)
+    assert result.exit_code in [1, 2]
+
+
+def test_config_show_table(runner, temp_config_file):
+    """Test config show command with table format."""
+    result = runner.invoke(show, [str(temp_config_file)])
+    assert result.exit_code == 0
+    assert "Server" in result.output
+
+
+def test_config_show_json(runner, temp_config_file):
+    """Test config show command with JSON format."""
+    result = runner.invoke(show, [str(temp_config_file), "--format", "json"])
+    assert result.exit_code == 0
+    # Just check that JSON-like content is in output
+    assert "{" in result.output
+    assert "server" in result.output
+
+
+def test_config_show_toml(runner, temp_config_file):
+    """Test config show command with TOML format."""
+    result = runner.invoke(show, [str(temp_config_file), "--format", "toml"])
+    assert result.exit_code == 0
+
+
+# Test List Command
+
+
+def test_list_command_help(runner):
+    """Test list command help."""
+    result = runner.invoke(list_components, ["--help"])
+    assert result.exit_code == 0
+    assert "List all components" in result.output
+
+
+@patch('simply_mcp.cli.list_cmd.load_python_module')
+@patch('simply_mcp.cli.list_cmd.detect_api_style')
+def test_list_command_all_components(mock_detect, mock_load, runner, tmp_path):
+    """Test list command showing all components."""
+    server_file = tmp_path / "server.py"
+    server_file.write_text("# test")
+
+    mock_module = MagicMock()
+    mock_load.return_value = mock_module
+
+    # Create mock server with components
+    mock_server = MagicMock()
+    mock_registry = MagicMock()
+    mock_registry.list_tools.return_value = [
+        {"name": "add", "description": "Add numbers"}
+    ]
+    mock_registry.list_prompts.return_value = [
+        {"name": "greet", "description": "Greet user"}
+    ]
+    mock_registry.list_resources.return_value = [
+        {"uri": "config://test", "name": "config", "description": "Config", "mime_type": "application/json"}
+    ]
+    mock_server.registry = mock_registry
+
+    mock_detect.return_value = ("decorator", mock_server)
+
+    result = runner.invoke(list_components, [str(server_file)])
+    assert result.exit_code == 0
+    assert "add" in result.output
+    assert "greet" in result.output
+    assert "config" in result.output
+
+
+@patch('simply_mcp.cli.list_cmd.load_python_module')
+@patch('simply_mcp.cli.list_cmd.detect_api_style')
+def test_list_command_filter_tools(mock_detect, mock_load, runner, tmp_path):
+    """Test list command with --tools filter."""
+    server_file = tmp_path / "server.py"
+    server_file.write_text("# test")
+
+    mock_module = MagicMock()
+    mock_load.return_value = mock_module
+
+    mock_server = MagicMock()
+    mock_registry = MagicMock()
+    mock_registry.list_tools.return_value = [
+        {"name": "add", "description": "Add numbers"}
+    ]
+    mock_registry.list_prompts.return_value = []
+    mock_registry.list_resources.return_value = []
+    mock_server.registry = mock_registry
+
+    mock_detect.return_value = ("decorator", mock_server)
+
+    result = runner.invoke(list_components, [str(server_file), "--tools"])
+    assert result.exit_code == 0
+    assert "add" in result.output
+
+
+@patch('simply_mcp.cli.list_cmd.load_python_module')
+@patch('simply_mcp.cli.list_cmd.detect_api_style')
+def test_list_command_json_output(mock_detect, mock_load, runner, tmp_path):
+    """Test list command with JSON output."""
+    server_file = tmp_path / "server.py"
+    server_file.write_text("# test")
+
+    mock_module = MagicMock()
+    mock_load.return_value = mock_module
+
+    mock_server = MagicMock()
+    mock_registry = MagicMock()
+    mock_registry.list_tools.return_value = [
+        {"name": "add", "description": "Add numbers", "input_schema": {}}
+    ]
+    mock_registry.list_prompts.return_value = []
+    mock_registry.list_resources.return_value = []
+    mock_server.registry = mock_registry
+
+    mock_detect.return_value = ("decorator", mock_server)
+
+    result = runner.invoke(list_components, [str(server_file), "--json"])
+    assert result.exit_code == 0
+    # Just check JSON-like content in output
+    assert "{" in result.output
+    assert "tools" in result.output
+    assert "add" in result.output
+
+
+@patch('simply_mcp.cli.list_cmd.load_python_module')
+@patch('simply_mcp.cli.list_cmd.detect_api_style')
+def test_list_command_empty_server(mock_detect, mock_load, runner, tmp_path):
+    """Test list command with empty server."""
+    server_file = tmp_path / "server.py"
+    server_file.write_text("# test")
+
+    mock_module = MagicMock()
+    mock_load.return_value = mock_module
+
+    mock_server = MagicMock()
+    mock_registry = MagicMock()
+    mock_registry.list_tools.return_value = []
+    mock_registry.list_prompts.return_value = []
+    mock_registry.list_resources.return_value = []
+    mock_server.registry = mock_registry
+
+    mock_detect.return_value = ("decorator", mock_server)
+
+    result = runner.invoke(list_components, [str(server_file)])
+    assert result.exit_code == 0
+    assert "No components found" in result.output or "0 component" in result.output
+
+
+@patch('simply_mcp.cli.list_cmd.load_python_module')
+def test_list_command_no_server(mock_load, runner, tmp_path):
+    """Test list command with no server found."""
+    server_file = tmp_path / "server.py"
+    server_file.write_text("# test")
+
+    mock_module = MagicMock()
+    mock_load.return_value = mock_module
+
+    with patch('simply_mcp.cli.list_cmd.detect_api_style', return_value=("unknown", None)):
+        result = runner.invoke(list_components, [str(server_file)])
+        assert result.exit_code == 1
+        assert "No MCP server found" in result.output
+
+
+@patch('simply_mcp.cli.list_cmd.load_python_module')
+def test_list_command_import_error(mock_load, runner, tmp_path):
+    """Test list command with import error."""
+    server_file = tmp_path / "server.py"
+    server_file.write_text("# test")
+
+    mock_load.side_effect = ImportError("Import failed")
+
+    result = runner.invoke(list_components, [str(server_file)])
+    assert result.exit_code == 1
+
+
+# Integration Tests
+
+
+def test_full_workflow_decorator_api(runner, tmp_path):
+    """Test full workflow with decorator API."""
+    # Create server file
+    server_file = tmp_path / "server.py"
+    server_file.write_text("""
+from simply_mcp import tool
+
+@tool()
+def test_tool(x: int) -> int:
+    '''Test tool.'''
+    return x * 2
+""")
+
+    # Reset global server
+    import simply_mcp.api.decorators as decorators
+    decorators._global_server = None
+
+    # List components
+    result = runner.invoke(list_components, [str(server_file)])
+    assert result.exit_code == 0
+
+
+def test_full_workflow_builder_api(runner, tmp_path):
+    """Test full workflow with builder API."""
+    # Create server file
+    server_file = tmp_path / "server.py"
+    server_file.write_text("""
+from simply_mcp import SimplyMCP
+
+mcp = SimplyMCP(name="test", version="1.0.0")
+
+@mcp.tool()
+def test_tool(x: int) -> int:
+    '''Test tool.'''
+    return x * 2
+""")
+
+    # List components
+    result = runner.invoke(list_components, [str(server_file)])
+    assert result.exit_code == 0
+
+
+__all__ = [
+    "test_validate_python_file",
+    "test_load_python_module",
+    "test_detect_api_style_decorator",
+    "test_detect_api_style_builder",
+    "test_cli_version",
+    "test_run_command_stdio",
+    "test_config_init_toml",
+    "test_list_command_all_components",
+]
