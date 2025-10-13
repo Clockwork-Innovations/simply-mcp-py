@@ -281,7 +281,7 @@ def _merge_env_vars(config_data: Dict[str, Any]) -> Dict[str, Any]:
         final_key = key_path[-1]
 
         # Find reference type from original config to preserve types
-        ref_value = merged
+        ref_value: Any = merged
         for key_part in key_path[:-1]:
             if isinstance(ref_value, dict) and key_part in ref_value:
                 ref_value = ref_value[key_part]
