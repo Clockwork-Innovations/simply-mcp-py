@@ -556,16 +556,14 @@ def register_tools(configs: list[ToolConfigModel]) -> None:
 
 - [Pydantic Documentation](https://docs.pydantic.dev/)
 - [Simply-MCP API Reference](https://simply-mcp-py.readthedocs.io)
-- [Type System Guide](./TYPES.md)
-- [Migration Examples](../examples/pydantic_migration/)
+- [GitHub Repository](https://github.com/Clockwork-Innovations/simply-mcp-py)
 
 ## Questions?
 
 If you have questions about the migration:
 
-1. Check the [FAQ](./FAQ.md)
-2. Open an issue on [GitHub](https://github.com/Clockwork-Innovations/simply-mcp-py/issues)
-3. Join our [Discord](https://discord.gg/simply-mcp) community
+1. Open an issue on [GitHub](https://github.com/Clockwork-Innovations/simply-mcp-py/issues)
+2. Check the documentation for more information
 
 ## Summary
 

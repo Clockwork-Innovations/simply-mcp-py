@@ -562,21 +562,21 @@ def create_middleware_stack(
 
     # Add logging first for complete request/response tracking
     if logging_enabled:
-        middleware_instance = LoggingMiddleware()
-        middlewares.append(middleware_instance.__call__)
+        logging_middleware = LoggingMiddleware()
+        middlewares.append(logging_middleware)
 
     # Add CORS support
     if cors_enabled:
-        middleware_instance = CORSMiddleware(
+        cors_middleware = CORSMiddleware(
             enabled=True,
             allowed_origins=cors_origins,
         )
-        middlewares.append(middleware_instance.__call__)
+        middlewares.append(cors_middleware)
 
     # Add rate limiting (placeholder for Phase 4)
     if rate_limit_enabled:
-        middleware_instance = RateLimitMiddleware()
-        middlewares.append(middleware_instance.__call__)
+        rate_limit_middleware = RateLimitMiddleware()
+        middlewares.append(rate_limit_middleware)
 
     return middlewares
 
