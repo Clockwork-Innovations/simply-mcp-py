@@ -17,8 +17,8 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from simply_mcp.api.programmatic import BuildMCPServer
 from simply_mcp.api.decorators import get_global_server
+from simply_mcp.api.programmatic import BuildMCPServer
 from simply_mcp.core.server import SimplyMCPServer
 
 # Rich console for output

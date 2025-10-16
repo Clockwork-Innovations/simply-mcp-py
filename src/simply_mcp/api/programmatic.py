@@ -492,7 +492,7 @@ class BuildMCPServer:
 
     # Lifecycle
 
-    async def initialize(self) -> "SimplyMCP":
+    async def initialize(self) -> "BuildMCPServer":
         """Initialize the server.
 
         Must be called before running the server.
