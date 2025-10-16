@@ -51,7 +51,7 @@ class HTTPServer:
         return {"status": "running", "transport": "http"}
 ```
 
-**Run**: `simply-mcp run examples/http_server.py --http --port 3000`
+**Run**: `simply-mcp run examples/http_server.py --transport http --port 3000`
 
 ## Advanced Features
 
@@ -89,7 +89,7 @@ Demonstrates:
 - Request validation
 - Security middleware
 
-**Run**: `simply-mcp run examples/authenticated_server.py --http`
+**Run**: `simply-mcp run examples/authenticated_server.py --transport http`
 
 ### Rate Limiting
 Protecting your server from excessive requests.
@@ -101,7 +101,7 @@ Demonstrates:
 - Token bucket algorithm
 - Custom rate limit responses
 
-**Run**: `simply-mcp run examples/rate_limited_server.py --http`
+**Run**: `simply-mcp run examples/rate_limited_server.py --transport http`
 
 ## Development Examples
 

@@ -35,7 +35,7 @@ RUN pip install -e .
 EXPOSE 3000
 
 # Run server
-CMD ["simply-mcp", "run", "server.py", "--http", "--port", "3000"]
+CMD ["simply-mcp", "run", "server.py", "--transport", "http", "--port", "3000"]
 ```
 
 ### Docker Compose
@@ -94,7 +94,7 @@ Group=mcp
 WorkingDirectory=/opt/mcp-server
 Environment="PATH=/opt/mcp-server/venv/bin"
 EnvironmentFile=/opt/mcp-server/.env
-ExecStart=/opt/mcp-server/venv/bin/simply-mcp run server.py --http --port 3000
+ExecStart=/opt/mcp-server/venv/bin/simply-mcp run server.py --transport http --port 3000
 Restart=always
 RestartSec=10
 
@@ -181,7 +181,7 @@ Create `startup.sh`:
 ```bash
 #!/bin/bash
 pip install -e .
-simply-mcp run server.py --http --port 8000
+simply-mcp run server.py --transport http --port 8000
 ```
 
 Deploy:
@@ -215,7 +215,7 @@ pyinstaller --onefile \
 
 ```bash
 # The executable is now standalone
-./dist/mcp-server --http --port 3000
+./dist/mcp-server --transport http --port 3000
 ```
 
 ## Kubernetes

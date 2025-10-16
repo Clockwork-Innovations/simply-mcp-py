@@ -126,11 +126,11 @@ Real-time event streaming for live updates.
 
 #### 2.3.1 Run Command
 ```bash
-simply-mcp run server.py                    # Run with stdio
-simply-mcp run server.py --http             # Run with HTTP on default port
-simply-mcp run server.py --http --port 3000 # Run with HTTP on port 3000
-simply-mcp run server.py --sse              # Run with SSE
-simply-mcp run server.py --watch            # Watch mode with auto-reload
+simply-mcp run server.py                            # Run with stdio
+simply-mcp run server.py --transport http           # Run with HTTP on default port
+simply-mcp run server.py --transport http --port 3000 # Run with HTTP on port 3000
+simply-mcp run server.py --transport sse            # Run with SSE
+simply-mcp run server.py --watch                    # Watch mode with auto-reload
 ```
 
 #### 2.3.2 Bundle Command

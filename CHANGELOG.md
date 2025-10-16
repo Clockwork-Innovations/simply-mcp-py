@@ -20,6 +20,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional transport options
 - Enhanced monitoring and observability features
 
+## [0.1.0b2] - 2025-10-15
+
+### Added
+- **uvx Support Documentation**: Comprehensive documentation for using simply-mcp without installation via uvx
+  - New section in installation guide with comparison tables
+  - uvx examples throughout quickstart guide
+  - Detailed uvx usage patterns in CLI guide
+  - Quick-try options in README and documentation index
+- Performance expectations for uvx usage (first run: 7-30s, subsequent: near-instant)
+- "Try before installing" workflows across documentation
+
+### Fixed
+- **Transport Flag Syntax** (Critical): Corrected 22 instances of incorrect transport flag syntax across 12 files
+  - Changed `--http` to `--transport http`
+  - Changed `--sse` to `--transport sse`
+  - Changed `--stdio` to `--transport stdio`
+  - Affected files: quickstart.md, README.md, TECHNICAL_SPEC.md, FEATURE_PARITY.md, examples/index.md, configuration.md, deployment.md, first-server.md, CHANGELOG.md
+- Output format in quickstart.md now shows actual Rich table format
+- Version number consistency between pyproject.toml and __init__.py
+
+### Changed
+- Documentation now consistently uses `--transport TYPE` syntax throughout
+- Enhanced README with uvx installation option
+- Improved CLI usage guide with comprehensive uvx section
+
+### Documentation
+- Added ~220 lines of uvx-related documentation
+- Enhanced 5 primary documentation files with uvx examples
+- Fixed transport syntax in 12 files
+- All examples now use realistic file paths (server.py vs {file})
+
 ## [0.1.0-beta] - 2025-10-13
 
 First beta release of Simply-MCP-PY with complete core features and production-ready capabilities.
@@ -121,7 +152,7 @@ First beta release of Simply-MCP-PY with complete core features and production-r
 
 **CLI Features**
 - API style auto-detection (decorator, builder, class-based)
-- Transport selection (--stdio, --http, --sse flags)
+- Transport selection (--transport stdio/http/sse)
 - Port and host configuration (--port, --host options)
 - Rich console output with colors and formatting
 - Detailed error messages with suggestions
@@ -522,6 +553,7 @@ Both implementations provide equivalent functionality adapted to their respectiv
 
 ---
 
-[Unreleased]: https://github.com/Clockwork-Innovations/simply-mcp-py/compare/v0.1.0-beta...HEAD
+[Unreleased]: https://github.com/Clockwork-Innovations/simply-mcp-py/compare/v0.1.0b2...HEAD
+[0.1.0b2]: https://github.com/Clockwork-Innovations/simply-mcp-py/releases/tag/v0.1.0b2
 [0.1.0-beta]: https://github.com/Clockwork-Innovations/simply-mcp-py/releases/tag/v0.1.0-beta
 [0.0.1]: https://github.com/Clockwork-Innovations/simply-mcp-py/releases/tag/v0.0.1

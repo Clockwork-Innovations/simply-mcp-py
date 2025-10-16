@@ -43,6 +43,17 @@ Simply-MCP-PY is the Python implementation of [simply-mcp-ts](https://github.com
 
 ### Installation
 
+**Option 1: Try without installing (uvx)**
+```bash
+# Install uvx
+pip install uv
+
+# Run directly without installing simply-mcp
+uvx simply-mcp --version
+uvx simply-mcp run server.py
+```
+
+**Option 2: Install permanently (pip)**
 ```bash
 pip install simply-mcp
 ```
@@ -75,11 +86,13 @@ class MyServer:
 simply-mcp run server.py
 
 # Run with HTTP on port 3000
-simply-mcp run server.py --http --port 3000
+simply-mcp run server.py --transport http --port 3000
 
 # Run with auto-reload
 simply-mcp run server.py --watch
 ```
+
+**Note:** If using uvx, prefix commands with `uvx`: `uvx simply-mcp run server.py`. First run takes ~7-30 seconds to download packages, subsequent runs are near-instant.
 
 ## API Styles
 
@@ -198,7 +211,7 @@ def get_document(self) -> bytes:
 
 ```bash
 # Run a server
-simply-mcp run server.py [--http] [--port PORT] [--watch]
+simply-mcp run server.py [--transport TYPE] [--port PORT] [--watch]
 
 # Bundle to executable
 simply-mcp bundle server.py --output dist/

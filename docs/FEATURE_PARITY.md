@@ -78,7 +78,7 @@ Simply-mcp-py has achieved **complete feature parity** with simply-mcp-ts for al
 | **Run Command** | | | | |
 | simply-mcp run | ✅ | ✅ | ✅ Complete | Execute servers |
 | API style auto-detection | ✅ | ✅ | ✅ Complete | Detect decorator/builder/class |
-| Transport selection | ✅ | ✅ | ✅ Complete | --stdio, --http, --sse |
+| Transport selection | ✅ | ✅ | ✅ Complete | --transport stdio, --transport http, --transport sse |
 | Port configuration | ✅ | ✅ | ✅ Complete | --port option |
 | Host binding | ✅ | ✅ | ✅ Complete | --host option |
 | **Config Command** | | | | |

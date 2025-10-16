@@ -4,7 +4,22 @@ Get up and running with Simply-MCP-PY in 5 minutes.
 
 ## Prerequisites
 
-Make sure you have Simply-MCP-PY installed. If not, see the [Installation Guide](installation.md).
+You can use Simply-MCP-PY in two ways:
+
+**Option 1: Try without installing (uvx)**
+```bash
+# Install uvx if you don't have it
+pip install uv
+
+# No further installation needed!
+```
+
+**Option 2: Install permanently (pip)**
+```bash
+pip install simply-mcp
+```
+
+See the [Installation Guide](installation.md) for detailed instructions.
 
 ## Your First Server
 
@@ -36,9 +51,17 @@ class HelloServer:
 
 Run the server using the CLI:
 
+**With pip install:**
 ```bash
 simply-mcp run server.py
 ```
+
+**With uvx (no installation):**
+```bash
+uvx simply-mcp run server.py
+```
+
+**Note:** First `uvx` run takes ~7-30 seconds to download packages. Subsequent runs are near-instant.
 
 You should see output indicating the server is running:
 
@@ -60,7 +83,7 @@ The server is now running and waiting for MCP protocol messages on stdin/stdout.
 Run your server over HTTP:
 
 ```bash
-simply-mcp run server.py --http --port 3000
+simply-mcp run server.py --transport http --port 3000
 ```
 
 Visit `http://localhost:3000` to see your server running.
@@ -70,7 +93,7 @@ Visit `http://localhost:3000` to see your server running.
 For real-time streaming:
 
 ```bash
-simply-mcp run server.py --sse --port 3000
+simply-mcp run server.py --transport sse --port 3000
 ```
 
 ## Development Mode
@@ -163,22 +186,30 @@ class HelloServer:
 
 To see all registered tools, resources, and prompts:
 
+**With pip install:**
 ```bash
 simply-mcp list server.py
+```
+
+**With uvx:**
+```bash
+uvx simply-mcp list server.py
 ```
 
 Output:
 
 ```
-Tools (2):
-  - add: Add two numbers
-  - greet: Greet a user
+                         MCP Server Components
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Type     ┃ Name                   ┃ Description                     ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Tool     │ add                    │ Add two numbers                 │
+│ Tool     │ greet                  │ Greet a user                    │
+│ Prompt   │ code_review (language) │ Generate a code review template │
+│ Resource │ server_config          │ Server configuration            │
+└──────────┴────────────────────────┴─────────────────────────────────┘
 
-Resources (1):
-  - config://server: Server configuration
-
-Prompts (1):
-  - code_review: Generate a code review template
+Total: 4 component(s)
 ```
 
 ## Configuration
@@ -224,7 +255,7 @@ Now that you have a basic server running, explore more:
 simply-mcp run server.py
 
 # Run with HTTP
-simply-mcp run server.py --http --port 3000
+simply-mcp run server.py --transport http --port 3000
 
 # Run with auto-reload
 simply-mcp run server.py --watch
@@ -263,7 +294,7 @@ pip install --upgrade simply-mcp
 Change the port:
 
 ```bash
-simply-mcp run server.py --http --port 3001
+simply-mcp run server.py --transport http --port 3001
 ```
 
 For more help, visit our [Issue Tracker](https://github.com/Clockwork-Innovations/simply-mcp-py/issues).

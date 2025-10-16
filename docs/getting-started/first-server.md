@@ -258,7 +258,7 @@ simply-mcp run file_server.py
 ### HTTP
 
 ```bash
-simply-mcp run file_server.py --http --port 3000
+simply-mcp run file_server.py --transport http --port 3000
 ```
 
 Test with curl:
@@ -270,7 +270,7 @@ curl http://localhost:3000/tools
 ### SSE
 
 ```bash
-simply-mcp run file_server.py --sse --port 3000
+simply-mcp run file_server.py --transport sse --port 3000
 ```
 
 ## Step 10: Development Mode

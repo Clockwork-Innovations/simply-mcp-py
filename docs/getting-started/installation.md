@@ -5,9 +5,92 @@ This guide covers all the ways to install Simply-MCP-PY and its optional depende
 ## Requirements
 
 - Python 3.10 or higher
-- pip 21.0 or higher
+- pip 21.0 or higher (for permanent installation)
+- OR uv 0.1.0 or higher (for trying without installing)
 
-## Basic Installation
+## Try Without Installing (uvx)
+
+Want to test Simply-MCP-PY before committing to a full installation? Use **uvx** to run commands directly from PyPI without installing anything permanently.
+
+### What is uvx?
+
+[uvx](https://github.com/astral-sh/uv) is a tool that lets you run Python packages instantly without installation. Think of it like `npx` for Python - it downloads and caches the package on first run, then executes it immediately.
+
+### When to Use uvx
+
+**Use uvx if you want to:**
+- Try Simply-MCP-PY without installing it
+- Run one-off commands without affecting your Python environment
+- Test a specific version without switching virtual environments
+- Avoid global package installation
+
+**Use pip install if you want to:**
+- Develop MCP servers regularly
+- Import Simply-MCP in your Python code
+- Customize or extend the framework
+- Have faster command execution (no download delay)
+
+### Installing uv/uvx
+
+```bash
+# macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# With pip
+pip install uv
+```
+
+### Using uvx with Simply-MCP
+
+Run any Simply-MCP command without installation:
+
+```bash
+# Check version
+uvx simply-mcp --version
+
+# Run a server
+uvx simply-mcp run server.py
+
+# List components
+uvx simply-mcp list server.py
+
+# Start development mode
+uvx simply-mcp dev server.py
+```
+
+**First Run:** Downloads packages (~20-40MB total), takes ~7-30 seconds
+
+**Subsequent Runs:** Nearly instant (uses cached packages)
+
+### Comparison: uvx vs pip install
+
+| Feature | uvx simply-mcp | pip install simply-mcp |
+|---------|----------------|------------------------|
+| Installation required | No | Yes |
+| First run speed | 7-30 seconds (download) | Instant |
+| Subsequent runs | Near-instant (cached) | Instant |
+| Virtual environment | Not needed | Recommended |
+| Package isolation | Automatic | Manual (via venv) |
+| Import in Python code | No | Yes |
+| Best for | Trying/testing | Development/production |
+
+### Example: Try Before Installing
+
+```bash
+# Test Simply-MCP without installing
+uvx simply-mcp --help
+
+# Run an example server
+uvx simply-mcp run examples/simple_server.py
+
+# Like it? Install it permanently
+pip install simply-mcp
+```
+
+## Permanent Installation (pip)
 
 ### Using pip
 

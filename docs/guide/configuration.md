@@ -172,8 +172,8 @@ Override any configuration via CLI:
 simply-mcp run server.py --name my-server --version 1.0.0
 
 # Transport options
-simply-mcp run server.py --http --port 3000 --host 0.0.0.0
-simply-mcp run server.py --sse --port 8080
+simply-mcp run server.py --transport http --port 3000 --host 0.0.0.0
+simply-mcp run server.py --transport sse --port 8080
 
 # Logging options
 simply-mcp run server.py --log-level DEBUG --log-format text
