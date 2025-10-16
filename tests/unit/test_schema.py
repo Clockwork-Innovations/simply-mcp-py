@@ -2,6 +2,7 @@
 
 import dataclasses
 from typing import Any, Dict, List, Optional, Union
+from unittest.mock import patch
 
 import pytest
 from pydantic import BaseModel, Field
@@ -756,3 +757,92 @@ class TestEdgeCases:
         # Fields with default_factory are not required
         assert "items" not in schema.get("required", [])
         assert "counts" not in schema.get("required", [])
+
+
+    def test_generate_schema_from_dataclass_error(self) -> None:
+        """Test error handling in schema generation from dataclass."""
+        @dataclasses.dataclass
+        class BrokenDataclass:
+            x: int
+
+        # Mock get_type_hints to raise an exception
+        with pytest.raises(SchemaGenerationError):
+            with patch('simply_mcp.validation.schema.get_type_hints', side_effect=Exception("Type hints failed")):
+                generate_schema_from_dataclass(BrokenDataclass)
+
+    def test_generate_schema_from_pydantic_error(self) -> None:
+        """Test error handling in schema generation from Pydantic model."""
+        class BrokenModel(BaseModel):
+            x: int
+
+        # Mock model_json_schema to raise an exception
+        with pytest.raises(SchemaGenerationError):
+            with patch.object(BrokenModel, 'model_json_schema', side_effect=Exception("Schema generation failed")):
+                generate_schema_from_pydantic(BrokenModel)
+
+    def test_generate_schema_from_typeddict_error(self) -> None:
+        """Test error handling in schema generation from TypedDict."""
+        from typing import TypedDict
+
+        class UserDict(TypedDict):
+            name: str
+            age: int
+
+        # Mock get_type_hints to raise an exception
+        with pytest.raises(SchemaGenerationError):
+            with patch('simply_mcp.validation.schema.get_type_hints', side_effect=Exception("Type hints failed")):
+                generate_schema_from_typeddict(UserDict)
+
+    def test_typeddict_with_mixed_required_optional(self) -> None:
+        """Test TypedDict with both required and optional keys."""
+        from typing import TypedDict
+        try:
+            # Python 3.11+ supports Required and NotRequired
+            from typing import Required, NotRequired
+
+            class MixedDict(TypedDict):
+                name: Required[str]
+                age: NotRequired[int]
+
+            schema = generate_schema_from_typeddict(MixedDict)
+            assert schema["type"] == "object"
+            assert "name" in schema["required"]
+            assert "age" not in schema.get("required", [])
+        except ImportError:
+            # Skip test on older Python versions
+            pass
+
+    def test_extract_param_descriptions_multiline(self) -> None:
+        """Test extraction of multiline parameter descriptions."""
+        def func(long_param: str) -> None:
+            """Test function.
+
+            Args:
+                long_param: This is a very long parameter description
+                    that spans multiple lines and should be
+                    properly combined into a single line
+            """
+            pass
+
+        result = extract_param_descriptions_from_docstring(func)
+        assert "long_param" in result
+        # Multiline description should be combined
+        assert "long parameter description" in result["long_param"]
+
+    def test_pydantic_schema_removes_title(self) -> None:
+        """Test that Pydantic schema removes redundant title."""
+        class MyModel(BaseModel):
+            value: int
+
+        schema = generate_schema_from_pydantic(MyModel)
+        # Title should be removed if it's just the class name
+        assert "title" not in schema or schema["title"] != "MyModel"
+
+    def test_pydantic_schema_removes_empty_defs(self) -> None:
+        """Test that Pydantic schema removes empty $defs."""
+        class SimpleModel(BaseModel):
+            value: int
+
+        schema = generate_schema_from_pydantic(SimpleModel)
+        # $defs should be removed if empty
+        assert "$defs" not in schema or len(schema["$defs"]) > 0

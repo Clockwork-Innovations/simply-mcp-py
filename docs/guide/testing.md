@@ -260,12 +260,12 @@ async def test_progress():
 
 ```python
 import pytest
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
 @pytest.fixture
 def full_server():
     """Create complete server instance."""
-    mcp = SimplyMCP(name="test-server", version="1.0.0")
+    mcp = BuildMCPServer(name="test-server", version="1.0.0")
 
     @mcp.add_tool(description="Test tool")
     def test_tool(param: str) -> str:

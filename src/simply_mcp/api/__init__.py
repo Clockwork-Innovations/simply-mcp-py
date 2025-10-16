@@ -1,11 +1,29 @@
 """API interfaces for Simply-MCP.
 
-This module provides two API styles:
-- Builder API (SimplyMCP): Fluent interface with method chaining
+This module provides multiple API styles mirroring the TypeScript implementation:
+- Programmatic API (BuildMCPServer): Explicit server construction
+- Functional API: Config-based definitions (define_mcp, MCPBuilder)
 - Decorator API: Pythonic decorators for registering components
 """
 
-from simply_mcp.api.builder import SimplyMCP
+# Programmatic API
+from simply_mcp.api.programmatic import BuildMCPServer
+
+# Functional API
+from simply_mcp.api.functional import (
+    MCPBuilder,
+    MCPConfig,
+    PromptConfig,
+    ResourceConfig,
+    ToolConfig,
+    create_mcp,
+    define_mcp,
+    define_prompt,
+    define_resource,
+    define_tool,
+)
+
+# Decorator API
 from simply_mcp.api.decorators import (
     get_global_server,
     mcp_server,
@@ -16,8 +34,19 @@ from simply_mcp.api.decorators import (
 )
 
 __all__ = [
-    # Builder API
-    "SimplyMCP",
+    # Programmatic API (mirrors TypeScript BuildMCPServer)
+    "BuildMCPServer",
+    # Functional API (mirrors TypeScript functional API)
+    "MCPBuilder",
+    "create_mcp",
+    "define_mcp",
+    "define_tool",
+    "define_prompt",
+    "define_resource",
+    "MCPConfig",
+    "ToolConfig",
+    "PromptConfig",
+    "ResourceConfig",
     # Decorator API
     "tool",
     "prompt",

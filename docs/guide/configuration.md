@@ -129,7 +129,7 @@ export SIMPLY_MCP_SECURITY_RATE_LIMIT_PER_MINUTE="60"
 ### Using Config Objects
 
 ```python
-from simply_mcp import SimplyMCP, ServerConfig, TransportConfig
+from simply_mcp import BuildMCPServer, ServerConfig, TransportConfig
 
 config = ServerConfig(
     name="my-server",
@@ -142,15 +142,15 @@ transport = TransportConfig(
     port=3000
 )
 
-mcp = SimplyMCP(config=config, transport=transport)
+mcp = BuildMCPServer(config=config, transport=transport)
 ```
 
 ### Direct Configuration
 
 ```python
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
-mcp = SimplyMCP(
+mcp = BuildMCPServer(
     name="my-server",
     version="1.0.0"
 )
@@ -247,11 +247,11 @@ Load with python-dotenv:
 
 ```python
 from dotenv import load_dotenv
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
 load_dotenv()  # Load .env file
 
-mcp = SimplyMCP(name="my-server")
+mcp = BuildMCPServer(name="my-server")
 ```
 
 ## Configuration Validation

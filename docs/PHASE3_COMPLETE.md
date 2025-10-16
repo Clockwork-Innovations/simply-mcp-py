@@ -257,10 +257,10 @@ simply-mcp run --transport sse --port 8080 --cors-enabled
 ### Programmatic Usage
 
 ```python
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
 # Create server
-mcp = SimplyMCP(name="my-server", version="1.0.0")
+mcp = BuildMCPServer(name="my-server", version="1.0.0")
 
 # Register components
 @mcp.tool()

@@ -142,7 +142,7 @@ option_settings:
 Create `wsgi.py`:
 
 ```python
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 from server import MyServer
 
 application = MyServer.to_wsgi()

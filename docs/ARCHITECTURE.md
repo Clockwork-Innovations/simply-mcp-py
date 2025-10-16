@@ -192,7 +192,7 @@ User Code ──[function calls]──▶ API Layer
 │     Functional API Module           │
 ├─────────────────────────────────────┤
 │                                     │
-│  SimplyMCP                          │
+│  BuildMCPServer                          │
 │    ├─ __init__(config)              │
 │    ├─ add_tool(fn, **opts)          │
 │    ├─ add_prompt(fn, **opts)        │
@@ -648,7 +648,7 @@ class ServerFactory:
 **Location**: `src/simply_mcp/api/functional.py`
 
 ```python
-mcp = (SimplyMCP("my-server")
+mcp = (BuildMCPServer("my-server")
     .add_tool(add, description="Add numbers")
     .add_prompt(greet, description="Greet user")
     .configure(port=3000)
@@ -688,7 +688,7 @@ def add(a: int, b: int) -> int:
 
 ```python
 # Simplified public API
-from simply_mcp import SimplyMCP, tool, prompt, resource
+from simply_mcp import BuildMCPServer, tool, prompt, resource
 ```
 
 **Usage**: Providing simple interface to complex subsystems
@@ -773,13 +773,13 @@ def detect_api_style(entry_point: Any) -> APIStyle:
 
     Priority:
     1. Check for @mcp_server decorator → Decorator API
-    2. Check for SimplyMCP instance → Functional API
+    2. Check for BuildMCPServer instance → Functional API
     3. Check for Protocol subclass → Interface API
     4. Fallback to default (Decorator)
     """
     if hasattr(entry_point, "__mcp_server__"):
         return APIStyle.DECORATOR
-    elif isinstance(entry_point, SimplyMCP):
+    elif isinstance(entry_point, BuildMCPServer):
         return APIStyle.FUNCTIONAL
     elif is_protocol_subclass(entry_point):
         return APIStyle.INTERFACE

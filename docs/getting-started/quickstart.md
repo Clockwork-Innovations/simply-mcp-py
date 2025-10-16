@@ -111,9 +111,9 @@ Now any changes to `server.py` will automatically reload the server.
 If you prefer a functional approach, here's the same server using the Functional API:
 
 ```python
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
-mcp = SimplyMCP(name="hello-server", version="1.0.0")
+mcp = BuildMCPServer(name="hello-server", version="1.0.0")
 
 @mcp.add_tool(description="Add two numbers")
 def add(a: int, b: int) -> int:

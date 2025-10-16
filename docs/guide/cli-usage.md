@@ -1414,8 +1414,8 @@ def my_tool():
     pass
 
 # Builder API
-from simply_mcp import SimplyMCP
-mcp = SimplyMCP(name="server")
+from simply_mcp import BuildMCPServer
+mcp = BuildMCPServer(name="server")
 
 # Class-based API
 from simply_mcp import mcp_server

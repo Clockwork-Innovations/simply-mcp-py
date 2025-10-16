@@ -6,7 +6,7 @@ for building an MCP server.
 """
 
 import asyncio
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
 
 async def main():
@@ -38,7 +38,7 @@ async def main():
 
     # Build server with fluent API - everything chained!
     mcp = (
-        SimplyMCP(name="demo-server", version="2.0.0")
+        BuildMCPServer(name="demo-server", version="2.0.0")
         .add_tool("add", add, description="Add two numbers")
         .add_tool("subtract", subtract, description="Subtract two numbers")
         .add_prompt("greet", greet, description="Generate a greeting", arguments=["name", "style"])

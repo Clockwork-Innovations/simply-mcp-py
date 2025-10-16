@@ -298,9 +298,9 @@ pip install simply-mcp[dev]      # Development tools
 
 ### Basic Server
 ```python
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
-mcp = SimplyMCP(name="my-server", version="1.0.0")
+mcp = BuildMCPServer(name="my-server", version="1.0.0")
 
 @mcp.tool()
 def add(a: int, b: int) -> int:
@@ -314,10 +314,10 @@ if __name__ == "__main__":
 
 ### Production Server
 ```python
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 from simply_mcp.security import RateLimiter, APIKeyAuthProvider
 
-mcp = SimplyMCP(name="prod-server", version="1.0.0")
+mcp = BuildMCPServer(name="prod-server", version="1.0.0")
 
 # Configure security
 limiter = RateLimiter(requests_per_minute=60, burst_size=10)

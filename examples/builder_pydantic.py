@@ -8,7 +8,7 @@ with the builder API.
 import asyncio
 from typing import List, Optional
 from pydantic import BaseModel, Field
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
 
 # Define Pydantic models for input validation
@@ -28,7 +28,7 @@ class UserInput(BaseModel):
 
 
 # Create server
-mcp = SimplyMCP(
+mcp = BuildMCPServer(
     name="validated-server",
     version="1.0.0",
     description="Server with Pydantic validation"

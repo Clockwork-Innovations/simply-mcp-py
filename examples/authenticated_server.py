@@ -84,7 +84,7 @@ Requirements:
 import asyncio
 import logging
 
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 from simply_mcp.security.auth import APIKeyAuthProvider
 from simply_mcp.transports.http import HTTPTransport
 
@@ -127,7 +127,7 @@ def main() -> None:
         # ====================================================================
         # Create the MCP server instance with identifying information
 
-        mcp = SimplyMCP(
+        mcp = BuildMCPServer(
             name="authenticated-mcp-server",
             version="1.0.0",
             description="Example server with API key authentication"

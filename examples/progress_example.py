@@ -10,7 +10,7 @@ Run with:
 
 import asyncio
 
-from simply_mcp import SimplyMCPServer
+from simply_mcp import BuildMCPServerServer
 from simply_mcp.api.decorators import tool
 from simply_mcp.core.config import SimplyMCPConfig
 from simply_mcp.core.types import ProgressReporter

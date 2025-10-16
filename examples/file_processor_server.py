@@ -86,7 +86,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 from simply_mcp.core.types import ProgressReporter
 from simply_mcp.features.binary import BinaryContent
 from simply_mcp.security.auth import APIKeyAuthProvider
@@ -127,13 +127,13 @@ PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 FILE_REGISTRY: dict[str, dict[str, Any]] = {}
 
 
-def create_file_processor_server() -> SimplyMCP:
+def create_file_processor_server() -> BuildMCPServer:
     """Create the file processing MCP server.
 
     Returns:
-        Configured SimplyMCP instance
+        Configured BuildMCPServer instance
     """
-    mcp = SimplyMCP(
+    mcp = BuildMCPServer(
         name="file-processor-server",
         version="1.0.0",
         description="File processing server with image manipulation and PDF generation",

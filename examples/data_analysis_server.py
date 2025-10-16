@@ -104,7 +104,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 from simply_mcp.core.types import ProgressReporter
 from simply_mcp.features.binary import BinaryContent
 from simply_mcp.security.auth import APIKeyAuthProvider
@@ -161,13 +161,13 @@ DATASETS: dict[str, dict[str, Any]] = {}
 RESULTS: dict[str, dict[str, Any]] = {}
 
 
-def create_data_analysis_server() -> SimplyMCP:
+def create_data_analysis_server() -> BuildMCPServer:
     """Create the data analysis MCP server.
 
     Returns:
-        Configured SimplyMCP instance
+        Configured BuildMCPServer instance
     """
-    mcp = SimplyMCP(
+    mcp = BuildMCPServer(
         name="data-analysis-server",
         version="1.0.0",
         description="Data analysis server with statistical analysis and visualization",

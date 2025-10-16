@@ -30,7 +30,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 import aiohttp
 
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 from simply_mcp.security.rate_limiter import RateLimiter
 from simply_mcp.transports.http import HTTPTransport
 
@@ -81,7 +81,7 @@ async def run_server() -> None:
     print("=" * 70)
 
     # Create server using builder API
-    mcp = SimplyMCP(
+    mcp = BuildMCPServer(
         name="rate-limited-server",
         version="1.0.0",
         description="Example server with rate limiting",

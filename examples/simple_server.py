@@ -2,7 +2,7 @@
 """Simple MCP Server Example - Getting Started
 
 This is the most basic example of a Simply-MCP server. It demonstrates:
-- Creating a SimplyMCP instance with name and version
+- Creating a BuildMCPServer instance with name and version
 - Registering tools using the builder API pattern
 - Running with stdio transport (standard input/output)
 - Basic tool implementation with type annotations
@@ -57,7 +57,7 @@ Requirements:
 """
 
 import asyncio
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
 
 # ============================================================================
@@ -118,7 +118,7 @@ async def main():
     """Main entry point for the simple server.
 
     This function:
-    1. Creates a SimplyMCP server instance
+    1. Creates a BuildMCPServer server instance
     2. Registers tool handlers
     3. Initializes the server
     4. Runs with stdio transport
@@ -126,9 +126,9 @@ async def main():
     # ========================================================================
     # Server Creation
     # ========================================================================
-    # Create a SimplyMCP instance with identifying information.
+    # Create a BuildMCPServer instance with identifying information.
     # The name and version are sent to clients during initialization.
-    mcp = SimplyMCP(
+    mcp = BuildMCPServer(
         name="simple-server",
         version="1.0.0",
         description="Simple MCP server example"

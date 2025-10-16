@@ -66,7 +66,7 @@ Class-based approach using Python decorators for clean, declarative syntax.
 Programmatic server building with method chaining for maximum control.
 
 **Features:**
-- `SimplyMCP` builder class
+- `BuildMCPServer` builder class
 - `.add_tool()`, `.add_prompt()`, `.add_resource()` methods
 - Fluent interface with method chaining
 - Dynamic tool registration
@@ -157,7 +157,7 @@ simply-mcp config show                      # Display current configuration
 #### 2.4.1 Auto API Detection
 Automatically detects which API style is being used:
 - Scans for class decorators → Decorator API
-- Detects SimplyMCP instance → Functional API
+- Detects BuildMCPServer instance → Functional API
 - Analyzes type annotations → Interface API
 
 #### 2.4.2 Validation
@@ -345,7 +345,7 @@ class MyServer:
 **Responsibility:** Implements functional/builder API
 
 **Key Components:**
-- `SimplyMCP` - Main builder class
+- `BuildMCPServer` - Main builder class
 - `.add_tool()` - Dynamic tool registration
 - `.add_prompt()` - Dynamic prompt registration
 - `.add_resource()` - Dynamic resource registration
@@ -354,9 +354,9 @@ class MyServer:
 
 **Example:**
 ```python
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
-mcp = SimplyMCP(name="my-server", version="1.0.0")
+mcp = BuildMCPServer(name="my-server", version="1.0.0")
 
 @mcp.add_tool(description="Add two numbers")
 def add(a: int, b: int) -> int:
@@ -703,9 +703,9 @@ mcp.run();
 
 #### Python
 ```python
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
-mcp = SimplyMCP(name='my-server', version='1.0.0')
+mcp = BuildMCPServer(name='my-server', version='1.0.0')
 
 @mcp.add_tool(description='Add two numbers')
 def add(a: int, b: int) -> int:

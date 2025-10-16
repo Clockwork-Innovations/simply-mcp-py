@@ -50,7 +50,7 @@ Phase 2 of simply-mcp-py has been successfully completed, delivering **two power
 
 ### Phase 2 Week 4: Functional/Builder API ✅
 
-6. ✅ **Implement SimplyMCP builder class**
+6. ✅ **Implement BuildMCPServer builder class**
    - Fluent builder interface
    - Method chaining support
    - Explicit server instance control
@@ -182,9 +182,9 @@ class Calculator:
 **Explicit and Flexible:**
 
 ```python
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
-mcp = SimplyMCP(name="my-server", version="1.0.0")
+mcp = BuildMCPServer(name="my-server", version="1.0.0")
 
 # Decorator style
 @mcp.tool()
@@ -205,7 +205,7 @@ await (mcp
 
 ```python
 mcp = (
-    SimplyMCP(name="demo", version="2.0.0")
+    BuildMCPServer(name="demo", version="2.0.0")
     .add_tool("add", add)
     .add_tool("subtract", subtract)
     .add_prompt("greet", greet)
@@ -370,10 +370,10 @@ Success: no issues found in 13 source files
 Both APIs can be used together:
 
 ```python
-from simply_mcp import SimplyMCP, tool
+from simply_mcp import BuildMCPServer, tool
 
 # Create builder instance
-mcp = SimplyMCP(name="hybrid", version="1.0.0")
+mcp = BuildMCPServer(name="hybrid", version="1.0.0")
 
 # Use decorator on builder
 @mcp.tool()
@@ -449,7 +449,7 @@ Both APIs leverage the same foundation:
 
 ### Phase 2 Week 4 ✅
 
-- [x] SimplyMCP builder class implemented
+- [x] BuildMCPServer builder class implemented
 - [x] add_tool(), add_prompt(), add_resource() methods working
 - [x] Method chaining fully functional
 - [x] configure() and run() methods implemented

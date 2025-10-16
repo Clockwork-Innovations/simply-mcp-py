@@ -1097,5 +1097,308 @@ class TestSSETransportAdvanced:
 
         assert conn.connected is False
 
+    @pytest.mark.asyncio
+    async def test_sse_error_on_double_start(self) -> None:
+        """Test error when starting SSE transport twice."""
+        config = get_default_config()
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        transport = SSETransport(server=server, host="localhost", port=0)
+
+        await transport.start()
+
+        with pytest.raises(RuntimeError, match="already started"):
+            await transport.start()
+
+        await transport.stop()
+
+    @pytest.mark.asyncio
+    async def test_sse_stop_with_connections(self) -> None:
+        """Test stopping SSE transport with active connections."""
+        config = get_default_config()
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        transport = SSETransport(server=server, host="localhost", port=0, keepalive_interval=1)
+        await transport.start()
+
+        # Add mock connections
+        conn1 = MagicMock(spec=SSEConnection)
+        conn1.close = MagicMock()
+        conn1.connected = True
+        conn1.connection_id = "test-1"
+
+        conn2 = MagicMock(spec=SSEConnection)
+        conn2.close = MagicMock()
+        conn2.connected = True
+        conn2.connection_id = "test-2"
+
+        transport.connections = {conn1, conn2}
+
+        # Stop transport
+        await transport.stop()
+
+        # Verify connections were closed
+        conn1.close.assert_called_once()
+        conn2.close.assert_called_once()
+        assert len(transport.connections) == 0
+
+    @pytest.mark.asyncio
+    async def test_sse_handle_mcp_request_success(self) -> None:
+        """Test successful SSE MCP request handling with broadcast."""
+        config = get_default_config()
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        server.registry.register_tool(ToolConfigModel(
+            name="test_tool",
+            description="A test tool",
+            input_schema={"type": "object", "properties": {}},
+            handler=lambda: "result"
+        ))
+
+        transport = SSETransport(server=server, host="localhost", port=0)
+
+        request = MagicMock(spec=web.Request)
+        request.json = AsyncMock(return_value={
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "tools/call",
+            "params": {"name": "test_tool", "arguments": {}}
+        })
+
+        response = await transport.handle_mcp_request(request)
+
+        assert response.status == 200
+
+    @pytest.mark.asyncio
+    async def test_sse_handle_mcp_request_internal_error(self) -> None:
+        """Test SSE MCP request handler with internal error."""
+        config = get_default_config()
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        transport = SSETransport(server=server, host="localhost", port=0)
+
+        # Mock request that will cause an error in method handling
+        request = MagicMock(spec=web.Request)
+        request.json = AsyncMock(return_value={
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "tools/call",
+            "params": {"name": "nonexistent_tool"}
+        })
+
+        response = await transport.handle_mcp_request(request)
+
+        assert response.status == 500
+
+    @pytest.mark.asyncio
+    async def test_sse_handle_method_tools_call_missing_name(self) -> None:
+        """Test SSE tools/call with missing tool name."""
+        config = get_default_config()
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        transport = SSETransport(server=server, host="localhost", port=0)
+
+        with pytest.raises(ValueError, match="Tool name is required"):
+            await transport._handle_method("tools/call", {})
+
+    @pytest.mark.asyncio
+    async def test_sse_handle_method_tools_call_not_found(self) -> None:
+        """Test SSE tools/call with non-existent tool."""
+        config = get_default_config()
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        transport = SSETransport(server=server, host="localhost", port=0)
+
+        with pytest.raises(ValueError, match="Tool not found"):
+            await transport._handle_method("tools/call", {"name": "nonexistent"})
+
+    @pytest.mark.asyncio
+    async def test_sse_handle_method_tools_call_async(self) -> None:
+        """Test SSE tools/call with async handler."""
+        config = get_default_config()
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        # Register an async tool
+        async def async_handler(arg: str) -> str:
+            await asyncio.sleep(0.01)
+            return f"Async: {arg}"
+
+        server.registry.register_tool(ToolConfigModel(
+            name="async_tool",
+            description="An async tool",
+            input_schema={"type": "object", "properties": {"arg": {"type": "string"}}},
+            handler=async_handler
+        ))
+
+        transport = SSETransport(server=server, host="localhost", port=0)
+
+        result = await transport._handle_method("tools/call", {"name": "async_tool", "arguments": {"arg": "test"}})
+
+        assert result["result"] == "Async: test"
+
+    @pytest.mark.asyncio
+    async def test_sse_keepalive_loop(self) -> None:
+        """Test SSE keepalive loop removes disconnected connections."""
+        config = get_default_config()
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        transport = SSETransport(server=server, host="localhost", port=0, keepalive_interval=0.1)
+        await transport.start()
+
+        # Create mock connections
+        conn1 = MagicMock(spec=SSEConnection)
+        conn1.send_ping = AsyncMock()
+        conn1.connected = True
+        conn1.connection_id = "test-1"
+
+        conn2 = MagicMock(spec=SSEConnection)
+        conn2.send_ping = AsyncMock()
+        conn2.connected = False  # This one is disconnected
+        conn2.connection_id = "test-2"
+
+        transport.connections = {conn1, conn2}
+
+        # Wait for keepalive to run
+        await asyncio.sleep(0.2)
+
+        # Verify ping was sent
+        conn1.send_ping.assert_called()
+
+        # Verify disconnected connection was removed
+        assert conn2 not in transport.connections
+
+        await transport.stop()
+
+    @pytest.mark.asyncio
+    async def test_sse_send_event_with_id(self) -> None:
+        """Test sending SSE event with event ID."""
+        response = MagicMock(spec=web.StreamResponse)
+        response.write = AsyncMock()
+
+        conn = SSEConnection("test-123", response)
+
+        await conn.send_event("test_event", {"data": "test"}, "event-123")
+
+        response.write.assert_called_once()
+        call_args = response.write.call_args[0][0]
+        assert b"id: event-123" in call_args
+        assert b"event: test_event" in call_args
+        assert b"data:" in call_args
+
+    @pytest.mark.asyncio
+    async def test_sse_send_event_without_id(self) -> None:
+        """Test sending SSE event without event ID."""
+        response = MagicMock(spec=web.StreamResponse)
+        response.write = AsyncMock()
+
+        conn = SSEConnection("test-123", response)
+
+        await conn.send_event("test_event", {"data": "test"})
+
+        response.write.assert_called_once()
+        call_args = response.write.call_args[0][0]
+        assert b"id:" not in call_args
+        assert b"event: test_event" in call_args
+        assert b"data:" in call_args
+
+
+    @pytest.mark.asyncio
+    async def test_sse_connection_exception_during_write(self) -> None:
+        """Test SSE connection exception handling when write fails."""
+        # Test the error path in send_event
+        response = MagicMock(spec=web.StreamResponse)
+        response.write = AsyncMock(side_effect=Exception("Write error"))
+
+        connection = SSEConnection("test-123", response)
+        assert connection.connected is True
+
+        # This should handle the exception and mark connection as disconnected
+        await connection.send_event("test", {"data": "test"})
+
+        assert connection.connected is False
+
+
+class TestSSETransportFactory:
+    """Tests for SSE transport factory function."""
+
+    @pytest.mark.asyncio
+    async def test_create_sse_transport_default_config(self) -> None:
+        """Test creating SSE transport with default config."""
+        from simply_mcp.transports.sse import create_sse_transport
+
+        config = get_default_config()
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        transport = await create_sse_transport(server)
+
+        assert isinstance(transport, SSETransport)
+        assert transport.server == server
+        assert transport.host == config.transport.host
+        assert transport.port == config.transport.port
+
+    @pytest.mark.asyncio
+    async def test_create_sse_transport_custom_config(self) -> None:
+        """Test creating SSE transport with custom config."""
+        from simply_mcp.transports.sse import create_sse_transport
+
+        config = get_default_config()
+        config.transport.host = "127.0.0.1"
+        config.transport.port = 9999
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        transport = await create_sse_transport(server, config)
+
+        assert isinstance(transport, SSETransport)
+        assert transport.host == "127.0.0.1"
+        assert transport.port == 9999
+
+    @pytest.mark.asyncio
+    async def test_create_sse_transport_with_rate_limit(self) -> None:
+        """Test creating SSE transport with rate limiting."""
+        from simply_mcp.transports.sse import create_sse_transport
+
+        config = get_default_config()
+        config.rate_limit.enabled = True
+        config.rate_limit.requests_per_minute = 120
+        config.rate_limit.burst_size = 20
+
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        transport = await create_sse_transport(server, config)
+
+        assert isinstance(transport, SSETransport)
+        assert transport.rate_limiter is not None
+        assert transport.rate_limiter.requests_per_minute == 120
+        assert transport.rate_limiter.burst_size == 20
+
+    @pytest.mark.asyncio
+    async def test_create_sse_transport_with_auth(self) -> None:
+        """Test creating SSE transport with authentication."""
+        from simply_mcp.transports.sse import create_sse_transport
+
+        config = get_default_config()
+        config.auth.enabled = True
+        config.auth.type = "api_key"
+        config.auth.api_keys = ["test-key-123"]
+
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        transport = await create_sse_transport(server, config)
+
+        assert isinstance(transport, SSETransport)
+        assert transport.auth_provider is not None
+
 
 import json

@@ -123,9 +123,9 @@ class MyServer:
 Programmatic server building:
 
 ```python
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
-mcp = SimplyMCP(name="my-server", version="1.0.0")
+mcp = BuildMCPServer(name="my-server", version="1.0.0")
 
 @mcp.add_tool(description="Add two numbers")
 def add(a: int, b: int) -> int:

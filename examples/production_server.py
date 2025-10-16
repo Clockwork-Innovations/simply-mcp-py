@@ -102,7 +102,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 from simply_mcp.core.types import ProgressReporter
 from simply_mcp.features.binary import BinaryContent
 from simply_mcp.security.auth import APIKeyAuthProvider
@@ -125,14 +125,14 @@ FILE_STORE = Path(tempfile.mkdtemp()) / "uploads"
 FILE_STORE.mkdir(parents=True, exist_ok=True)
 
 
-def create_production_server() -> SimplyMCP:
+def create_production_server() -> BuildMCPServer:
     """Create and configure the production MCP server.
 
     Returns:
-        Configured SimplyMCP instance with all production features
+        Configured BuildMCPServer instance with all production features
     """
     # Create server with production configuration
-    mcp = SimplyMCP(
+    mcp = BuildMCPServer(
         name="production-mcp-server",
         version="1.0.0",
         description="Production-ready MCP server with advanced features",

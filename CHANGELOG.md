@@ -20,6 +20,96 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional transport options
 - Enhanced monitoring and observability features
 
+## [0.1.0b3] - 2025-10-15
+
+### Breaking Changes
+- **API Naming Alignment**: Renamed SimplyMCP to BuildMCPServer to mirror TypeScript implementation
+  - Old: `from simply_mcp import SimplyMCP`
+  - New: `from simply_mcp import BuildMCPServer`
+  - Rationale: Maintain naming consistency across TypeScript and Python implementations
+  - Impact: All existing code using SimplyMCP must be updated
+
+### Added
+- **Functional API** (mirrors TypeScript functional API):
+  - `define_mcp()`: Type-safe helper for defining MCP server configs
+  - `define_tool()`: Type-safe helper for defining tools
+  - `define_prompt()`: Type-safe helper for defining prompts
+  - `define_resource()`: Type-safe helper for defining resources
+  - `MCPBuilder`: Builder class with method chaining (`.tool()`, `.prompt()`, `.resource()`, `.build()`)
+  - `create_mcp()`: Factory function for creating MCPBuilder instances
+- **Programmatic API** (mirrors TypeScript BuildMCPServer):
+  - `BuildMCPServer`: Main class for programmatic server construction (renamed from SimplyMCP)
+  - Full method compatibility with decorator-style registration (@server.tool())
+  - Full method compatibility with direct registration (server.add_tool())
+- **Type Definitions** for config-based API:
+  - `MCPConfig`: Complete server configuration type
+  - `ToolConfig`: Tool configuration type
+  - `PromptConfig`: Prompt configuration type
+  - `ResourceConfig`: Resource configuration type
+
+### Changed
+- **Primary Class Name**: `SimplyMCP` → `BuildMCPServer` (breaking)
+- **API Module Structure**: Reorganized for clarity
+  - `api/programmatic.py`: BuildMCPServer class (main programmatic API)
+  - `api/functional.py`: Config-based helpers and MCPBuilder
+  - `api/builder.py`: Now re-exports BuildMCPServer for compatibility
+  - `api/decorators.py`: Unchanged (decorator API)
+- **Documentation**: Updated all examples and docs to use BuildMCPServer
+- **Examples**: Updated 12 example files to use new API naming
+- **Tests**: Updated test suite to use BuildMCPServer
+
+### Fixed
+- **Import Structure**: Cleaned up API module imports for better tree-shaking
+- **CLI Detection**: Updated server detection to recognize BuildMCPServer instances
+- **Type Exports**: Added comprehensive __all__ exports for better IDE support
+
+### Migration Guide
+
+**For existing users:**
+
+1. **Update imports**:
+   ```python
+   # Old
+   from simply_mcp import SimplyMCP
+   mcp = SimplyMCP(name="my-server", version="1.0.0")
+
+   # New
+   from simply_mcp import BuildMCPServer
+   server = BuildMCPServer(name="my-server", version="1.0.0")
+   ```
+
+2. **Update variable names** (optional but recommended):
+   ```python
+   # Old style (still works)
+   mcp = BuildMCPServer(...)
+
+   # New style (matches TypeScript)
+   server = BuildMCPServer(...)
+   ```
+
+3. **Use new functional API** (optional):
+   ```python
+   from simply_mcp import create_mcp
+
+   mcp = create_mcp(name="my-server", version="1.0.0")
+   mcp.tool({"name": "add", "handler": lambda a, b: a + b})
+   config = mcp.build()
+   ```
+
+**Why this change?**
+
+- **Cross-language consistency**: Python and TypeScript implementations now use identical naming
+- **Clear intent**: "BuildMCPServer" clearly indicates programmatic construction
+- **Better alignment**: Matches the established TypeScript API that users may already know
+- **Future-proof**: Prepares for additional API styles (Interface API, etc.)
+
+### Documentation
+- Updated all documentation files to use BuildMCPServer
+- Updated README.md with new API examples
+- Updated quickstart guide
+- Updated API reference
+- Added functional API examples
+
 ## [0.1.0b2] - 2025-10-15
 
 ### Added

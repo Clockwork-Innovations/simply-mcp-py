@@ -185,9 +185,9 @@ class DecoratorServer:
 ### Functional API
 
 ```python
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
-mcp = SimplyMCP(name="functional-example")
+mcp = BuildMCPServer(name="functional-example")
 
 @mcp.add_tool(description="Example tool")
 def example(param: str) -> str:

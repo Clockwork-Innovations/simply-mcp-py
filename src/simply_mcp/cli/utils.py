@@ -17,7 +17,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from simply_mcp.api.builder import SimplyMCP
+from simply_mcp.api.programmatic import BuildMCPServer
 from simply_mcp.api.decorators import get_global_server
 from simply_mcp.core.server import SimplyMCPServer
 
@@ -53,12 +53,24 @@ def load_python_module(file_path: str) -> Any:
     if spec is None or spec.loader is None:
         raise ImportError(f"Could not load module from: {file_path}")
 
-    # Load module
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[module_name] = module
-    spec.loader.exec_module(module)
+    # Add parent directory to sys.path to support local imports
+    parent_dir = str(path.parent.absolute())
+    path_modified = False
 
-    return module
+    if parent_dir not in sys.path:
+        sys.path.insert(0, parent_dir)
+        path_modified = True
+
+    try:
+        # Load module
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[module_name] = module
+        spec.loader.exec_module(module)
+        return module
+    finally:
+        # Clean up sys.path to avoid pollution
+        if path_modified and parent_dir in sys.path:
+            sys.path.remove(parent_dir)
 
 
 def detect_api_style(module: Any) -> tuple[str, Any | None]:
@@ -66,7 +78,7 @@ def detect_api_style(module: Any) -> tuple[str, Any | None]:
 
     Detects:
     - Decorator API: Module-level @tool, @prompt, @resource decorators
-    - Builder API: SimplyMCP instance created in module
+    - Programmatic API: BuildMCPServer instance created in module
     - Class-based API: Class decorated with @mcp_server
 
     Args:
@@ -77,10 +89,10 @@ def detect_api_style(module: Any) -> tuple[str, Any | None]:
         - api_style: "decorator", "builder", "class", or "unknown"
         - server_instance: Server instance if found, None otherwise
     """
-    # Check for builder API (SimplyMCP instance)
+    # Check for programmatic API (BuildMCPServer instance)
     for attr_name in dir(module):
         attr = getattr(module, attr_name)
-        if isinstance(attr, SimplyMCP):
+        if isinstance(attr, BuildMCPServer):
             return ("builder", attr.get_server())
 
     # Check for class-based API (@mcp_server decorated class)

@@ -1,21 +1,31 @@
 """Simply-MCP: A Pythonic framework for building MCP servers.
 
-This package provides multiple API styles for building MCP servers:
-- Builder API (SimplyMCP): Fluent, method-chaining interface
+This package provides multiple API styles for building MCP servers,
+mirroring the TypeScript implementation for cross-language consistency:
+
+- Programmatic API (BuildMCPServer): Explicit server construction
+- Functional API: Config-based definitions (define_mcp, MCPBuilder)
 - Decorator API: Pythonic decorators (@tool, @prompt, @resource)
 - Core API: Direct server and registry access
 
-Example (Builder API):
-    >>> from simply_mcp import SimplyMCP
+Example (Programmatic API - mirrors TypeScript BuildMCPServer):
+    >>> from simply_mcp import BuildMCPServer
     >>>
-    >>> mcp = SimplyMCP(name="my-server", version="1.0.0")
+    >>> server = BuildMCPServer(name="my-server", version="1.0.0")
     >>>
-    >>> @mcp.tool()
+    >>> @server.tool()
     >>> def add(a: int, b: int) -> int:
     ...     return a + b
     >>>
-    >>> await mcp.initialize()
-    >>> await mcp.run()
+    >>> await server.initialize()
+    >>> await server.run()
+
+Example (Functional API - mirrors TypeScript functional API):
+    >>> from simply_mcp import create_mcp
+    >>>
+    >>> mcp = create_mcp(name="my-server", version="1.0.0")
+    >>> mcp.tool({"name": "add", "handler": lambda a, b: a + b})
+    >>> config = mcp.build()
 
 Example (Decorator API):
     >>> from simply_mcp import tool, prompt, resource
@@ -26,8 +36,22 @@ Example (Decorator API):
     ...     return a + b
 """
 
-# Builder API (primary interface)
-from simply_mcp.api.builder import SimplyMCP
+# Programmatic API (BuildMCPServer - mirrors TypeScript)
+from simply_mcp.api.programmatic import BuildMCPServer
+
+# Functional API (config-based, mirrors TypeScript)
+from simply_mcp.api.functional import (
+    MCPBuilder,
+    MCPConfig,
+    PromptConfig,
+    ResourceConfig,
+    ToolConfig,
+    create_mcp,
+    define_mcp,
+    define_prompt,
+    define_resource,
+    define_tool,
+)
 
 # Decorator API
 from simply_mcp.api.decorators import (
@@ -53,11 +77,22 @@ from simply_mcp.core.errors import (
 )
 from simply_mcp.core.server import SimplyMCPServer
 
-__version__ = "0.1.0b2"
+__version__ = "0.1.0b3"
 
 __all__ = [
-    # Builder API
-    "SimplyMCP",
+    # Programmatic API (mirrors TypeScript BuildMCPServer)
+    "BuildMCPServer",
+    # Functional API (mirrors TypeScript functional API)
+    "MCPBuilder",
+    "create_mcp",
+    "define_mcp",
+    "define_tool",
+    "define_prompt",
+    "define_resource",
+    "MCPConfig",
+    "ToolConfig",
+    "PromptConfig",
+    "ResourceConfig",
     # Decorator API
     "tool",
     "prompt",

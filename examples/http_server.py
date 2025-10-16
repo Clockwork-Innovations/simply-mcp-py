@@ -66,7 +66,7 @@ Requirements:
 import asyncio
 import sys
 
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
 
 # ============================================================================
@@ -75,7 +75,7 @@ from simply_mcp import SimplyMCP
 # Create the MCP server instance. This can be used with any transport
 # (stdio, HTTP, SSE). The transport is specified when calling run methods.
 
-mcp = SimplyMCP(
+mcp = BuildMCPServer(
     name="http-demo-server",
     version="1.0.0",
     description="Demo MCP server with HTTP transport",

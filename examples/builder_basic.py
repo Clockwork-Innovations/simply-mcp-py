@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Builder API Example - Creating MCP Servers with Method Chaining
 
-This example demonstrates the SimplyMCP builder API, which provides a clean
+This example demonstrates the BuildMCPServer builder API, which provides a clean
 and intuitive way to construct MCP servers. The builder pattern offers:
 
 - Fluent Interface: Create and configure servers in a readable flow
@@ -10,7 +10,7 @@ and intuitive way to construct MCP servers. The builder pattern offers:
 - Flexibility: Mix and match different registration styles
 
 Key Features Demonstrated:
-    - Creating a SimplyMCP instance with configuration
+    - Creating a BuildMCPServer instance with configuration
     - Registering tools using @mcp.tool() decorator
     - Direct tool registration with add_tool()
     - Adding prompts with @mcp.prompt()
@@ -66,17 +66,17 @@ Requirements:
 """
 
 import asyncio
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
 
 # ============================================================================
 # Server Instance Creation
 # ============================================================================
-# Create a SimplyMCP instance that will hold all tools, prompts, and resources.
+# Create a BuildMCPServer instance that will hold all tools, prompts, and resources.
 # This instance uses the builder pattern - you can add capabilities using
 # either decorators (@mcp.tool) or direct methods (mcp.add_tool).
 
-mcp = SimplyMCP(
+mcp = BuildMCPServer(
     name="calculator",
     version="1.0.0",
     description="A simple calculator server"

@@ -1008,6 +1008,863 @@ class TestSimplyMCPServerProperties:
         assert server.request_count == 0
 
 
+class TestSimplyMCPServerProgressFeature:
+    """Test progress feature integration."""
+
+    @pytest.mark.asyncio
+    async def test_init_with_progress_enabled(self) -> None:
+        """Test server initialization with progress feature enabled."""
+        config = get_default_config()
+        config.features.enable_progress = True
+
+        server = SimplyMCPServer(config)
+
+        assert server.progress_tracker is not None
+        assert server.config.features.enable_progress is True
+
+    @pytest.mark.asyncio
+    async def test_init_with_progress_disabled(self) -> None:
+        """Test server initialization with progress feature disabled."""
+        config = get_default_config()
+        config.features.enable_progress = False
+
+        server = SimplyMCPServer(config)
+
+        assert server.progress_tracker is None
+        assert server.config.features.enable_progress is False
+
+    @pytest.mark.asyncio
+    async def test_send_progress_notification(self) -> None:
+        """Test progress notification sending."""
+        config = get_default_config()
+        config.features.enable_progress = True
+
+        server = SimplyMCPServer(config)
+
+        # Test sending progress notification
+        update = {
+            "percentage": 50.0,
+            "message": "Halfway done",
+            "current": 5,
+            "total": 10,
+        }
+
+        # Should not raise
+        await server._send_progress_notification(update)
+
+    @pytest.mark.asyncio
+    async def test_send_progress_notification_error_handling(self) -> None:
+        """Test progress notification error handling."""
+        config = get_default_config()
+        config.features.enable_progress = True
+
+        server = SimplyMCPServer(config)
+
+        # Test with malformed update (should not raise)
+        update = {"invalid": "data"}
+        await server._send_progress_notification(update)
+
+    @pytest.mark.asyncio
+    async def test_tool_with_progress_parameter(self) -> None:
+        """Test tool execution with progress parameter."""
+        config = get_default_config()
+        config.features.enable_progress = True
+
+        server = SimplyMCPServer(config)
+
+        # Track progress updates
+        progress_updates = []
+
+        async def long_running_task(steps: int, progress=None) -> str:
+            """A task that reports progress."""
+            if progress:
+                for i in range(steps):
+                    await progress.update((i + 1) * 100 / steps, message=f"Step {i+1}/{steps}")
+            return f"Completed {steps} steps"
+
+        server.register_tool(
+            ToolConfigModel(
+                name="long_task",
+                description="Long running task",
+                input_schema={"type": "object"},
+                handler=long_running_task,
+            )
+        )
+
+        await server.initialize()
+
+        # Get the handler
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.CallToolRequest]
+
+        # Call handler
+        request = types.CallToolRequest(
+            method="tools/call",
+            params=types.CallToolRequestParams(name="long_task", arguments={"steps": 3}),
+        )
+        result = await handler(request)
+
+        # Check result
+        assert isinstance(result, types.ServerResult)
+        assert "Completed 3 steps" in result.root.content[0].text
+
+    @pytest.mark.asyncio
+    async def test_tool_with_progress_failure(self) -> None:
+        """Test tool execution with progress that fails."""
+        config = get_default_config()
+        config.features.enable_progress = True
+
+        server = SimplyMCPServer(config)
+
+        async def failing_task_with_progress(progress=None) -> str:
+            """A task that fails with progress."""
+            if progress:
+                await progress.update(50, message="Halfway")
+            raise ValueError("Task failed")
+
+        server.register_tool(
+            ToolConfigModel(
+                name="failing_task",
+                description="Failing task",
+                input_schema={"type": "object"},
+                handler=failing_task_with_progress,
+            )
+        )
+
+        await server.initialize()
+
+        # Get the handler
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.CallToolRequest]
+
+        # Call handler
+        request = types.CallToolRequest(
+            method="tools/call",
+            params=types.CallToolRequestParams(name="failing_task", arguments={}),
+        )
+
+        # Should return error result
+        result = await handler(request)
+        assert isinstance(result, types.ServerResult)
+        assert result.root.isError is True
+
+
+class TestSimplyMCPServerErrorHandling:
+    """Test error handling paths."""
+
+    @pytest.mark.asyncio
+    async def test_list_tools_error_handling(self) -> None:
+        """Test error handling in list_tools."""
+        server = SimplyMCPServer()
+        await server.initialize()
+
+        # Mock registry to raise exception
+        with patch.object(server.registry, "list_tools", side_effect=RuntimeError("Registry error")):
+            mcp_server = server.get_mcp_server()
+            handler = mcp_server.request_handlers[types.ListToolsRequest]
+
+            request = types.ListToolsRequest(method="tools/list")
+
+            with pytest.raises(RuntimeError, match="Registry error"):
+                await handler(request)
+
+    @pytest.mark.asyncio
+    async def test_call_tool_unexpected_error(self) -> None:
+        """Test unexpected error handling in call_tool."""
+        server = SimplyMCPServer()
+
+        def broken_tool() -> str:
+            raise RuntimeError("Unexpected error")
+
+        server.register_tool(
+            ToolConfigModel(
+                name="broken",
+                description="Broken tool",
+                input_schema={"type": "object"},
+                handler=broken_tool,
+            )
+        )
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.CallToolRequest]
+
+        request = types.CallToolRequest(
+            method="tools/call",
+            params=types.CallToolRequestParams(name="broken", arguments={}),
+        )
+
+        result = await handler(request)
+        assert isinstance(result, types.ServerResult)
+        assert result.root.isError is True
+
+    @pytest.mark.asyncio
+    async def test_list_prompts_error_handling(self) -> None:
+        """Test error handling in list_prompts."""
+        server = SimplyMCPServer()
+        await server.initialize()
+
+        # Mock registry to raise exception
+        with patch.object(server.registry, "list_prompts", side_effect=RuntimeError("Registry error")):
+            mcp_server = server.get_mcp_server()
+            handler = mcp_server.request_handlers[types.ListPromptsRequest]
+
+            request = types.ListPromptsRequest(method="prompts/list")
+
+            with pytest.raises(RuntimeError, match="Registry error"):
+                await handler(request)
+
+    @pytest.mark.asyncio
+    async def test_get_prompt_handler_execution_error(self) -> None:
+        """Test handler execution error in get_prompt."""
+        server = SimplyMCPServer()
+
+        def failing_handler(name: str) -> str:
+            raise ValueError("Handler failed")
+
+        server.register_prompt(
+            PromptConfigModel(
+                name="failing",
+                description="Failing prompt",
+                handler=failing_handler,
+                arguments=["name"],
+            )
+        )
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.GetPromptRequest]
+
+        request = types.GetPromptRequest(
+            method="prompts/get",
+            params=types.GetPromptRequestParams(name="failing", arguments={"name": "test"}),
+        )
+
+        with pytest.raises(HandlerExecutionError):
+            await handler(request)
+
+    @pytest.mark.asyncio
+    async def test_get_prompt_no_handler_or_template(self) -> None:
+        """Test get_prompt with neither handler nor template."""
+        server = SimplyMCPServer()
+
+        # Manually create a prompt config without handler or template
+        # This requires bypassing normal validation
+        from simply_mcp.core.types import PromptConfigModel
+
+        prompt_config = PromptConfigModel(
+            name="invalid",
+            description="Invalid prompt",
+        )
+        # Force register without validation
+        server.registry._prompts["invalid"] = prompt_config
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.GetPromptRequest]
+
+        request = types.GetPromptRequest(
+            method="prompts/get",
+            params=types.GetPromptRequestParams(name="invalid", arguments=None),
+        )
+
+        with pytest.raises(ValidationError, match="has neither handler nor template"):
+            await handler(request)
+
+    @pytest.mark.asyncio
+    async def test_get_prompt_generic_error(self) -> None:
+        """Test generic error handling in get_prompt."""
+        server = SimplyMCPServer()
+
+        async def async_failing_handler(name: str) -> str:
+            raise RuntimeError("Async handler failed")
+
+        server.register_prompt(
+            PromptConfigModel(
+                name="async_failing",
+                description="Async failing prompt",
+                handler=async_failing_handler,
+                arguments=["name"],
+            )
+        )
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.GetPromptRequest]
+
+        request = types.GetPromptRequest(
+            method="prompts/get",
+            params=types.GetPromptRequestParams(name="async_failing", arguments={"name": "test"}),
+        )
+
+        with pytest.raises(HandlerExecutionError):
+            await handler(request)
+
+    @pytest.mark.asyncio
+    async def test_list_resources_error_handling(self) -> None:
+        """Test error handling in list_resources."""
+        server = SimplyMCPServer()
+        await server.initialize()
+
+        # Mock registry to raise exception
+        with patch.object(server.registry, "list_resources", side_effect=RuntimeError("Registry error")):
+            mcp_server = server.get_mcp_server()
+            handler = mcp_server.request_handlers[types.ListResourcesRequest]
+
+            request = types.ListResourcesRequest(method="resources/list")
+
+            with pytest.raises(RuntimeError, match="Registry error"):
+                await handler(request)
+
+    @pytest.mark.asyncio
+    async def test_read_resource_handler_execution_error(self) -> None:
+        """Test handler execution error in read_resource."""
+        server = SimplyMCPServer()
+
+        def failing_resource() -> str:
+            raise ValueError("Resource handler failed")
+
+        server.register_resource(
+            ResourceConfigModel(
+                uri="error://test",
+                name="error",
+                description="Error resource",
+                mime_type="text/plain",
+                handler=failing_resource,
+            )
+        )
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.ReadResourceRequest]
+
+        request = types.ReadResourceRequest(
+            method="resources/read",
+            params=types.ReadResourceRequestParams(uri=AnyUrl("error://test")),
+        )
+
+        with pytest.raises(HandlerExecutionError):
+            await handler(request)
+
+    @pytest.mark.asyncio
+    async def test_read_resource_generic_error(self) -> None:
+        """Test generic error handling in read_resource."""
+        server = SimplyMCPServer()
+
+        def sync_failing_resource() -> str:
+            raise RuntimeError("Resource failed")
+
+        server.register_resource(
+            ResourceConfigModel(
+                uri="error2://test",
+                name="error2",
+                description="Error resource 2",
+                mime_type="text/plain",
+                handler=sync_failing_resource,
+            )
+        )
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.ReadResourceRequest]
+
+        request = types.ReadResourceRequest(
+            method="resources/read",
+            params=types.ReadResourceRequestParams(uri=AnyUrl("error2://test")),
+        )
+
+        with pytest.raises(HandlerExecutionError):
+            await handler(request)
+
+
+class TestSimplyMCPServerResourceBinaryContent:
+    """Test resource handling with binary content."""
+
+    @pytest.mark.asyncio
+    async def test_read_resource_bytes_with_binary_enabled(self) -> None:
+        """Test reading resource that returns bytes with binary content enabled."""
+        config = get_default_config()
+        config.features.enable_binary_content = True
+
+        server = SimplyMCPServer(config)
+
+        def load_binary() -> bytes:
+            return b"Binary content here"
+
+        server.register_resource(
+            ResourceConfigModel(
+                uri="binary://test",
+                name="binary",
+                description="Binary resource",
+                mime_type="application/octet-stream",
+                handler=load_binary,
+            )
+        )
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.ReadResourceRequest]
+
+        request = types.ReadResourceRequest(
+            method="resources/read",
+            params=types.ReadResourceRequestParams(uri=AnyUrl("binary://test")),
+        )
+        result = await handler(request)
+
+        # Should be base64 encoded
+        assert isinstance(result, types.ServerResult)
+        content = result.root.contents[0].text
+        assert len(content) > 0  # Base64 encoded string
+
+    @pytest.mark.asyncio
+    async def test_read_resource_bytes_with_binary_disabled(self) -> None:
+        """Test reading resource that returns UTF-8 decodable bytes with binary disabled."""
+        config = get_default_config()
+        config.features.enable_binary_content = False
+
+        server = SimplyMCPServer(config)
+
+        def load_text_bytes() -> bytes:
+            return "Text content".encode("utf-8")
+
+        server.register_resource(
+            ResourceConfigModel(
+                uri="file:///tmp/text_bytes",
+                name="text_bytes",
+                description="Text bytes resource",
+                mime_type="text/plain",
+                handler=load_text_bytes,
+            )
+        )
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.ReadResourceRequest]
+
+        request = types.ReadResourceRequest(
+            method="resources/read",
+            params=types.ReadResourceRequestParams(uri=AnyUrl("file:///tmp/text_bytes")),
+        )
+        result = await handler(request)
+
+        # Should be UTF-8 decoded
+        assert isinstance(result, types.ServerResult)
+        assert result.root.contents[0].text == "Text content"
+
+    @pytest.mark.asyncio
+    async def test_read_resource_binary_content_object_enabled(self) -> None:
+        """Test reading resource that returns BinaryContent object."""
+        config = get_default_config()
+        config.features.enable_binary_content = True
+
+        server = SimplyMCPServer(config)
+
+        def load_binary_object() -> Any:
+            from simply_mcp.features.binary import BinaryContent
+            return BinaryContent(b"Binary data", mime_type="image/png")
+
+        server.register_resource(
+            ResourceConfigModel(
+                uri="image://test",
+                name="image",
+                description="Image resource",
+                mime_type="image/png",
+                handler=load_binary_object,
+            )
+        )
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.ReadResourceRequest]
+
+        request = types.ReadResourceRequest(
+            method="resources/read",
+            params=types.ReadResourceRequestParams(uri=AnyUrl("image://test")),
+        )
+        result = await handler(request)
+
+        # Should be base64 encoded
+        assert isinstance(result, types.ServerResult)
+        content = result.root.contents[0].text
+        assert len(content) > 0
+
+    @pytest.mark.asyncio
+    async def test_read_resource_binary_content_object_disabled(self) -> None:
+        """Test reading resource that returns BinaryContent when disabled."""
+        config = get_default_config()
+        config.features.enable_binary_content = False
+
+        server = SimplyMCPServer(config)
+
+        def load_binary_object() -> Any:
+            from simply_mcp.features.binary import BinaryContent
+            return BinaryContent(b"Binary data", mime_type="image/png")
+
+        server.register_resource(
+            ResourceConfigModel(
+                uri="file:///tmp/image_disabled",
+                name="image_disabled",
+                description="Image resource disabled",
+                mime_type="image/png",
+                handler=load_binary_object,
+            )
+        )
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.ReadResourceRequest]
+
+        request = types.ReadResourceRequest(
+            method="resources/read",
+            params=types.ReadResourceRequestParams(uri=AnyUrl("file:///tmp/image_disabled")),
+        )
+
+        # Should raise ValidationError because binary content is disabled
+        with pytest.raises(ValidationError, match="Binary content is disabled"):
+            await handler(request)
+
+
+class TestSimplyMCPServerLifecycleAdvanced:
+    """Test advanced lifecycle methods."""
+
+    @pytest.mark.asyncio
+    async def test_lifespan_context_manager(self) -> None:
+        """Test server lifespan context manager."""
+        server = SimplyMCPServer()
+        await server.initialize()
+
+        # Server should not be running initially
+        assert not server.is_running
+
+        # Enter lifespan context
+        async with server._lifespan(server.mcp_server) as context:
+            # Server should be running
+            assert server.is_running
+
+            # Context should contain expected keys
+            assert "registry" in context
+            assert "config" in context
+            assert "server" in context
+            assert "progress_tracker" in context
+
+            assert context["registry"] is server.registry
+            assert context["config"] is server.config
+            assert context["server"] is server
+
+        # After exiting context, server should not be running
+        assert not server.is_running
+
+    @pytest.mark.asyncio
+    async def test_lifespan_with_progress_cleanup(self) -> None:
+        """Test lifespan cleanup with progress operations."""
+        config = get_default_config()
+        config.features.enable_progress = True
+
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        # Create a progress operation
+        async with server._lifespan(server.mcp_server) as context:
+            tracker = context["progress_tracker"]
+            if tracker:
+                # Create an operation
+                reporter = await tracker.create_operation("test-op")
+                await reporter.complete()
+
+        # After lifespan, completed operations should be cleaned up
+        # (this is tested indirectly through the lifespan finally block)
+
+    @pytest.mark.asyncio
+    async def test_lifespan_with_progress_cleanup_error(self) -> None:
+        """Test lifespan cleanup when progress cleanup fails."""
+        config = get_default_config()
+        config.features.enable_progress = True
+
+        server = SimplyMCPServer(config)
+        await server.initialize()
+
+        # Mock progress tracker to raise error on cleanup
+        if server.progress_tracker:
+            with patch.object(
+                server.progress_tracker,
+                "cleanup_completed",
+                side_effect=RuntimeError("Cleanup error"),
+            ):
+                # Should not raise, just log warning
+                async with server._lifespan(server.mcp_server) as context:
+                    pass
+
+    @pytest.mark.asyncio
+    async def test_start_method(self) -> None:
+        """Test start method (alias for run_stdio)."""
+        server = SimplyMCPServer()
+
+        # Should raise if not initialized
+        with pytest.raises(RuntimeError, match="not initialized"):
+            await server.start()
+
+    @pytest.mark.asyncio
+    async def test_run_http_not_initialized(self) -> None:
+        """Test run_http raises error if not initialized."""
+        server = SimplyMCPServer()
+
+        with pytest.raises(RuntimeError, match="not initialized"):
+            await server.run_http()
+
+    @pytest.mark.asyncio
+    async def test_run_http_initialized(self) -> None:
+        """Test run_http with initialized server."""
+        server = SimplyMCPServer()
+        await server.initialize()
+
+        # Mock HTTPTransport from the transports.http module
+        with patch("simply_mcp.transports.http.HTTPTransport") as MockHTTPTransport:
+            mock_transport = AsyncMock()
+            MockHTTPTransport.return_value = mock_transport
+
+            # Mock the running loop to exit immediately
+            server._running = True
+
+            async def stop_after_start():
+                await asyncio.sleep(0.01)
+                server._running = False
+
+            # Run both coroutines concurrently
+            await asyncio.gather(
+                server.run_http(host="localhost", port=8080),
+                stop_after_start(),
+            )
+
+            # Verify transport was created with correct params
+            MockHTTPTransport.assert_called_once_with(
+                server=server,
+                host="localhost",
+                port=8080,
+                cors_enabled=True,
+                cors_origins=None,
+            )
+            mock_transport.start.assert_called_once()
+            mock_transport.stop.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_run_http_keyboard_interrupt(self) -> None:
+        """Test run_http handles KeyboardInterrupt."""
+        server = SimplyMCPServer()
+        await server.initialize()
+
+        with patch("simply_mcp.transports.http.HTTPTransport") as MockHTTPTransport:
+            mock_transport = AsyncMock()
+            mock_transport.start.side_effect = KeyboardInterrupt()
+            MockHTTPTransport.return_value = mock_transport
+
+            with pytest.raises(KeyboardInterrupt):
+                await server.run_http()
+
+            mock_transport.stop.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_run_sse_not_initialized(self) -> None:
+        """Test run_sse raises error if not initialized."""
+        server = SimplyMCPServer()
+
+        with pytest.raises(RuntimeError, match="not initialized"):
+            await server.run_sse()
+
+    @pytest.mark.asyncio
+    async def test_run_sse_initialized(self) -> None:
+        """Test run_sse with initialized server."""
+        server = SimplyMCPServer()
+        await server.initialize()
+
+        # Mock SSETransport from the transports.sse module
+        with patch("simply_mcp.transports.sse.SSETransport") as MockSSETransport:
+            mock_transport = AsyncMock()
+            MockSSETransport.return_value = mock_transport
+
+            # Mock the running loop to exit immediately
+            server._running = True
+
+            async def stop_after_start():
+                await asyncio.sleep(0.01)
+                server._running = False
+
+            # Run both coroutines concurrently
+            await asyncio.gather(
+                server.run_sse(host="localhost", port=8081, cors_origins=["*"]),
+                stop_after_start(),
+            )
+
+            # Verify transport was created with correct params
+            MockSSETransport.assert_called_once_with(
+                server=server,
+                host="localhost",
+                port=8081,
+                cors_enabled=True,
+                cors_origins=["*"],
+            )
+            mock_transport.start.assert_called_once()
+            mock_transport.stop.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_run_sse_keyboard_interrupt(self) -> None:
+        """Test run_sse handles KeyboardInterrupt."""
+        server = SimplyMCPServer()
+        await server.initialize()
+
+        with patch("simply_mcp.transports.sse.SSETransport") as MockSSETransport:
+            mock_transport = AsyncMock()
+            mock_transport.start.side_effect = KeyboardInterrupt()
+            MockSSETransport.return_value = mock_transport
+
+            with pytest.raises(KeyboardInterrupt):
+                await server.run_sse()
+
+            mock_transport.stop.assert_called_once()
+
+
+class TestSimplyMCPServerCallToolResultTypes:
+    """Test call_tool with various result types."""
+
+    @pytest.mark.asyncio
+    async def test_call_tool_list_result(self) -> None:
+        """Test tool returning list."""
+        server = SimplyMCPServer()
+
+        def get_items() -> list:
+            return ["item1", "item2", "item3"]
+
+        server.register_tool(
+            ToolConfigModel(
+                name="get_items",
+                description="Get items",
+                input_schema={"type": "object"},
+                handler=get_items,
+            )
+        )
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.CallToolRequest]
+
+        request = types.CallToolRequest(
+            method="tools/call",
+            params=types.CallToolRequestParams(name="get_items", arguments={}),
+        )
+        result = await handler(request)
+
+        # Check result - list items should be converted to text content
+        assert isinstance(result, types.ServerResult)
+        assert len(result.root.content) == 3
+        assert "item1" in result.root.content[0].text
+        assert "item2" in result.root.content[1].text
+        assert "item3" in result.root.content[2].text
+
+    @pytest.mark.asyncio
+    async def test_call_tool_other_result_type(self) -> None:
+        """Test tool returning other types (converted to string)."""
+        server = SimplyMCPServer()
+
+        def get_number() -> int:
+            return 42
+
+        server.register_tool(
+            ToolConfigModel(
+                name="get_number",
+                description="Get number",
+                input_schema={"type": "object"},
+                handler=get_number,
+            )
+        )
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.CallToolRequest]
+
+        request = types.CallToolRequest(
+            method="tools/call",
+            params=types.CallToolRequestParams(name="get_number", arguments={}),
+        )
+        result = await handler(request)
+
+        # Check result - should be converted to string
+        assert isinstance(result, types.ServerResult)
+        assert "42" in result.root.content[0].text
+
+
+class TestSimplyMCPServerPromptTemplateHandling:
+    """Test prompt template handling."""
+
+    @pytest.mark.asyncio
+    async def test_get_prompt_template_without_arguments(self) -> None:
+        """Test getting prompt with template but no arguments."""
+        server = SimplyMCPServer()
+
+        server.register_prompt(
+            PromptConfigModel(
+                name="simple",
+                description="Simple prompt",
+                template="This is a simple prompt without variables",
+            )
+        )
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.GetPromptRequest]
+
+        request = types.GetPromptRequest(
+            method="prompts/get",
+            params=types.GetPromptRequestParams(name="simple", arguments=None),
+        )
+        result = await handler(request)
+
+        assert isinstance(result, types.ServerResult)
+        assert "This is a simple prompt without variables" in result.root.messages[0].content.text
+
+    @pytest.mark.asyncio
+    async def test_get_prompt_template_with_arguments(self) -> None:
+        """Test getting prompt with template and arguments."""
+        server = SimplyMCPServer()
+
+        server.register_prompt(
+            PromptConfigModel(
+                name="complex",
+                description="Complex prompt",
+                template="Name: {name}, Age: {age}",
+                arguments=["name", "age"],
+            )
+        )
+
+        await server.initialize()
+
+        mcp_server = server.get_mcp_server()
+        handler = mcp_server.request_handlers[types.GetPromptRequest]
+
+        request = types.GetPromptRequest(
+            method="prompts/get",
+            params=types.GetPromptRequestParams(
+                name="complex",
+                arguments={"name": "Alice", "age": "30"}
+            ),
+        )
+        result = await handler(request)
+
+        assert isinstance(result, types.ServerResult)
+        assert "Name: Alice, Age: 30" in result.root.messages[0].content.text
+
+
 class TestSimplyMCPServerIntegration:
     """Integration tests for server."""
 

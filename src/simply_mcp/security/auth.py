@@ -1,13 +1,18 @@
 """Authentication providers for Simply-MCP.
 
 This module provides authentication support for MCP servers, including
-API key authentication and extensibility for OAuth and JWT in the future.
+API key authentication, OAuth 2.0, and JWT (JSON Web Token) authentication.
 """
 
 import hmac
+import time
 from abc import ABC, abstractmethod
+from datetime import datetime, timedelta
 from typing import Any
+from urllib.parse import urlencode
 
+import aiohttp
+import jwt
 from aiohttp import web
 
 from simply_mcp.core.errors import AuthenticationError
@@ -299,16 +304,34 @@ class APIKeyAuthProvider(AuthProvider):
 
 
 class OAuthProvider(AuthProvider):
-    """OAuth authentication provider (stub for future implementation).
+    """OAuth 2.0 authentication provider.
 
-    This is a placeholder for OAuth 2.0 authentication support.
-    Implementation will be added in a future phase.
+    Implements OAuth 2.0 Authorization Code Flow with token validation,
+    token refresh, and proper error handling. This provider validates
+    access tokens received in the Authorization header.
+
+    Supported header format:
+    - Authorization: Bearer <access_token>
 
     Attributes:
         client_id: OAuth client ID
         client_secret: OAuth client secret
         authorization_url: OAuth authorization endpoint
         token_url: OAuth token endpoint
+        userinfo_url: Optional URL to fetch user information
+        redirect_uri: OAuth redirect URI for authorization flow
+        scope: OAuth scope (space-separated string)
+        token_cache: Cache of validated tokens with metadata
+
+    Example:
+        >>> provider = OAuthProvider(
+        ...     client_id="your-client-id",
+        ...     client_secret="your-client-secret",
+        ...     authorization_url="https://provider.com/oauth/authorize",
+        ...     token_url="https://provider.com/oauth/token",
+        ...     userinfo_url="https://provider.com/oauth/userinfo"
+        ... )
+        >>> client = await provider.authenticate(request)
     """
 
     def __init__(
@@ -317,27 +340,48 @@ class OAuthProvider(AuthProvider):
         client_secret: str,
         authorization_url: str,
         token_url: str,
+        userinfo_url: str | None = None,
+        redirect_uri: str | None = None,
+        scope: str = "openid profile email",
         **kwargs: Any,
     ) -> None:
-        """Initialize OAuth provider (stub).
+        """Initialize OAuth provider.
 
         Args:
             client_id: OAuth client ID
             client_secret: OAuth client secret
             authorization_url: OAuth authorization endpoint
             token_url: OAuth token endpoint
+            userinfo_url: Optional URL to fetch user information
+            redirect_uri: OAuth redirect URI for authorization flow
+            scope: OAuth scope (space-separated string)
             **kwargs: Additional OAuth configuration
         """
         self.client_id = client_id
         self.client_secret = client_secret
         self.authorization_url = authorization_url
         self.token_url = token_url
+        self.userinfo_url = userinfo_url
+        self.redirect_uri = redirect_uri
+        self.scope = scope
         self.config = kwargs
 
-        logger.info("Initialized OAuth provider (stub - not yet implemented)")
+        # Token cache: {access_token: (client_info, expiry_time)}
+        self.token_cache: dict[str, tuple[ClientInfo, float]] = {}
+
+        logger.info(
+            "Initialized OAuth provider",
+            extra={
+                "context": {
+                    "client_id": client_id,
+                    "authorization_url": authorization_url,
+                    "token_url": token_url,
+                }
+            },
+        )
 
     async def authenticate(self, request: web.Request) -> ClientInfo:
-        """Authenticate request using OAuth (not yet implemented).
+        """Authenticate request using OAuth 2.0 access token.
 
         Args:
             request: The incoming HTTP request
@@ -346,25 +390,321 @@ class OAuthProvider(AuthProvider):
             ClientInfo with authenticated client details
 
         Raises:
-            NotImplementedError: OAuth is not yet implemented
+            AuthenticationError: If authentication fails
         """
-        raise NotImplementedError(
-            "OAuth authentication is not yet implemented. "
-            "This is a placeholder for future Phase 4 Week 8+ development."
+        # Extract access token from Authorization header
+        access_token = self._extract_token(request)
+
+        if not access_token:
+            logger.warning(
+                "OAuth authentication failed: No access token provided",
+                extra={
+                    "context": {
+                        "remote": request.remote or "unknown",
+                        "path": request.path,
+                    }
+                },
+            )
+            raise AuthenticationError(
+                "Authentication required. Provide OAuth access token in "
+                "Authorization header (Bearer <token>)",
+                auth_type="oauth",
+            )
+
+        # Check token cache first
+        cached_info = self._get_cached_token(access_token)
+        if cached_info:
+            logger.debug(
+                f"OAuth token cache hit for client {cached_info.client_id}",
+                extra={"context": {"client_id": cached_info.client_id}},
+            )
+            return cached_info
+
+        # Validate token by fetching user info
+        try:
+            user_info = await self._fetch_user_info(access_token)
+        except Exception as e:
+            logger.warning(
+                "OAuth authentication failed: Token validation error",
+                extra={
+                    "context": {
+                        "remote": request.remote or "unknown",
+                        "path": request.path,
+                        "error": str(e),
+                    }
+                },
+            )
+            raise AuthenticationError(
+                f"Invalid OAuth access token: {str(e)}",
+                auth_type="oauth",
+            ) from e
+
+        # Extract user ID from user info
+        user_id = user_info.get("sub") or user_info.get("id") or user_info.get("user_id")
+        if not user_id:
+            raise AuthenticationError(
+                "Could not extract user ID from OAuth user info",
+                auth_type="oauth",
+            )
+
+        # Create client info
+        client_info = ClientInfo(
+            client_id=str(user_id),
+            auth_type="oauth",
+            metadata={
+                "remote": request.remote or "unknown",
+                "email": user_info.get("email"),
+                "name": user_info.get("name"),
+                "user_info": user_info,
+            },
         )
+
+        # Cache the token (cache for 5 minutes by default)
+        cache_duration = self.config.get("token_cache_duration", 300)
+        self._cache_token(access_token, client_info, cache_duration)
+
+        logger.info(
+            f"OAuth authentication successful for user {user_id}",
+            extra={
+                "context": {
+                    "client_id": client_info.client_id,
+                    "remote": request.remote or "unknown",
+                }
+            },
+        )
+
+        return client_info
+
+    def _extract_token(self, request: web.Request) -> str | None:
+        """Extract OAuth access token from request headers.
+
+        Args:
+            request: The incoming HTTP request
+
+        Returns:
+            Access token if found, None otherwise
+        """
+        auth_header = request.headers.get("Authorization")
+        if auth_header:
+            parts = auth_header.strip().split()
+            if len(parts) == 2 and parts[0].lower() == "bearer":
+                return parts[1]
+        return None
+
+    async def _fetch_user_info(self, access_token: str) -> dict[str, Any]:
+        """Fetch user information using access token.
+
+        Args:
+            access_token: OAuth access token
+
+        Returns:
+            User information dictionary
+
+        Raises:
+            AuthenticationError: If user info fetch fails
+        """
+        if not self.userinfo_url:
+            raise AuthenticationError(
+                "OAuth userinfo_url not configured",
+                auth_type="oauth",
+            )
+
+        headers = {"Authorization": f"Bearer {access_token}"}
+
+        async with aiohttp.ClientSession() as session:
+            try:
+                async with session.get(
+                    self.userinfo_url, headers=headers, timeout=aiohttp.ClientTimeout(total=10)
+                ) as response:
+                    if response.status != 200:
+                        error_text = await response.text()
+                        raise AuthenticationError(
+                            f"OAuth userinfo request failed: {response.status} - {error_text}",
+                            auth_type="oauth",
+                        )
+                    result: dict[str, Any] = await response.json()
+                    return result
+            except aiohttp.ClientError as e:
+                raise AuthenticationError(
+                    f"OAuth userinfo request error: {str(e)}",
+                    auth_type="oauth",
+                ) from e
+
+    def _get_cached_token(self, access_token: str) -> ClientInfo | None:
+        """Get cached token info if valid.
+
+        Args:
+            access_token: OAuth access token
+
+        Returns:
+            ClientInfo if token is cached and not expired, None otherwise
+        """
+        if access_token in self.token_cache:
+            client_info, expiry_time = self.token_cache[access_token]
+            if time.time() < expiry_time:
+                return client_info
+            else:
+                # Token expired, remove from cache
+                del self.token_cache[access_token]
+        return None
+
+    def _cache_token(
+        self, access_token: str, client_info: ClientInfo, duration: int
+    ) -> None:
+        """Cache token validation result.
+
+        Args:
+            access_token: OAuth access token
+            client_info: Client information
+            duration: Cache duration in seconds
+        """
+        expiry_time = time.time() + duration
+        self.token_cache[access_token] = (client_info, expiry_time)
+
+    def get_authorization_url(self, state: str | None = None) -> str:
+        """Generate OAuth authorization URL.
+
+        Args:
+            state: Optional state parameter for CSRF protection
+
+        Returns:
+            Authorization URL
+
+        Raises:
+            ValueError: If redirect_uri is not configured
+        """
+        if not self.redirect_uri:
+            raise ValueError("redirect_uri must be configured to generate authorization URL")
+
+        params = {
+            "client_id": self.client_id,
+            "redirect_uri": self.redirect_uri,
+            "response_type": "code",
+            "scope": self.scope,
+        }
+
+        if state:
+            params["state"] = state
+
+        return f"{self.authorization_url}?{urlencode(params)}"
+
+    async def exchange_code_for_token(self, code: str) -> dict[str, Any]:
+        """Exchange authorization code for access token.
+
+        Args:
+            code: Authorization code from OAuth callback
+
+        Returns:
+            Token response dictionary containing access_token, etc.
+
+        Raises:
+            AuthenticationError: If token exchange fails
+            ValueError: If redirect_uri is not configured
+        """
+        if not self.redirect_uri:
+            raise ValueError("redirect_uri must be configured to exchange code")
+
+        data = {
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "code": code,
+            "redirect_uri": self.redirect_uri,
+            "grant_type": "authorization_code",
+        }
+
+        async with aiohttp.ClientSession() as session:
+            try:
+                async with session.post(
+                    self.token_url, data=data, timeout=aiohttp.ClientTimeout(total=10)
+                ) as response:
+                    if response.status != 200:
+                        error_text = await response.text()
+                        raise AuthenticationError(
+                            f"OAuth token exchange failed: {response.status} - {error_text}",
+                            auth_type="oauth",
+                        )
+                    result: dict[str, Any] = await response.json()
+                    return result
+            except aiohttp.ClientError as e:
+                raise AuthenticationError(
+                    f"OAuth token exchange error: {str(e)}",
+                    auth_type="oauth",
+                ) from e
+
+    async def refresh_token(self, refresh_token: str) -> dict[str, Any]:
+        """Refresh an OAuth access token.
+
+        Args:
+            refresh_token: OAuth refresh token
+
+        Returns:
+            Token response dictionary containing new access_token, etc.
+
+        Raises:
+            AuthenticationError: If token refresh fails
+        """
+        data = {
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "refresh_token": refresh_token,
+            "grant_type": "refresh_token",
+        }
+
+        async with aiohttp.ClientSession() as session:
+            try:
+                async with session.post(
+                    self.token_url, data=data, timeout=aiohttp.ClientTimeout(total=10)
+                ) as response:
+                    if response.status != 200:
+                        error_text = await response.text()
+                        raise AuthenticationError(
+                            f"OAuth token refresh failed: {response.status} - {error_text}",
+                            auth_type="oauth",
+                        )
+                    result: dict[str, Any] = await response.json()
+                    return result
+            except aiohttp.ClientError as e:
+                raise AuthenticationError(
+                    f"OAuth token refresh error: {str(e)}",
+                    auth_type="oauth",
+                ) from e
 
 
 class JWTProvider(AuthProvider):
-    """JWT authentication provider (stub for future implementation).
+    """JWT (JSON Web Token) authentication provider.
 
-    This is a placeholder for JWT (JSON Web Token) authentication support.
-    Implementation will be added in a future phase.
+    Implements JWT token validation with support for multiple signing algorithms,
+    claims validation (audience, issuer, expiration), and optional token generation.
+
+    Supported header format:
+    - Authorization: Bearer <jwt_token>
 
     Attributes:
-        secret_key: JWT secret key for verification
-        algorithm: JWT signing algorithm (e.g., HS256, RS256)
-        audience: Expected JWT audience
-        issuer: Expected JWT issuer
+        secret_key: JWT secret key for verification (for HS256/HS384/HS512)
+        public_key: Optional public key for verification (for RS256/RS384/RS512/ES256/ES384/ES512)
+        algorithm: JWT signing algorithm (HS256, HS384, HS512, RS256, RS384, RS512, ES256, ES384, ES512)
+        audience: Expected JWT audience (optional)
+        issuer: Expected JWT issuer (optional)
+        leeway: Time leeway in seconds for expiration validation (default: 0)
+
+    Example:
+        >>> # Symmetric key (HS256)
+        >>> provider = JWTProvider(
+        ...     secret_key="your-secret-key",
+        ...     algorithm="HS256",
+        ...     audience="my-app",
+        ...     issuer="auth-server"
+        ... )
+        >>> client = await provider.authenticate(request)
+        >>>
+        >>> # Asymmetric key (RS256)
+        >>> with open("public_key.pem") as f:
+        ...     public_key = f.read()
+        >>> provider = JWTProvider(
+        ...     secret_key="",  # Not used for RS256
+        ...     public_key=public_key,
+        ...     algorithm="RS256"
+        ... )
     """
 
     def __init__(
@@ -373,27 +713,69 @@ class JWTProvider(AuthProvider):
         algorithm: str = "HS256",
         audience: str | None = None,
         issuer: str | None = None,
+        public_key: str | None = None,
+        leeway: int = 0,
         **kwargs: Any,
     ) -> None:
-        """Initialize JWT provider (stub).
+        """Initialize JWT provider.
 
         Args:
-            secret_key: JWT secret key for verification
-            algorithm: JWT signing algorithm
-            audience: Expected JWT audience
-            issuer: Expected JWT issuer
+            secret_key: JWT secret key for verification (required for symmetric algorithms)
+            algorithm: JWT signing algorithm (default: HS256)
+            audience: Expected JWT audience (optional)
+            issuer: Expected JWT issuer (optional)
+            public_key: Optional public key for asymmetric algorithms (RS256, ES256, etc.)
+            leeway: Time leeway in seconds for expiration validation (default: 0)
             **kwargs: Additional JWT configuration
         """
         self.secret_key = secret_key
         self.algorithm = algorithm
         self.audience = audience
         self.issuer = issuer
+        self.public_key = public_key
+        self.leeway = leeway
         self.config = kwargs
 
-        logger.info("Initialized JWT provider (stub - not yet implemented)")
+        # Validate algorithm
+        valid_algorithms = [
+            "HS256",
+            "HS384",
+            "HS512",
+            "RS256",
+            "RS384",
+            "RS512",
+            "ES256",
+            "ES384",
+            "ES512",
+        ]
+        if algorithm not in valid_algorithms:
+            raise ValueError(
+                f"Invalid JWT algorithm: {algorithm}. Supported: {', '.join(valid_algorithms)}"
+            )
+
+        # Validate configuration
+        if algorithm.startswith("HS") and not secret_key:
+            raise ValueError(f"secret_key is required for {algorithm} algorithm")
+
+        if algorithm.startswith(("RS", "ES")) and not public_key:
+            logger.warning(
+                f"{algorithm} algorithm specified but no public_key provided. "
+                "Using secret_key for verification (not recommended for production)."
+            )
+
+        logger.info(
+            "Initialized JWT provider",
+            extra={
+                "context": {
+                    "algorithm": algorithm,
+                    "has_audience": audience is not None,
+                    "has_issuer": issuer is not None,
+                }
+            },
+        )
 
     async def authenticate(self, request: web.Request) -> ClientInfo:
-        """Authenticate request using JWT (not yet implemented).
+        """Authenticate request using JWT token.
 
         Args:
             request: The incoming HTTP request
@@ -402,12 +784,229 @@ class JWTProvider(AuthProvider):
             ClientInfo with authenticated client details
 
         Raises:
-            NotImplementedError: JWT is not yet implemented
+            AuthenticationError: If authentication fails
         """
-        raise NotImplementedError(
-            "JWT authentication is not yet implemented. "
-            "This is a placeholder for future Phase 4 Week 8+ development."
+        # Extract JWT token from Authorization header
+        token = self._extract_token(request)
+
+        if not token:
+            logger.warning(
+                "JWT authentication failed: No token provided",
+                extra={
+                    "context": {
+                        "remote": request.remote or "unknown",
+                        "path": request.path,
+                    }
+                },
+            )
+            raise AuthenticationError(
+                "Authentication required. Provide JWT token in "
+                "Authorization header (Bearer <token>)",
+                auth_type="jwt",
+            )
+
+        # Validate and decode JWT token
+        try:
+            payload = self._decode_token(token)
+        except jwt.ExpiredSignatureError:
+            logger.warning(
+                "JWT authentication failed: Token expired",
+                extra={
+                    "context": {
+                        "remote": request.remote or "unknown",
+                        "path": request.path,
+                    }
+                },
+            )
+            raise AuthenticationError(
+                "JWT token has expired",
+                auth_type="jwt",
+            ) from None
+        except jwt.InvalidAudienceError:
+            logger.warning(
+                "JWT authentication failed: Invalid audience",
+                extra={
+                    "context": {
+                        "remote": request.remote or "unknown",
+                        "path": request.path,
+                    }
+                },
+            )
+            raise AuthenticationError(
+                "JWT token has invalid audience",
+                auth_type="jwt",
+            ) from None
+        except jwt.InvalidIssuerError:
+            logger.warning(
+                "JWT authentication failed: Invalid issuer",
+                extra={
+                    "context": {
+                        "remote": request.remote or "unknown",
+                        "path": request.path,
+                    }
+                },
+            )
+            raise AuthenticationError(
+                "JWT token has invalid issuer",
+                auth_type="jwt",
+            ) from None
+        except jwt.InvalidTokenError as e:
+            logger.warning(
+                f"JWT authentication failed: {str(e)}",
+                extra={
+                    "context": {
+                        "remote": request.remote or "unknown",
+                        "path": request.path,
+                        "error": str(e),
+                    }
+                },
+            )
+            raise AuthenticationError(
+                f"Invalid JWT token: {str(e)}",
+                auth_type="jwt",
+            ) from e
+
+        # Extract user ID from token claims
+        user_id = payload.get("sub") or payload.get("user_id") or payload.get("uid")
+        if not user_id:
+            raise AuthenticationError(
+                "JWT token missing subject (sub) claim",
+                auth_type="jwt",
+            )
+
+        # Create client info
+        client_info = ClientInfo(
+            client_id=str(user_id),
+            auth_type="jwt",
+            metadata={
+                "remote": request.remote or "unknown",
+                "claims": payload,
+                "email": payload.get("email"),
+                "name": payload.get("name"),
+            },
         )
+
+        logger.info(
+            f"JWT authentication successful for user {user_id}",
+            extra={
+                "context": {
+                    "client_id": client_info.client_id,
+                    "remote": request.remote or "unknown",
+                }
+            },
+        )
+
+        return client_info
+
+    def _extract_token(self, request: web.Request) -> str | None:
+        """Extract JWT token from request headers.
+
+        Args:
+            request: The incoming HTTP request
+
+        Returns:
+            JWT token if found, None otherwise
+        """
+        auth_header = request.headers.get("Authorization")
+        if auth_header:
+            parts = auth_header.strip().split()
+            if len(parts) == 2 and parts[0].lower() == "bearer":
+                return parts[1]
+        return None
+
+    def _decode_token(self, token: str) -> dict[str, Any]:
+        """Decode and validate JWT token.
+
+        Args:
+            token: JWT token string
+
+        Returns:
+            Decoded token payload
+
+        Raises:
+            jwt.InvalidTokenError: If token is invalid
+        """
+        # Determine which key to use for verification
+        if self.algorithm.startswith(("RS", "ES")):
+            # Use public key for asymmetric algorithms
+            verify_key = self.public_key or self.secret_key
+        else:
+            # Use secret key for symmetric algorithms
+            verify_key = self.secret_key
+
+        # Build options for validation
+        options: dict[str, Any] = {
+            "verify_signature": True,
+            "verify_exp": True,
+            "verify_aud": self.audience is not None,
+            "verify_iss": self.issuer is not None,
+        }
+
+        # Decode and validate token
+        payload: dict[str, Any] = jwt.decode(
+            token,
+            verify_key,
+            algorithms=[self.algorithm],
+            audience=self.audience,
+            issuer=self.issuer,
+            leeway=self.leeway,
+            options=options,
+        )
+
+        return payload
+
+    def generate_token(
+        self,
+        user_id: str,
+        expires_in: int = 3600,
+        additional_claims: dict[str, Any] | None = None,
+    ) -> str:
+        """Generate a JWT token.
+
+        Args:
+            user_id: User ID to include in token (sub claim)
+            expires_in: Token expiration time in seconds (default: 3600 = 1 hour)
+            additional_claims: Additional claims to include in token
+
+        Returns:
+            Encoded JWT token string
+
+        Raises:
+            ValueError: If algorithm requires public/private key pair but only secret_key is set
+        """
+        if self.algorithm.startswith(("RS", "ES")):
+            # For asymmetric algorithms, we need the private key to sign
+            # The secret_key field should contain the private key in this case
+            if not self.secret_key:
+                raise ValueError(
+                    f"Private key required in secret_key field to generate tokens with {self.algorithm}"
+                )
+            signing_key = self.secret_key
+        else:
+            # For symmetric algorithms, use secret_key
+            signing_key = self.secret_key
+
+        # Build token payload
+        now = datetime.utcnow()
+        payload: dict[str, Any] = {
+            "sub": user_id,
+            "iat": now,
+            "exp": now + timedelta(seconds=expires_in),
+        }
+
+        if self.audience:
+            payload["aud"] = self.audience
+
+        if self.issuer:
+            payload["iss"] = self.issuer
+
+        if additional_claims:
+            payload.update(additional_claims)
+
+        # Encode token
+        token = jwt.encode(payload, signing_key, algorithm=self.algorithm)
+
+        return token
 
 
 def create_auth_provider(

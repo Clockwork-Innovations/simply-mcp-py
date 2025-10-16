@@ -45,10 +45,10 @@ import asyncio
 import sys
 from datetime import datetime
 
-from simply_mcp import SimplyMCP
+from simply_mcp import BuildMCPServer
 
 # Create MCP server with SSE transport
-mcp = SimplyMCP(
+mcp = BuildMCPServer(
     name="sse-demo-server",
     version="1.0.0",
     description="Demo MCP server with SSE transport for real-time streaming",

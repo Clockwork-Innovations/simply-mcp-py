@@ -1,6 +1,6 @@
 """Unit tests for builder API.
 
-Tests the SimplyMCP builder class, including:
+Tests the BuildMCPServer builder class, including:
 - Initialization with various configurations
 - add_tool/tool decorator with various configurations
 - add_prompt/prompt decorator with various configurations
@@ -23,17 +23,17 @@ try:
 except ImportError:
     PYDANTIC_AVAILABLE = False
 
-from simply_mcp.api.builder import SimplyMCP
+from simply_mcp.api.programmatic import BuildMCPServer
 from simply_mcp.core.config import SimplyMCPConfig, ServerMetadataModel
 from simply_mcp.core.errors import ValidationError
 
 
 class TestSimplyMCPInitialization:
-    """Tests for SimplyMCP initialization."""
+    """Tests for BuildMCPServer initialization."""
 
     def test_default_initialization(self):
-        """Test SimplyMCP initialization with defaults."""
-        mcp = SimplyMCP()
+        """Test BuildMCPServer initialization with defaults."""
+        mcp = BuildMCPServer()
         assert mcp.name == "simply-mcp-server"
         assert mcp.version == "0.1.0"
         assert mcp.description is None
@@ -41,16 +41,16 @@ class TestSimplyMCPInitialization:
         assert mcp.config is not None
 
     def test_initialization_with_name_version(self):
-        """Test SimplyMCP initialization with custom name and version."""
-        mcp = SimplyMCP(name="my-server", version="1.0.0")
+        """Test BuildMCPServer initialization with custom name and version."""
+        mcp = BuildMCPServer(name="my-server", version="1.0.0")
         assert mcp.name == "my-server"
         assert mcp.version == "1.0.0"
         assert mcp.config.server.name == "my-server"
         assert mcp.config.server.version == "1.0.0"
 
     def test_initialization_with_description(self):
-        """Test SimplyMCP initialization with description."""
-        mcp = SimplyMCP(
+        """Test BuildMCPServer initialization with description."""
+        mcp = BuildMCPServer(
             name="test-server",
             version="2.0.0",
             description="Test server description"
@@ -59,7 +59,7 @@ class TestSimplyMCPInitialization:
         assert mcp.config.server.description == "Test server description"
 
     def test_initialization_with_custom_config(self):
-        """Test SimplyMCP initialization with custom config."""
+        """Test BuildMCPServer initialization with custom config."""
         custom_config = SimplyMCPConfig(
             server=ServerMetadataModel(
                 name="custom-server",
@@ -69,7 +69,7 @@ class TestSimplyMCPInitialization:
             )
         )
 
-        mcp = SimplyMCP(config=custom_config)
+        mcp = BuildMCPServer(config=custom_config)
         assert mcp.config.server.name == "custom-server"
         assert mcp.config.server.version == "3.0.0"
         assert mcp.config.server.author == "Test Author"
@@ -80,7 +80,7 @@ class TestAddTool:
 
     def test_add_tool_basic(self):
         """Test add_tool with basic function."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def add(a: int, b: int) -> int:
             """Add two numbers."""
@@ -103,7 +103,7 @@ class TestAddTool:
 
     def test_add_tool_custom_description(self):
         """Test add_tool with custom description."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def multiply(a: int, b: int) -> int:
             return a * b
@@ -115,7 +115,7 @@ class TestAddTool:
 
     def test_add_tool_auto_description_from_docstring(self):
         """Test add_tool extracts description from docstring."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def subtract(a: int, b: int) -> int:
             """Subtract b from a."""
@@ -128,7 +128,7 @@ class TestAddTool:
 
     def test_add_tool_auto_schema_generation(self):
         """Test add_tool generates schema from function signature."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def divide(a: float, b: float) -> float:
             """Divide a by b."""
@@ -146,7 +146,7 @@ class TestAddTool:
 
     def test_add_tool_explicit_schema(self):
         """Test add_tool with explicit schema."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def process(x: int) -> int:
             return x * 2
@@ -167,7 +167,7 @@ class TestAddTool:
     @pytest.mark.skipif(not PYDANTIC_AVAILABLE, reason="Pydantic not available")
     def test_add_tool_pydantic_model(self):
         """Test add_tool with Pydantic model."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         class SearchInput(BaseModel):
             query: str = Field(description="Search query")
@@ -187,7 +187,7 @@ class TestAddTool:
 
     def test_add_tool_duplicate_raises_error(self):
         """Test add_tool raises error for duplicate tool name."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def tool1(x: int) -> int:
             return x
@@ -206,7 +206,7 @@ class TestToolDecorator:
 
     def test_tool_decorator_basic(self):
         """Test @mcp.tool() decorator."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         @mcp.tool()
         def add(a: int, b: int) -> int:
@@ -219,7 +219,7 @@ class TestToolDecorator:
 
     def test_tool_decorator_custom_name(self):
         """Test @mcp.tool with custom name."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         @mcp.tool(name="custom_multiply")
         def multiply(a: int, b: int) -> int:
@@ -231,7 +231,7 @@ class TestToolDecorator:
 
     def test_tool_decorator_custom_description(self):
         """Test @mcp.tool with custom description."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         @mcp.tool(description="Custom description")
         def divide(a: float, b: float) -> float:
@@ -243,7 +243,7 @@ class TestToolDecorator:
     @pytest.mark.skipif(not PYDANTIC_AVAILABLE, reason="Pydantic not available")
     def test_tool_decorator_pydantic_schema(self):
         """Test @mcp.tool with Pydantic schema."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         class UserInput(BaseModel):
             name: str
@@ -264,7 +264,7 @@ class TestAddPrompt:
 
     def test_add_prompt_basic(self):
         """Test add_prompt with basic function."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def greet(name: str) -> str:
             """Generate a greeting."""
@@ -288,7 +288,7 @@ class TestAddPrompt:
 
     def test_add_prompt_custom_description(self):
         """Test add_prompt with custom description."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def code_review(language: str) -> str:
             return f"Review this {language} code..."
@@ -300,7 +300,7 @@ class TestAddPrompt:
 
     def test_add_prompt_explicit_arguments(self):
         """Test add_prompt with explicit arguments."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def generate_text(topic: str, style: str = "formal") -> str:
             return f"Write about {topic} in {style} style"
@@ -312,7 +312,7 @@ class TestAddPrompt:
 
     def test_add_prompt_no_arguments(self):
         """Test add_prompt with no arguments."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def static_prompt() -> str:
             """Static prompt."""
@@ -326,7 +326,7 @@ class TestAddPrompt:
 
     def test_add_prompt_duplicate_raises_error(self):
         """Test add_prompt raises error for duplicate prompt name."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def prompt1() -> str:
             return "Prompt 1"
@@ -345,7 +345,7 @@ class TestPromptDecorator:
 
     def test_prompt_decorator_basic(self):
         """Test @mcp.prompt() decorator."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         @mcp.prompt()
         def code_review(language: str = "python") -> str:
@@ -358,7 +358,7 @@ class TestPromptDecorator:
 
     def test_prompt_decorator_custom_name(self):
         """Test @mcp.prompt with custom name."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         @mcp.prompt(name="custom_prompt")
         def my_prompt(topic: str) -> str:
@@ -369,7 +369,7 @@ class TestPromptDecorator:
 
     def test_prompt_decorator_explicit_arguments(self):
         """Test @mcp.prompt with explicit arguments."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         @mcp.prompt(arguments=["topic", "style"])
         def generate_prompt(topic: str, style: str = "formal") -> str:
@@ -384,7 +384,7 @@ class TestAddResource:
 
     def test_add_resource_basic(self):
         """Test add_resource with basic function."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def get_config() -> dict:
             """Get application config."""
@@ -409,7 +409,7 @@ class TestAddResource:
 
     def test_add_resource_custom_name_description(self):
         """Test add_resource with custom name and description."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def load_data() -> dict:
             return {"data": "value"}
@@ -427,7 +427,7 @@ class TestAddResource:
 
     def test_add_resource_custom_mime_type(self):
         """Test add_resource with custom MIME type."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def get_text() -> str:
             """Get text data."""
@@ -440,7 +440,7 @@ class TestAddResource:
 
     def test_add_resource_empty_uri_raises_error(self):
         """Test add_resource raises error for empty URI."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def bad_resource() -> dict:
             return {}
@@ -450,7 +450,7 @@ class TestAddResource:
 
     def test_add_resource_duplicate_raises_error(self):
         """Test add_resource raises error for duplicate URI."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def resource1() -> dict:
             return {"v": 1}
@@ -469,7 +469,7 @@ class TestResourceDecorator:
 
     def test_resource_decorator_basic(self):
         """Test @mcp.resource() decorator."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         @mcp.resource(uri="config://app")
         def get_config() -> dict:
@@ -480,7 +480,7 @@ class TestResourceDecorator:
 
     def test_resource_decorator_custom_name(self):
         """Test @mcp.resource with custom name."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         @mcp.resource(uri="data://stats", name="statistics")
         def get_stats() -> dict:
@@ -491,7 +491,7 @@ class TestResourceDecorator:
 
     def test_resource_decorator_custom_mime_type(self):
         """Test @mcp.resource with custom MIME type."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         @mcp.resource(uri="data://text", mime_type="text/plain")
         def get_text() -> str:
@@ -502,7 +502,7 @@ class TestResourceDecorator:
 
     def test_resource_decorator_empty_uri_raises_error(self):
         """Test @mcp.resource raises error for empty URI."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         with pytest.raises(ValueError, match="Resource URI is required"):
             @mcp.resource(uri="")
@@ -515,7 +515,7 @@ class TestMethodChaining:
 
     def test_method_chaining_add_tool(self):
         """Test method chaining with add_tool."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def add(a: int, b: int) -> int:
             return a + b
@@ -530,7 +530,7 @@ class TestMethodChaining:
 
     def test_method_chaining_mixed_components(self):
         """Test method chaining with mixed components."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def add(a: int, b: int) -> int:
             return a + b
@@ -554,7 +554,7 @@ class TestMethodChaining:
 
     def test_method_chaining_with_configure(self):
         """Test method chaining with configure."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def add(a: int, b: int) -> int:
             return a + b
@@ -571,21 +571,21 @@ class TestConfigure:
 
     def test_configure_port(self):
         """Test configure with port."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
         mcp.configure(port=8080)
 
         assert mcp.config.transport.port == 8080
 
     def test_configure_log_level(self):
         """Test configure with log level."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
         mcp.configure(log_level="WARNING")
 
         assert mcp.config.logging.level == "WARNING"
 
     def test_configure_both_port_and_log_level(self):
         """Test configure with both port and log level."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
         mcp.configure(port=9000, log_level="ERROR")
 
         assert mcp.config.transport.port == 9000
@@ -593,14 +593,14 @@ class TestConfigure:
 
     def test_configure_invalid_log_level(self):
         """Test configure raises error for invalid log level."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         with pytest.raises(ValueError, match="Invalid log level"):
             mcp.configure(log_level="INVALID")
 
     def test_configure_returns_self(self):
         """Test configure returns self for chaining."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
         result = mcp.configure(port=3000)
 
         assert result is mcp
@@ -612,7 +612,7 @@ class TestLifecycleMethods:
     @pytest.mark.asyncio
     async def test_initialize(self):
         """Test initialize method."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
         result = await mcp.initialize()
 
         assert result is mcp
@@ -621,7 +621,7 @@ class TestLifecycleMethods:
     @pytest.mark.asyncio
     async def test_initialize_returns_self(self):
         """Test initialize returns self for chaining."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def add(a: int, b: int) -> int:
             return a + b
@@ -632,7 +632,7 @@ class TestLifecycleMethods:
 
     def test_run_stdio_not_initialized_raises_error(self):
         """Test run_stdio raises error if not initialized."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         with pytest.raises(RuntimeError, match="not initialized"):
             import asyncio
@@ -640,7 +640,7 @@ class TestLifecycleMethods:
 
     def test_run_unsupported_transport_raises_error(self):
         """Test run raises error for unsupported transport."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         with pytest.raises(ValueError, match="Unsupported transport"):
             import asyncio
@@ -652,7 +652,7 @@ class TestServerAccess:
 
     def test_get_server(self):
         """Test get_server returns underlying server."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
         server = mcp.get_server()
 
         from simply_mcp.core.server import SimplyMCPServer
@@ -665,12 +665,12 @@ class TestComponentQueries:
 
     def test_list_tools_empty(self):
         """Test list_tools returns empty list initially."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
         assert mcp.list_tools() == []
 
     def test_list_tools_with_tools(self):
         """Test list_tools returns registered tools."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def add(a: int, b: int) -> int:
             return a + b
@@ -688,12 +688,12 @@ class TestComponentQueries:
 
     def test_list_prompts_empty(self):
         """Test list_prompts returns empty list initially."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
         assert mcp.list_prompts() == []
 
     def test_list_prompts_with_prompts(self):
         """Test list_prompts returns registered prompts."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def greet(name: str) -> str:
             return f"Hello, {name}!"
@@ -711,12 +711,12 @@ class TestComponentQueries:
 
     def test_list_resources_empty(self):
         """Test list_resources returns empty list initially."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
         assert mcp.list_resources() == []
 
     def test_list_resources_with_resources(self):
         """Test list_resources returns registered resources."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def get_config() -> dict:
             return {"version": "1.0.0"}
@@ -738,7 +738,7 @@ class TestEdgeCases:
 
     def test_tool_with_no_parameters(self):
         """Test add_tool with function that has no parameters."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def no_params() -> str:
             """No parameters."""
@@ -753,7 +753,7 @@ class TestEdgeCases:
 
     def test_tool_with_optional_parameters(self):
         """Test add_tool with optional parameters."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def with_optional(name: str, greeting: str = "Hello") -> str:
             """Greet someone."""
@@ -768,7 +768,7 @@ class TestEdgeCases:
 
     def test_prompt_with_no_arguments(self):
         """Test add_prompt with function that has no arguments."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def static_prompt() -> str:
             return "Static prompt text"
@@ -780,7 +780,7 @@ class TestEdgeCases:
 
     def test_tool_without_docstring(self):
         """Test add_tool with function without docstring."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         def no_doc(x: int) -> int:
             return x * 2
@@ -792,7 +792,7 @@ class TestEdgeCases:
 
     def test_async_tool_function(self):
         """Test add_tool with async function."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         async def async_tool(x: int) -> int:
             """Async tool."""
@@ -810,7 +810,7 @@ class TestIntegration:
 
     def test_complete_workflow(self):
         """Test complete workflow with all features."""
-        mcp = SimplyMCP(name="test-server", version="1.0.0")
+        mcp = BuildMCPServer(name="test-server", version="1.0.0")
 
         # Add tools
         def add(a: int, b: int) -> int:
@@ -849,7 +849,7 @@ class TestIntegration:
     @pytest.mark.skipif(not PYDANTIC_AVAILABLE, reason="Pydantic not available")
     def test_pydantic_and_regular_tools(self):
         """Test mixing Pydantic and regular tools."""
-        mcp = SimplyMCP()
+        mcp = BuildMCPServer()
 
         class SearchQuery(BaseModel):
             query: str = Field(description="Search query")
@@ -871,7 +871,7 @@ class TestIntegration:
 
     def test_method_chaining_fluent_api(self):
         """Test fluent API with extensive method chaining."""
-        mcp = SimplyMCP(name="calc", version="1.0.0")
+        mcp = BuildMCPServer(name="calc", version="1.0.0")
 
         def add(a: int, b: int) -> int:
             return a + b
