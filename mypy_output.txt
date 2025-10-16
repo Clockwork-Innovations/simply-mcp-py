@@ -1,0 +1,3 @@
+src/simply_mcp/transports/middleware.py:570: error: Incompatible types in assignment (expression has type "CORSMiddleware", variable has type "LoggingMiddleware")  [assignment]
+src/simply_mcp/transports/middleware.py:578: error: Incompatible types in assignment (expression has type "RateLimitMiddleware", variable has type "LoggingMiddleware")  [assignment]
+Found 2 errors in 1 file (checked 35 source files)

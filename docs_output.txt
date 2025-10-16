@@ -1,0 +1,30 @@
+INFO    -  Cleaning site directory
+INFO    -  Building documentation to directory: /mnt/Shared/cs-projects/simply-mcp-py/site
+INFO    -  The following pages exist in the docs directory, but are not included in the "nav" configuration:
+  - API_DOCUMENTATION_REPORT.md
+  - ARCHITECTURE.md
+  - CICD_SETUP.md
+  - COMPLETION_SUMMARY.md
+  - FEATURE_PARITY.md
+  - FINAL_VALIDATION_REPORT.md
+  - FIRST_RELEASE_CHECKLIST.md
+  - PHASE1_COMPLETE.md
+  - PHASE2_COMPLETE.md
+  - PHASE3_COMPLETE.md
+  - PHASE4_COMPLETE.md
+  - PYDANTIC_MIGRATION.md
+  - README_BADGES.md
+  - RELEASE_PROCESS.md
+  - ROADMAP.md
+  - SCHEMA_GENERATION.md
+  - TECHNICAL_SPEC.md
+INFO    -  Doc file 'index.md' contains an unrecognized relative link 'LICENSE', it was left as is.
+WARNING -  Doc file 'PYDANTIC_MIGRATION.md' contains a link './TYPES.md', but the target 'TYPES.md' is not found among documentation files.
+INFO    -  Doc file 'PYDANTIC_MIGRATION.md' contains an unrecognized relative link '../examples/pydantic_migration/', it was left as is.
+WARNING -  Doc file 'PYDANTIC_MIGRATION.md' contains a link './FAQ.md', but the target 'FAQ.md' is not found among documentation files.
+INFO    -  Doc file 'ROADMAP.md' contains a link '#4-phase-3-cli--transport-weeks-5-6', but there is no such anchor on this page.
+INFO    -  Doc file 'ROADMAP.md' contains a link '#6-phase-5-documentation--polish-week-9', but there is no such anchor on this page.
+INFO    -  Doc file 'ROADMAP.md' contains a link '#7-phase-6-interface-api--builder-api-week-10', but there is no such anchor on this page.
+INFO    -  Doc file 'TECHNICAL_SPEC.md' contains a link '#4-key-modules--responsibilities', but there is no such anchor on this page.
+
+Aborted with 2 warnings in strict mode!

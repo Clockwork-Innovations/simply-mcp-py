@@ -39,8 +39,7 @@ Example (Builder pattern):
 from collections.abc import Callable
 from typing import Any, TypedDict, TypeVar
 
-from simply_mcp.core.types import ToolConfigModel, PromptConfigModel, ResourceConfigModel
-
+from simply_mcp.core.types import PromptConfigModel, ResourceConfigModel, ToolConfigModel
 
 # Type definitions for config-based API
 

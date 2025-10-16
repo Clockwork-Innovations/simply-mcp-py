@@ -7,7 +7,15 @@ This module provides multiple API styles mirroring the TypeScript implementation
 """
 
 # Programmatic API
-from simply_mcp.api.programmatic import BuildMCPServer
+# Decorator API
+from simply_mcp.api.decorators import (
+    get_global_server,
+    mcp_server,
+    prompt,
+    resource,
+    set_global_server,
+    tool,
+)
 
 # Functional API
 from simply_mcp.api.functional import (
@@ -22,16 +30,7 @@ from simply_mcp.api.functional import (
     define_resource,
     define_tool,
 )
-
-# Decorator API
-from simply_mcp.api.decorators import (
-    get_global_server,
-    mcp_server,
-    prompt,
-    resource,
-    set_global_server,
-    tool,
-)
+from simply_mcp.api.programmatic import BuildMCPServer
 
 __all__ = [
     # Programmatic API (mirrors TypeScript BuildMCPServer)

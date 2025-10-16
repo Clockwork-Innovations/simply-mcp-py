@@ -1,0 +1,961 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- /mnt/Shared/cs-projects/simply-mcp-py/venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /mnt/Shared/cs-projects/simply-mcp-py
+configfile: pyproject.toml
+plugins: anyio-4.11.0, asyncio-1.2.0, cov-7.0.0, mock-3.15.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 753 items
+
+tests/cli/test_bundle.py::TestDetectImports::test_detect_basic_imports PASSED [  0%]
+tests/cli/test_bundle.py::TestDetectImports::test_detect_nested_imports PASSED [  0%]
+tests/cli/test_bundle.py::TestDetectImports::test_detect_imports_with_aliases PASSED [  0%]
+tests/cli/test_bundle.py::TestDetectImports::test_detect_imports_invalid_file PASSED [  0%]
+tests/cli/test_bundle.py::TestGetHiddenImports::test_returns_list PASSED [  0%]
+tests/cli/test_bundle.py::TestGetHiddenImports::test_includes_simply_mcp PASSED [  0%]
+tests/cli/test_bundle.py::TestGetHiddenImports::test_includes_mcp PASSED [  0%]
+tests/cli/test_bundle.py::TestGetHiddenImports::test_includes_dependencies PASSED [  1%]
+tests/cli/test_bundle.py::TestGenerateSpecFile::test_basic_spec_generation PASSED [  1%]
+tests/cli/test_bundle.py::TestGenerateSpecFile::test_spec_onefile_mode PASSED [  1%]
+tests/cli/test_bundle.py::TestGenerateSpecFile::test_spec_directory_mode PASSED [  1%]
+tests/cli/test_bundle.py::TestGenerateSpecFile::test_spec_windowed_mode PASSED [  1%]
+tests/cli/test_bundle.py::TestGenerateSpecFile::test_spec_console_mode PASSED [  1%]
+tests/cli/test_bundle.py::TestGenerateSpecFile::test_spec_with_icon PASSED [  1%]
+tests/cli/test_bundle.py::TestGenerateSpecFile::test_spec_without_icon PASSED [  1%]
+tests/cli/test_bundle.py::TestGenerateSpecFile::test_spec_includes_hidden_imports PASSED [  2%]
+tests/cli/test_bundle.py::TestValidateServerFile::test_validate_builder_server PASSED [  2%]
+tests/cli/test_bundle.py::TestValidateServerFile::test_validate_decorator_server PASSED [  2%]
+tests/cli/test_bundle.py::TestValidateServerFile::test_validate_invalid_server PASSED [  2%]
+tests/cli/test_bundle.py::TestValidateServerFile::test_validate_nonexistent_file PASSED [  2%]
+tests/cli/test_bundle.py::TestBundleCommand::test_bundle_basic PASSED    [  2%]
+tests/cli/test_bundle.py::TestBundleCommand::test_bundle_missing_pyinstaller PASSED [  2%]
+tests/cli/test_bundle.py::TestBundleCommand::test_bundle_invalid_file PASSED [  3%]
+tests/cli/test_bundle.py::TestBundleCommand::test_bundle_with_custom_name PASSED [  3%]
+tests/cli/test_bundle.py::TestBundleCommand::test_bundle_with_output_dir PASSED [  3%]
+tests/cli/test_bundle.py::TestBundleCommand::test_bundle_no_onefile PASSED [  3%]
+tests/cli/test_bundle.py::TestBundleCommand::test_bundle_windowed PASSED [  3%]
+tests/cli/test_bundle.py::TestBundleCommand::test_bundle_with_icon PASSED [  3%]
+tests/cli/test_bundle.py::TestBundleCommand::test_bundle_with_clean PASSED [  3%]
+tests/cli/test_bundle.py::TestBundleCommand::test_bundle_pyinstaller_failure PASSED [  3%]
+tests/cli/test_bundle.py::TestBundleCommand::test_bundle_invalid_server PASSED [  4%]
+tests/cli/test_bundle.py::TestBundleCommand::test_bundle_help PASSED     [  4%]
+tests/cli/test_bundle.py::TestIntegration::test_spec_file_is_valid_python PASSED [  4%]
+tests/cli/test_bundle.py::TestIntegration::test_validation_returns_boolean PASSED [  4%]
+tests/cli/test_dev.py::TestDevServerHandler::test_init_with_logging_and_metrics PASSED [  4%]
+tests/cli/test_dev.py::TestDevServerHandler::test_start_server_with_debug_logging PASSED [  4%]
+tests/cli/test_dev.py::TestDevServerHandler::test_metrics_display PASSED [  4%]
+tests/cli/test_dev.py::TestDevServerHandler::test_metrics_disabled PASSED [  5%]
+tests/cli/test_dev.py::TestDevServerHandler::test_start_server_resets_metrics PASSED [  5%]
+tests/cli/test_dev.py::TestDevCommand::test_dev_command_with_nonexistent_file PASSED [  5%]
+tests/cli/test_dev.py::TestDevCommand::test_dev_command_with_non_python_file PASSED [  5%]
+tests/cli/test_dev.py::TestDevCommand::test_dev_command_starts_with_defaults PASSED [  5%]
+tests/cli/test_dev.py::TestDevCommand::test_dev_command_with_no_reload PASSED [  5%]
+tests/cli/test_dev.py::TestDevCommand::test_dev_command_with_transport_options PASSED [  5%]
+tests/cli/test_dev.py::TestDevCommand::test_dev_command_with_port_and_host PASSED [  5%]
+tests/cli/test_dev.py::TestDevCommand::test_dev_command_with_no_log_requests PASSED [  6%]
+tests/cli/test_dev.py::TestDevCommand::test_dev_command_keyboard_interrupt PASSED [  6%]
+tests/cli/test_dev.py::TestDisplayComponents::test_display_components_decorator_api PASSED [  6%]
+tests/cli/test_dev.py::TestDisplayComponents::test_display_components_builder_api PASSED [  6%]
+tests/cli/test_dev.py::TestDisplayComponents::test_display_components_no_server PASSED [  6%]
+tests/cli/test_dev.py::TestDisplayComponents::test_display_components_with_error PASSED [  6%]
+tests/cli/test_dev.py::TestKeyboardShortcuts::test_keyboard_quit PASSED  [  6%]
+tests/cli/test_dev.py::TestKeyboardShortcuts::test_keyboard_list_components PASSED [  7%]
+tests/cli/test_dev.py::TestKeyboardShortcuts::test_keyboard_no_input PASSED [  7%]
+tests/cli/test_dev.py::TestDevCommandIntegration::test_dev_command_full_workflow PASSED [  7%]
+tests/cli/test_dev.py::TestDevCommandIntegration::test_dev_command_with_all_options PASSED [  7%]
+tests/cli/test_run.py::TestRunCommand::test_run_with_watch_flag_not_implemented PASSED [  7%]
+tests/cli/test_run.py::TestRunCommand::test_run_with_nonexistent_file PASSED [  7%]
+tests/cli/test_run.py::TestRunCommand::test_run_with_valid_server PASSED [  7%]
+tests/cli/test_run.py::TestRunCommand::test_run_with_no_server_found PASSED [  7%]
+tests/cli/test_run.py::TestRunCommand::test_run_with_import_error PASSED [  8%]
+tests/cli/test_run.py::TestRunCommand::test_run_with_config_file PASSED  [  8%]
+tests/cli/test_run.py::TestRunCommand::test_run_with_invalid_config_file PASSED [  8%]
+tests/cli/test_run.py::TestRunCommand::test_run_with_transport_options PASSED [  8%]
+tests/cli/test_run.py::TestRunCommand::test_run_with_cors_disabled PASSED [  8%]
+tests/cli/test_run.py::TestRunCommand::test_run_with_sse_transport PASSED [  8%]
+tests/cli/test_run.py::TestRunCommand::test_run_with_stdio_transport PASSED [  8%]
+tests/cli/test_watch.py::TestServerReloadHandler::test_init_starts_server PASSED [  9%]
+tests/cli/test_watch.py::TestServerReloadHandler::test_should_ignore_patterns PASSED [  9%]
+tests/cli/test_watch.py::TestServerReloadHandler::test_debouncing PASSED [  9%]
+tests/cli/test_watch.py::TestServerReloadHandler::test_on_modified_python_file PASSED [  9%]
+tests/cli/test_watch.py::TestServerReloadHandler::test_on_modified_non_python_file PASSED [  9%]
+tests/cli/test_watch.py::TestServerReloadHandler::test_on_modified_ignored_file PASSED [  9%]
+tests/cli/test_watch.py::TestServerReloadHandler::test_on_modified_directory PASSED [  9%]
+tests/cli/test_watch.py::TestServerReloadHandler::test_stop_server_graceful PASSED [  9%]
+tests/cli/test_watch.py::TestServerReloadHandler::test_stop_server_force_kill PASSED [ 10%]
+tests/cli/test_watch.py::TestServerReloadHandler::test_stop_handler PASSED [ 10%]
+tests/cli/test_watch.py::TestWatchCommand::test_watch_command_with_nonexistent_file PASSED [ 10%]
+tests/cli/test_watch.py::TestWatchCommand::test_watch_command_with_non_python_file PASSED [ 10%]
+tests/cli/test_watch.py::TestWatchCommand::test_watch_command_starts PASSED [ 10%]
+tests/cli/test_watch.py::TestWatchCommand::test_watch_command_with_options PASSED [ 10%]
+tests/cli/test_watch.py::TestWatchCommand::test_watch_command_keyboard_interrupt PASSED [ 10%]
+tests/cli/test_watch.py::TestWatchCommand::test_watch_command_with_transport_options PASSED [ 11%]
+tests/cli/test_watch.py::TestIgnorePatterns::test_default_ignore_patterns_exist PASSED [ 11%]
+tests/cli/test_watch.py::TestIgnorePatterns::test_ignore_patterns_cover_common_files PASSED [ 11%]
+tests/cli/test_watch.py::TestWatchIntegration::test_handler_ignores_pycache PASSED [ 11%]
+tests/cli/test_watch.py::TestWatchIntegration::test_handler_detects_python_changes PASSED [ 11%]
+tests/examples/test_examples.py::TestBasicExamples::test_simple_server_imports PASSED [ 11%]
+tests/examples/test_examples.py::TestBasicExamples::test_decorator_example_imports PASSED [ 11%]
+tests/examples/test_examples.py::TestBasicExamples::test_builder_basic_imports PASSED [ 11%]
+tests/examples/test_examples.py::TestTransportExamples::test_http_server_imports PASSED [ 12%]
+tests/examples/test_examples.py::TestTransportExamples::test_sse_server_imports PASSED [ 12%]
+tests/examples/test_examples.py::TestSecurityExamples::test_authenticated_server_imports PASSED [ 12%]
+tests/examples/test_examples.py::TestSecurityExamples::test_rate_limited_server_imports SKIPPED [ 12%]
+tests/examples/test_examples.py::TestFeatureExamples::test_progress_example_imports PASSED [ 12%]
+tests/examples/test_examples.py::TestFeatureExamples::test_binary_resources_example_imports PASSED [ 12%]
+tests/examples/test_examples.py::TestProductionExamples::test_production_server_imports PASSED [ 12%]
+tests/examples/test_examples.py::TestProductionExamples::test_production_server_creation PASSED [ 13%]
+tests/examples/test_examples.py::TestProductionExamples::test_file_processor_server_imports PASSED [ 13%]
+tests/examples/test_examples.py::TestProductionExamples::test_file_processor_server_creation PASSED [ 13%]
+tests/examples/test_examples.py::TestProductionExamples::test_data_analysis_server_imports PASSED [ 13%]
+tests/examples/test_examples.py::TestProductionExamples::test_data_analysis_server_creation PASSED [ 13%]
+tests/examples/test_examples.py::TestServerInitialization::test_production_server_initialization PASSED [ 13%]
+tests/examples/test_examples.py::TestServerInitialization::test_file_processor_initialization PASSED [ 13%]
+tests/examples/test_examples.py::TestServerInitialization::test_data_analysis_initialization PASSED [ 13%]
+tests/examples/test_examples.py::TestServerConfiguration::test_production_server_config PASSED [ 14%]
+tests/examples/test_examples.py::TestServerConfiguration::test_file_processor_config PASSED [ 14%]
+tests/examples/test_examples.py::TestServerConfiguration::test_data_analysis_config PASSED [ 14%]
+tests/examples/test_examples.py::TestToolSignatures::test_production_server_tools PASSED [ 14%]
+tests/examples/test_examples.py::TestToolSignatures::test_file_processor_tools PASSED [ 14%]
+tests/examples/test_examples.py::TestToolSignatures::test_data_analysis_tools PASSED [ 14%]
+tests/examples/test_examples.py::TestDocumentation::test_production_server_docstring PASSED [ 14%]
+tests/examples/test_examples.py::TestDocumentation::test_file_processor_docstring PASSED [ 15%]
+tests/examples/test_examples.py::TestDocumentation::test_data_analysis_docstring PASSED [ 15%]
+tests/examples/test_examples.py::TestExampleREADME::test_readme_exists PASSED [ 15%]
+tests/examples/test_examples.py::TestExampleREADME::test_readme_content PASSED [ 15%]
+tests/features/test_binary.py::TestBinaryContent::test_init_with_bytes PASSED [ 15%]
+tests/features/test_binary.py::TestBinaryContent::test_init_with_filename PASSED [ 15%]
+tests/features/test_binary.py::TestBinaryContent::test_init_mime_type_from_filename PASSED [ 15%]
+tests/features/test_binary.py::TestBinaryContent::test_init_invalid_data_type PASSED [ 15%]
+tests/features/test_binary.py::TestBinaryContent::test_init_with_max_size_success PASSED [ 16%]
+tests/features/test_binary.py::TestBinaryContent::test_init_with_max_size_exceeded PASSED [ 16%]
+tests/features/test_binary.py::TestBinaryContent::test_detect_mime_type_png PASSED [ 16%]
+tests/features/test_binary.py::TestBinaryContent::test_detect_mime_type_jpeg PASSED [ 16%]
+tests/features/test_binary.py::TestBinaryContent::test_detect_mime_type_gif PASSED [ 16%]
+tests/features/test_binary.py::TestBinaryContent::test_detect_mime_type_webp PASSED [ 16%]
+tests/features/test_binary.py::TestBinaryContent::test_detect_mime_type_pdf PASSED [ 16%]
+tests/features/test_binary.py::TestBinaryContent::test_detect_mime_type_zip PASSED [ 16%]
+tests/features/test_binary.py::TestBinaryContent::test_detect_mime_type_gzip PASSED [ 17%]
+tests/features/test_binary.py::TestBinaryContent::test_detect_mime_type_unknown PASSED [ 17%]
+tests/features/test_binary.py::TestBinaryContent::test_to_base64 PASSED  [ 17%]
+tests/features/test_binary.py::TestBinaryContent::test_from_base64 PASSED [ 17%]
+tests/features/test_binary.py::TestBinaryContent::test_from_base64_with_filename PASSED [ 17%]
+tests/features/test_binary.py::TestBinaryContent::test_from_base64_invalid PASSED [ 17%]
+tests/features/test_binary.py::TestBinaryContent::test_from_base64_with_max_size_exceeded PASSED [ 17%]
+tests/features/test_binary.py::TestBinaryContent::test_from_file PASSED  [ 18%]
+tests/features/test_binary.py::TestBinaryContent::test_from_file_with_mime_type_override PASSED [ 18%]
+tests/features/test_binary.py::TestBinaryContent::test_from_file_not_found PASSED [ 18%]
+tests/features/test_binary.py::TestBinaryContent::test_from_file_with_max_size_exceeded PASSED [ 18%]
+tests/features/test_binary.py::TestBinaryContent::test_to_dict PASSED    [ 18%]
+tests/features/test_binary.py::TestBinaryContent::test_is_image_true PASSED [ 18%]
+tests/features/test_binary.py::TestBinaryContent::test_is_image_false PASSED [ 18%]
+tests/features/test_binary.py::TestBinaryContent::test_is_pdf_true PASSED [ 18%]
+tests/features/test_binary.py::TestBinaryContent::test_is_pdf_false PASSED [ 19%]
+tests/features/test_binary.py::TestBinaryContent::test_is_archive_true PASSED [ 19%]
+tests/features/test_binary.py::TestBinaryContent::test_is_archive_false PASSED [ 19%]
+tests/features/test_binary.py::TestBinaryContent::test_repr PASSED       [ 19%]
+tests/features/test_binary.py::TestHelperFunctions::test_read_image_png PASSED [ 19%]
+tests/features/test_binary.py::TestHelperFunctions::test_read_image_jpeg PASSED [ 19%]
+tests/features/test_binary.py::TestHelperFunctions::test_read_image_not_an_image PASSED [ 19%]
+tests/features/test_binary.py::TestHelperFunctions::test_read_image_with_max_size PASSED [ 20%]
+tests/features/test_binary.py::TestHelperFunctions::test_read_pdf PASSED [ 20%]
+tests/features/test_binary.py::TestHelperFunctions::test_read_pdf_not_a_pdf PASSED [ 20%]
+tests/features/test_binary.py::TestHelperFunctions::test_read_pdf_with_max_size PASSED [ 20%]
+tests/features/test_binary.py::TestHelperFunctions::test_read_binary_file PASSED [ 20%]
+tests/features/test_binary.py::TestHelperFunctions::test_read_binary_file_with_mime_type PASSED [ 20%]
+tests/features/test_binary.py::TestHelperFunctions::test_read_binary_file_with_max_size PASSED [ 20%]
+tests/features/test_binary.py::TestHelperFunctions::test_create_binary_resource_from_binary_content PASSED [ 20%]
+tests/features/test_binary.py::TestHelperFunctions::test_create_binary_resource_from_bytes PASSED [ 21%]
+tests/features/test_binary.py::TestHelperFunctions::test_create_binary_resource_from_bytes_no_mime_type PASSED [ 21%]
+tests/features/test_binary.py::TestHelperFunctions::test_create_binary_resource_with_filename PASSED [ 21%]
+tests/features/test_binary.py::TestHelperFunctions::test_is_binary_mime_type_images PASSED [ 21%]
+tests/features/test_binary.py::TestHelperFunctions::test_is_binary_mime_type_documents PASSED [ 21%]
+tests/features/test_binary.py::TestHelperFunctions::test_is_binary_mime_type_audio_video PASSED [ 21%]
+tests/features/test_binary.py::TestHelperFunctions::test_is_binary_mime_type_text PASSED [ 21%]
+tests/features/test_binary.py::TestHelperFunctions::test_is_binary_mime_type_json_xml PASSED [ 22%]
+tests/features/test_binary.py::TestHelperFunctions::test_is_binary_mime_type_fonts PASSED [ 22%]
+tests/features/test_binary.py::TestBinaryContentIntegration::test_roundtrip_encoding_decoding PASSED [ 22%]
+tests/features/test_binary.py::TestBinaryContentIntegration::test_large_binary_content PASSED [ 22%]
+tests/features/test_binary.py::TestBinaryContentIntegration::test_multiple_mime_type_detection_methods PASSED [ 22%]
+tests/features/test_binary.py::TestBinaryContentIntegration::test_binary_content_with_config_max_size PASSED [ 22%]
+tests/features/test_progress.py::TestProgressReporter::test_init PASSED  [ 22%]
+tests/features/test_progress.py::TestProgressReporter::test_update PASSED [ 22%]
+tests/features/test_progress.py::TestProgressReporter::test_update_with_steps PASSED [ 23%]
+tests/features/test_progress.py::TestProgressReporter::test_update_clamping PASSED [ 23%]
+tests/features/test_progress.py::TestProgressReporter::test_complete PASSED [ 23%]
+tests/features/test_progress.py::TestProgressReporter::test_complete_default_message PASSED [ 23%]
+tests/features/test_progress.py::TestProgressReporter::test_fail PASSED  [ 23%]
+tests/features/test_progress.py::TestProgressReporter::test_update_after_complete PASSED [ 23%]
+tests/features/test_progress.py::TestProgressReporter::test_sync_callback PASSED [ 23%]
+tests/features/test_progress.py::TestProgressTracker::test_init PASSED   [ 24%]
+tests/features/test_progress.py::TestProgressTracker::test_init_with_callback PASSED [ 24%]
+tests/features/test_progress.py::TestProgressTracker::test_create_operation PASSED [ 24%]
+tests/features/test_progress.py::TestProgressTracker::test_create_operation_auto_id PASSED [ 24%]
+tests/features/test_progress.py::TestProgressTracker::test_create_operation_duplicate_id PASSED [ 24%]
+tests/features/test_progress.py::TestProgressTracker::test_get_operation PASSED [ 24%]
+tests/features/test_progress.py::TestProgressTracker::test_get_operation_not_found PASSED [ 24%]
+tests/features/test_progress.py::TestProgressTracker::test_remove_operation PASSED [ 24%]
+tests/features/test_progress.py::TestProgressTracker::test_list_operations PASSED [ 25%]
+tests/features/test_progress.py::TestProgressTracker::test_cleanup_completed PASSED [ 25%]
+tests/features/test_progress.py::TestProgressTracker::test_start_operation_context PASSED [ 25%]
+tests/features/test_progress.py::TestProgressTracker::test_start_operation_context_with_exception PASSED [ 25%]
+tests/features/test_progress.py::TestProgressTracker::test_concurrent_operations PASSED [ 25%]
+tests/features/test_progress.py::TestProgressTracker::test_operation_with_default_callback PASSED [ 25%]
+tests/features/test_progress.py::TestProgressTracker::test_operation_callback_overrides_default PASSED [ 25%]
+tests/features/test_progress.py::TestProgressContext::test_progress_context_basic PASSED [ 26%]
+tests/features/test_progress.py::TestProgressIntegration::test_full_workflow PASSED [ 26%]
+tests/features/test_progress.py::TestProgressIntegration::test_error_handling_workflow PASSED [ 26%]
+tests/security/test_auth.py::TestClientInfo::test_client_info_creation PASSED [ 26%]
+tests/security/test_auth.py::TestClientInfo::test_client_info_with_metadata PASSED [ 26%]
+tests/security/test_auth.py::TestClientInfo::test_client_info_to_dict PASSED [ 26%]
+tests/security/test_auth.py::TestClientInfo::test_client_info_repr PASSED [ 26%]
+tests/security/test_auth.py::TestNoAuthProvider::test_no_auth_allows_all PASSED [ 26%]
+tests/security/test_auth.py::TestNoAuthProvider::test_no_auth_with_unknown_remote PASSED [ 27%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_provider_creation PASSED [ 27%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_provider_creation_no_keys_raises PASSED [ 27%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_authenticate_with_bearer_token PASSED [ 27%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_authenticate_with_x_api_key PASSED [ 27%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_authenticate_no_key_raises PASSED [ 27%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_authenticate_invalid_key_raises PASSED [ 27%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_authenticate_multiple_keys PASSED [ 28%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_extract_api_key_from_bearer PASSED [ 28%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_extract_api_key_from_x_api_key PASSED [ 28%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_extract_api_key_x_api_key_priority PASSED [ 28%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_extract_api_key_missing PASSED [ 28%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_extract_api_key_invalid_bearer_format PASSED [ 28%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_validate_api_key_valid PASSED [ 28%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_validate_api_key_invalid PASSED [ 28%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_validate_api_key_constant_time PASSED [ 29%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_create_client_id_deterministic PASSED [ 29%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_create_client_id_different_keys PASSED [ 29%]
+tests/security/test_auth.py::TestAPIKeyAuthProvider::test_create_client_id_format PASSED [ 29%]
+tests/security/test_auth.py::TestOAuthProvider::test_provider_creation PASSED [ 29%]
+tests/security/test_auth.py::TestOAuthProvider::test_authenticate_not_implemented PASSED [ 29%]
+tests/security/test_auth.py::TestJWTProvider::test_provider_creation PASSED [ 29%]
+tests/security/test_auth.py::TestJWTProvider::test_authenticate_not_implemented PASSED [ 30%]
+tests/security/test_auth.py::TestCreateAuthProvider::test_create_none_provider PASSED [ 30%]
+tests/security/test_auth.py::TestCreateAuthProvider::test_create_api_key_provider PASSED [ 30%]
+tests/security/test_auth.py::TestCreateAuthProvider::test_create_api_key_provider_no_keys_raises PASSED [ 30%]
+tests/security/test_auth.py::TestCreateAuthProvider::test_create_oauth_provider PASSED [ 30%]
+tests/security/test_auth.py::TestCreateAuthProvider::test_create_oauth_provider_missing_config_raises PASSED [ 30%]
+tests/security/test_auth.py::TestCreateAuthProvider::test_create_jwt_provider PASSED [ 30%]
+tests/security/test_auth.py::TestCreateAuthProvider::test_create_jwt_provider_no_secret_raises PASSED [ 30%]
+tests/security/test_auth.py::TestCreateAuthProvider::test_create_invalid_type_raises PASSED [ 31%]
+tests/security/test_auth.py::TestAuthMiddleware::test_middleware_clears_failures_on_success PASSED [ 31%]
+tests/security/test_auth.py::TestAuthMiddleware::test_middleware_rate_limits_failures PASSED [ 31%]
+tests/security/test_auth.py::TestAuthMiddleware::test_middleware_with_invalid_api_key PASSED [ 31%]
+tests/security/test_auth.py::TestAuthMiddleware::test_middleware_with_no_auth PASSED [ 31%]
+tests/security/test_auth.py::TestAuthMiddleware::test_middleware_with_valid_api_key PASSED [ 31%]
+tests/security/test_auth.py::TestAuthMiddleware::test_middleware_without_rate_limiting PASSED [ 31%]
+tests/security/test_rate_limiter.py::TestTokenBucket::test_init PASSED   [ 32%]
+tests/security/test_rate_limiter.py::TestTokenBucket::test_consume_success PASSED [ 32%]
+tests/security/test_rate_limiter.py::TestTokenBucket::test_consume_failure PASSED [ 32%]
+tests/security/test_rate_limiter.py::TestTokenBucket::test_refill PASSED [ 32%]
+tests/security/test_rate_limiter.py::TestTokenBucket::test_refill_cap_at_capacity PASSED [ 32%]
+tests/security/test_rate_limiter.py::TestTokenBucket::test_get_retry_after_no_wait PASSED [ 32%]
+tests/security/test_rate_limiter.py::TestTokenBucket::test_get_retry_after_with_wait PASSED [ 32%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_init PASSED   [ 32%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_init_invalid_params PASSED [ 33%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_allow_requests_under_limit PASSED [ 33%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_enforce_rate_limit PASSED [ 33%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_enforce_rate_limit_raises_exception PASSED [ 33%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_burst_capacity PASSED [ 33%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_refill_over_time PASSED [ 33%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_per_client_tracking PASSED [ 33%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_get_retry_after PASSED [ 33%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_get_retry_after_new_client PASSED [ 34%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_get_client_info PASSED [ 34%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_reset_client PASSED [ 34%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_get_stats PASSED [ 34%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_cleanup_expired_clients PASSED [ 34%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_emergency_cleanup PASSED [ 34%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_cleanup_task PASSED [ 34%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_concurrent_requests PASSED [ 35%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_fractional_tokens PASSED [ 35%]
+tests/security/test_rate_limiter.py::TestRateLimiter::test_metrics_tracking PASSED [ 35%]
+tests/security/test_rate_limiter.py::TestRateLimiterEdgeCases::test_high_rate_limit PASSED [ 35%]
+tests/security/test_rate_limiter.py::TestRateLimiterEdgeCases::test_low_rate_limit PASSED [ 35%]
+tests/security/test_rate_limiter.py::TestRateLimiterEdgeCases::test_many_clients PASSED [ 35%]
+tests/security/test_rate_limiter.py::TestRateLimiterEdgeCases::test_burst_refill_correctly PASSED [ 35%]
+tests/unit/test_builder.py::TestSimplyMCPInitialization::test_default_initialization PASSED [ 35%]
+tests/unit/test_builder.py::TestSimplyMCPInitialization::test_initialization_with_name_version PASSED [ 36%]
+tests/unit/test_builder.py::TestSimplyMCPInitialization::test_initialization_with_description PASSED [ 36%]
+tests/unit/test_builder.py::TestSimplyMCPInitialization::test_initialization_with_custom_config PASSED [ 36%]
+tests/unit/test_builder.py::TestAddTool::test_add_tool_basic PASSED      [ 36%]
+tests/unit/test_builder.py::TestAddTool::test_add_tool_custom_description PASSED [ 36%]
+tests/unit/test_builder.py::TestAddTool::test_add_tool_auto_description_from_docstring PASSED [ 36%]
+tests/unit/test_builder.py::TestAddTool::test_add_tool_auto_schema_generation PASSED [ 36%]
+tests/unit/test_builder.py::TestAddTool::test_add_tool_explicit_schema PASSED [ 37%]
+tests/unit/test_builder.py::TestAddTool::test_add_tool_pydantic_model PASSED [ 37%]
+tests/unit/test_builder.py::TestAddTool::test_add_tool_duplicate_raises_error PASSED [ 37%]
+tests/unit/test_builder.py::TestToolDecorator::test_tool_decorator_basic PASSED [ 37%]
+tests/unit/test_builder.py::TestToolDecorator::test_tool_decorator_custom_name PASSED [ 37%]
+tests/unit/test_builder.py::TestToolDecorator::test_tool_decorator_custom_description PASSED [ 37%]
+tests/unit/test_builder.py::TestToolDecorator::test_tool_decorator_pydantic_schema PASSED [ 37%]
+tests/unit/test_builder.py::TestAddPrompt::test_add_prompt_basic PASSED  [ 37%]
+tests/unit/test_builder.py::TestAddPrompt::test_add_prompt_custom_description PASSED [ 38%]
+tests/unit/test_builder.py::TestAddPrompt::test_add_prompt_explicit_arguments PASSED [ 38%]
+tests/unit/test_builder.py::TestAddPrompt::test_add_prompt_no_arguments PASSED [ 38%]
+tests/unit/test_builder.py::TestAddPrompt::test_add_prompt_duplicate_raises_error PASSED [ 38%]
+tests/unit/test_builder.py::TestPromptDecorator::test_prompt_decorator_basic PASSED [ 38%]
+tests/unit/test_builder.py::TestPromptDecorator::test_prompt_decorator_custom_name PASSED [ 38%]
+tests/unit/test_builder.py::TestPromptDecorator::test_prompt_decorator_explicit_arguments PASSED [ 38%]
+tests/unit/test_builder.py::TestAddResource::test_add_resource_basic PASSED [ 39%]
+tests/unit/test_builder.py::TestAddResource::test_add_resource_custom_name_description PASSED [ 39%]
+tests/unit/test_builder.py::TestAddResource::test_add_resource_custom_mime_type PASSED [ 39%]
+tests/unit/test_builder.py::TestAddResource::test_add_resource_empty_uri_raises_error PASSED [ 39%]
+tests/unit/test_builder.py::TestAddResource::test_add_resource_duplicate_raises_error PASSED [ 39%]
+tests/unit/test_builder.py::TestResourceDecorator::test_resource_decorator_basic PASSED [ 39%]
+tests/unit/test_builder.py::TestResourceDecorator::test_resource_decorator_custom_name PASSED [ 39%]
+tests/unit/test_builder.py::TestResourceDecorator::test_resource_decorator_custom_mime_type PASSED [ 39%]
+tests/unit/test_builder.py::TestResourceDecorator::test_resource_decorator_empty_uri_raises_error PASSED [ 40%]
+tests/unit/test_builder.py::TestMethodChaining::test_method_chaining_add_tool PASSED [ 40%]
+tests/unit/test_builder.py::TestMethodChaining::test_method_chaining_mixed_components PASSED [ 40%]
+tests/unit/test_builder.py::TestMethodChaining::test_method_chaining_with_configure PASSED [ 40%]
+tests/unit/test_builder.py::TestConfigure::test_configure_port PASSED    [ 40%]
+tests/unit/test_builder.py::TestConfigure::test_configure_log_level PASSED [ 40%]
+tests/unit/test_builder.py::TestConfigure::test_configure_both_port_and_log_level PASSED [ 40%]
+tests/unit/test_builder.py::TestConfigure::test_configure_invalid_log_level PASSED [ 41%]
+tests/unit/test_builder.py::TestConfigure::test_configure_returns_self PASSED [ 41%]
+tests/unit/test_builder.py::TestLifecycleMethods::test_initialize PASSED [ 41%]
+tests/unit/test_builder.py::TestLifecycleMethods::test_initialize_returns_self PASSED [ 41%]
+tests/unit/test_builder.py::TestLifecycleMethods::test_run_stdio_not_initialized_raises_error PASSED [ 41%]
+tests/unit/test_builder.py::TestLifecycleMethods::test_run_unsupported_transport_raises_error PASSED [ 41%]
+tests/unit/test_builder.py::TestServerAccess::test_get_server PASSED     [ 41%]
+tests/unit/test_builder.py::TestComponentQueries::test_list_tools_empty PASSED [ 41%]
+tests/unit/test_builder.py::TestComponentQueries::test_list_tools_with_tools PASSED [ 42%]
+tests/unit/test_builder.py::TestComponentQueries::test_list_prompts_empty PASSED [ 42%]
+tests/unit/test_builder.py::TestComponentQueries::test_list_prompts_with_prompts PASSED [ 42%]
+tests/unit/test_builder.py::TestComponentQueries::test_list_resources_empty PASSED [ 42%]
+tests/unit/test_builder.py::TestComponentQueries::test_list_resources_with_resources PASSED [ 42%]
+tests/unit/test_builder.py::TestEdgeCases::test_tool_with_no_parameters PASSED [ 42%]
+tests/unit/test_builder.py::TestEdgeCases::test_tool_with_optional_parameters PASSED [ 42%]
+tests/unit/test_builder.py::TestEdgeCases::test_prompt_with_no_arguments PASSED [ 43%]
+tests/unit/test_builder.py::TestEdgeCases::test_tool_without_docstring PASSED [ 43%]
+tests/unit/test_builder.py::TestEdgeCases::test_async_tool_function PASSED [ 43%]
+tests/unit/test_builder.py::TestIntegration::test_complete_workflow PASSED [ 43%]
+tests/unit/test_builder.py::TestIntegration::test_pydantic_and_regular_tools PASSED [ 43%]
+tests/unit/test_builder.py::TestIntegration::test_method_chaining_fluent_api PASSED [ 43%]
+tests/unit/test_cli.py::test_validate_python_file PASSED                 [ 43%]
+tests/unit/test_cli.py::test_load_python_module PASSED                   [ 43%]
+tests/unit/test_cli.py::test_load_python_module_not_found PASSED         [ 44%]
+tests/unit/test_cli.py::test_load_python_module_invalid_file PASSED      [ 44%]
+tests/unit/test_cli.py::test_detect_api_style_decorator PASSED           [ 44%]
+tests/unit/test_cli.py::test_detect_api_style_builder PASSED             [ 44%]
+tests/unit/test_cli.py::test_get_server_instance PASSED                  [ 44%]
+tests/unit/test_cli.py::test_create_components_table PASSED              [ 44%]
+tests/unit/test_cli.py::test_format_functions PASSED                     [ 44%]
+tests/unit/test_cli.py::test_cli_version PASSED                          [ 45%]
+tests/unit/test_cli.py::test_cli_help PASSED                             [ 45%]
+tests/unit/test_cli.py::test_run_command_help PASSED                     [ 45%]
+tests/unit/test_cli.py::test_run_command_stdio PASSED                    [ 45%]
+tests/unit/test_cli.py::test_run_command_file_not_found PASSED           [ 45%]
+tests/unit/test_cli.py::test_run_command_no_server PASSED                [ 45%]
+tests/unit/test_cli.py::test_run_command_watch_not_implemented PASSED    [ 45%]
+tests/unit/test_cli.py::test_config_help PASSED                          [ 45%]
+tests/unit/test_cli.py::test_config_init_toml PASSED                     [ 46%]
+tests/unit/test_cli.py::test_config_init_json PASSED                     [ 46%]
+tests/unit/test_cli.py::test_config_init_file_exists PASSED              [ 46%]
+tests/unit/test_cli.py::test_config_init_force_overwrite PASSED          [ 46%]
+tests/unit/test_cli.py::test_config_validate_valid PASSED                [ 46%]
+tests/unit/test_cli.py::test_config_validate_not_found PASSED            [ 46%]
+tests/unit/test_cli.py::test_config_show_table PASSED                    [ 46%]
+tests/unit/test_cli.py::test_config_show_json PASSED                     [ 47%]
+tests/unit/test_cli.py::test_config_show_toml PASSED                     [ 47%]
+tests/unit/test_cli.py::test_list_command_help PASSED                    [ 47%]
+tests/unit/test_cli.py::test_list_command_all_components PASSED          [ 47%]
+tests/unit/test_cli.py::test_list_command_filter_tools PASSED            [ 47%]
+tests/unit/test_cli.py::test_list_command_json_output PASSED             [ 47%]
+tests/unit/test_cli.py::test_list_command_empty_server PASSED            [ 47%]
+tests/unit/test_cli.py::test_list_command_no_server PASSED               [ 47%]
+tests/unit/test_cli.py::test_list_command_import_error PASSED            [ 48%]
+tests/unit/test_cli.py::test_full_workflow_decorator_api PASSED          [ 48%]
+tests/unit/test_cli.py::test_full_workflow_builder_api PASSED            [ 48%]
+tests/unit/test_config.py::TestServerMetadataModel::test_valid_server_metadata PASSED [ 48%]
+tests/unit/test_config.py::TestServerMetadataModel::test_server_metadata_with_optional_fields PASSED [ 48%]
+tests/unit/test_config.py::TestServerMetadataModel::test_server_metadata_name_validation PASSED [ 48%]
+tests/unit/test_config.py::TestTransportConfigModel::test_default_transport_config PASSED [ 48%]
+tests/unit/test_config.py::TestTransportConfigModel::test_http_transport_config PASSED [ 49%]
+tests/unit/test_config.py::TestTransportConfigModel::test_port_validation PASSED [ 49%]
+tests/unit/test_config.py::TestRateLimitConfigModel::test_default_rate_limit PASSED [ 49%]
+tests/unit/test_config.py::TestRateLimitConfigModel::test_custom_rate_limit PASSED [ 49%]
+tests/unit/test_config.py::TestAuthConfigModel::test_default_auth_config PASSED [ 49%]
+tests/unit/test_config.py::TestAuthConfigModel::test_api_key_auth PASSED [ 49%]
+tests/unit/test_config.py::TestAuthConfigModel::test_api_key_validation PASSED [ 49%]
+tests/unit/test_config.py::TestLogConfigModel::test_default_log_config PASSED [ 49%]
+tests/unit/test_config.py::TestLogConfigModel::test_custom_log_config PASSED [ 50%]
+tests/unit/test_config.py::TestFeatureFlagsModel::test_default_features PASSED [ 50%]
+tests/unit/test_config.py::TestFeatureFlagsModel::test_custom_features PASSED [ 50%]
+tests/unit/test_config.py::TestSimplyMCPConfig::test_default_config PASSED [ 50%]
+tests/unit/test_config.py::TestSimplyMCPConfig::test_custom_config PASSED [ 50%]
+tests/unit/test_config.py::TestLoadConfigFromFile::test_load_toml_config PASSED [ 50%]
+tests/unit/test_config.py::TestLoadConfigFromFile::test_load_json_config PASSED [ 50%]
+tests/unit/test_config.py::TestLoadConfigFromFile::test_load_nonexistent_file PASSED [ 50%]
+tests/unit/test_config.py::TestLoadConfigFromFile::test_load_unsupported_format PASSED [ 51%]
+tests/unit/test_config.py::TestLoadConfigFromEnv::test_load_from_env PASSED [ 51%]
+tests/unit/test_config.py::TestLoadConfig::test_load_default_config PASSED [ 51%]
+tests/unit/test_config.py::TestLoadConfig::test_load_from_file_with_env_override PASSED [ 51%]
+tests/unit/test_config.py::TestLoadConfig::test_load_from_file_without_env_override PASSED [ 51%]
+tests/unit/test_config.py::TestValidateConfig::test_validate_valid_config_object PASSED [ 51%]
+tests/unit/test_config.py::TestValidateConfig::test_validate_valid_config_dict PASSED [ 51%]
+tests/unit/test_config.py::TestValidateConfig::test_validate_invalid_config_dict PASSED [ 52%]
+tests/unit/test_config.py::TestValidateConfig::test_validate_wrong_type PASSED [ 52%]
+tests/unit/test_config.py::TestGetDefaultConfig::test_get_default_config PASSED [ 52%]
+tests/unit/test_decorators.py::TestToolDecorator::test_tool_decorator_auto_schema PASSED [ 52%]
+tests/unit/test_decorators.py::TestToolDecorator::test_tool_decorator_custom_name_description PASSED [ 52%]
+tests/unit/test_decorators.py::TestToolDecorator::test_tool_decorator_explicit_schema PASSED [ 52%]
+tests/unit/test_decorators.py::TestToolDecorator::test_tool_decorator_pydantic_model PASSED [ 52%]
+tests/unit/test_decorators.py::TestToolDecorator::test_tool_decorator_preserves_function_metadata PASSED [ 52%]
+tests/unit/test_decorators.py::TestToolDecorator::test_tool_decorator_without_docstring PASSED [ 53%]
+tests/unit/test_decorators.py::TestToolDecorator::test_tool_decorator_optional_parameters PASSED [ 53%]
+tests/unit/test_decorators.py::TestPromptDecorator::test_prompt_decorator_auto_detection PASSED [ 53%]
+tests/unit/test_decorators.py::TestPromptDecorator::test_prompt_decorator_custom_name_description PASSED [ 53%]
+tests/unit/test_decorators.py::TestPromptDecorator::test_prompt_decorator_explicit_arguments PASSED [ 53%]
+tests/unit/test_decorators.py::TestPromptDecorator::test_prompt_decorator_no_arguments PASSED [ 53%]
+tests/unit/test_decorators.py::TestPromptDecorator::test_prompt_decorator_without_docstring PASSED [ 53%]
+tests/unit/test_decorators.py::TestResourceDecorator::test_resource_decorator_basic PASSED [ 54%]
+tests/unit/test_decorators.py::TestResourceDecorator::test_resource_decorator_custom_name_description PASSED [ 54%]
+tests/unit/test_decorators.py::TestResourceDecorator::test_resource_decorator_custom_mime_type PASSED [ 54%]
+tests/unit/test_decorators.py::TestResourceDecorator::test_resource_decorator_missing_uri PASSED [ 54%]
+tests/unit/test_decorators.py::TestResourceDecorator::test_resource_decorator_without_docstring PASSED [ 54%]
+tests/unit/test_decorators.py::TestMCPServerDecorator::test_mcp_server_decorator_basic PASSED [ 54%]
+tests/unit/test_decorators.py::TestMCPServerDecorator::test_mcp_server_decorator_mixed_components PASSED [ 54%]
+tests/unit/test_decorators.py::TestMCPServerDecorator::test_mcp_server_decorator_default_name PASSED [ 54%]
+tests/unit/test_decorators.py::TestMCPServerDecorator::test_mcp_server_decorator_custom_config PASSED [ 55%]
+tests/unit/test_decorators.py::TestMCPServerDecorator::test_mcp_server_decorator_with_description PASSED [ 55%]
+tests/unit/test_decorators.py::TestMCPServerDecorator::test_mcp_server_decorator_method_binding PASSED [ 55%]
+tests/unit/test_decorators.py::TestGlobalServerManagement::test_get_global_server_creates_server PASSED [ 55%]
+tests/unit/test_decorators.py::TestGlobalServerManagement::test_get_global_server_returns_same_instance PASSED [ 55%]
+tests/unit/test_decorators.py::TestGlobalServerManagement::test_set_global_server PASSED [ 55%]
+tests/unit/test_decorators.py::TestIntegration::test_multiple_decorated_functions PASSED [ 55%]
+tests/unit/test_decorators.py::TestIntegration::test_pydantic_and_regular_tools PASSED [ 56%]
+tests/unit/test_decorators.py::TestEdgeCases::test_tool_with_no_parameters PASSED [ 56%]
+tests/unit/test_decorators.py::TestEdgeCases::test_tool_with_complex_types PASSED [ 56%]
+tests/unit/test_decorators.py::TestEdgeCases::test_prompt_with_varargs_ignored PASSED [ 56%]
+tests/unit/test_decorators.py::TestEdgeCases::test_decorated_async_function PASSED [ 56%]
+tests/unit/test_errors.py::TestSimplyMCPError::test_basic_error_creation PASSED [ 56%]
+tests/unit/test_errors.py::TestSimplyMCPError::test_error_with_code PASSED [ 56%]
+tests/unit/test_errors.py::TestSimplyMCPError::test_error_with_context PASSED [ 56%]
+tests/unit/test_errors.py::TestSimplyMCPError::test_to_dict PASSED       [ 57%]
+tests/unit/test_errors.py::TestSimplyMCPError::test_str_representation PASSED [ 57%]
+tests/unit/test_errors.py::TestSimplyMCPError::test_repr_representation PASSED [ 57%]
+tests/unit/test_errors.py::TestSimplyMCPError::test_exception_inheritance PASSED [ 57%]
+tests/unit/test_errors.py::TestSimplyMCPError::test_exception_raising PASSED [ 57%]
+tests/unit/test_errors.py::TestConfigurationErrors::test_configuration_error PASSED [ 57%]
+tests/unit/test_errors.py::TestConfigurationErrors::test_config_file_not_found PASSED [ 57%]
+tests/unit/test_errors.py::TestConfigurationErrors::test_config_validation_error PASSED [ 58%]
+tests/unit/test_errors.py::TestConfigurationErrors::test_config_validation_error_without_field PASSED [ 58%]
+tests/unit/test_errors.py::TestConfigurationErrors::test_config_format_error PASSED [ 58%]
+tests/unit/test_errors.py::TestConfigurationErrors::test_config_format_error_custom_formats PASSED [ 58%]
+tests/unit/test_errors.py::TestTransportErrors::test_transport_error PASSED [ 58%]
+tests/unit/test_errors.py::TestTransportErrors::test_connection_error PASSED [ 58%]
+tests/unit/test_errors.py::TestTransportErrors::test_connection_error_minimal PASSED [ 58%]
+tests/unit/test_errors.py::TestTransportErrors::test_transport_not_supported PASSED [ 58%]
+tests/unit/test_errors.py::TestTransportErrors::test_transport_not_supported_custom_types PASSED [ 59%]
+tests/unit/test_errors.py::TestTransportErrors::test_message_error PASSED [ 59%]
+tests/unit/test_errors.py::TestTransportErrors::test_message_error_without_type PASSED [ 59%]
+tests/unit/test_errors.py::TestHandlerErrors::test_handler_error PASSED  [ 59%]
+tests/unit/test_errors.py::TestHandlerErrors::test_handler_not_found PASSED [ 59%]
+tests/unit/test_errors.py::TestHandlerErrors::test_handler_not_found_default_type PASSED [ 59%]
+tests/unit/test_errors.py::TestHandlerErrors::test_handler_execution_error PASSED [ 59%]
+tests/unit/test_errors.py::TestHandlerErrors::test_invalid_handler_signature PASSED [ 60%]
+tests/unit/test_errors.py::TestValidationErrors::test_validation_error PASSED [ 60%]
+tests/unit/test_errors.py::TestValidationErrors::test_schema_validation_error PASSED [ 60%]
+tests/unit/test_errors.py::TestValidationErrors::test_schema_validation_error_minimal PASSED [ 60%]
+tests/unit/test_errors.py::TestValidationErrors::test_type_validation_error PASSED [ 60%]
+tests/unit/test_errors.py::TestValidationErrors::test_required_field_error PASSED [ 60%]
+tests/unit/test_errors.py::TestSecurityErrors::test_security_error PASSED [ 60%]
+tests/unit/test_errors.py::TestSecurityErrors::test_authentication_error PASSED [ 60%]
+tests/unit/test_errors.py::TestSecurityErrors::test_authentication_error_default_message PASSED [ 61%]
+tests/unit/test_errors.py::TestSecurityErrors::test_authorization_error PASSED [ 61%]
+tests/unit/test_errors.py::TestSecurityErrors::test_authorization_error_default_message PASSED [ 61%]
+tests/unit/test_errors.py::TestSecurityErrors::test_rate_limit_exceeded PASSED [ 61%]
+tests/unit/test_errors.py::TestSecurityErrors::test_rate_limit_exceeded_default_message PASSED [ 61%]
+tests/unit/test_errors.py::TestErrorHierarchy::test_all_errors_inherit_from_base PASSED [ 61%]
+tests/unit/test_errors.py::TestErrorHierarchy::test_config_errors_hierarchy PASSED [ 61%]
+tests/unit/test_errors.py::TestErrorHierarchy::test_transport_errors_hierarchy PASSED [ 62%]
+tests/unit/test_errors.py::TestErrorHierarchy::test_handler_errors_hierarchy PASSED [ 62%]
+tests/unit/test_errors.py::TestErrorHierarchy::test_validation_errors_hierarchy PASSED [ 62%]
+tests/unit/test_errors.py::TestErrorHierarchy::test_security_errors_hierarchy PASSED [ 62%]
+tests/unit/test_errors.py::TestErrorCodes::test_error_codes_are_unique PASSED [ 62%]
+tests/unit/test_errors.py::TestErrorCodes::test_error_codes_follow_convention PASSED [ 62%]
+tests/unit/test_errors.py::TestJSONSerialization::test_simple_error_serialization PASSED [ 62%]
+tests/unit/test_errors.py::TestJSONSerialization::test_error_with_context_serialization PASSED [ 62%]
+tests/unit/test_errors.py::TestJSONSerialization::test_complex_context_serialization PASSED [ 63%]
+tests/unit/test_errors.py::TestJSONSerialization::test_serialization_preserves_error_type PASSED [ 63%]
+tests/unit/test_errors.py::TestErrorCatching::test_catch_specific_error PASSED [ 63%]
+tests/unit/test_errors.py::TestErrorCatching::test_catch_category_error PASSED [ 63%]
+tests/unit/test_errors.py::TestErrorCatching::test_catch_base_error PASSED [ 63%]
+tests/unit/test_errors.py::TestErrorCatching::test_catch_as_exception PASSED [ 63%]
+tests/unit/test_errors.py::TestErrorCatching::test_multiple_error_handling PASSED [ 63%]
+tests/unit/test_errors.py::TestErrorContextPreservation::test_context_preserved_through_raise PASSED [ 64%]
+tests/unit/test_errors.py::TestErrorContextPreservation::test_original_error_preserved PASSED [ 64%]
+tests/unit/test_errors.py::TestErrorContextPreservation::test_multiple_context_fields PASSED [ 64%]
+tests/unit/test_logger.py::TestSetupLogger::test_setup_logger_defaults PASSED [ 64%]
+tests/unit/test_logger.py::TestSetupLogger::test_setup_logger_json_format PASSED [ 64%]
+tests/unit/test_logger.py::TestSetupLogger::test_setup_logger_with_file PASSED [ 64%]
+tests/unit/test_logger.py::TestSetupLogger::test_setup_logger_with_file_json PASSED [ 64%]
+tests/unit/test_logger.py::TestSetupLogger::test_setup_logger_creates_directories PASSED [ 64%]
+tests/unit/test_logger.py::TestSetupLogger::test_setup_logger_multiple_handlers PASSED [ 65%]
+tests/unit/test_logger.py::TestSetupLogger::test_setup_logger_log_levels PASSED [ 65%]
+tests/unit/test_logger.py::TestGetLogger::test_get_logger_default PASSED [ 65%]
+tests/unit/test_logger.py::TestGetLogger::test_get_logger_with_name PASSED [ 65%]
+tests/unit/test_logger.py::TestGetLogger::test_get_logger_singleton PASSED [ 65%]
+tests/unit/test_logger.py::TestLoggerContext::test_context_basic PASSED  [ 65%]
+tests/unit/test_logger.py::TestLoggerContext::test_context_nested PASSED [ 65%]
+tests/unit/test_logger.py::TestLoggerContext::test_context_cleanup PASSED [ 66%]
+tests/unit/test_logger.py::TestLoggerContext::test_context_with_exception PASSED [ 66%]
+tests/unit/test_logger.py::TestLoggerContext::test_context_multiple_fields PASSED [ 66%]
+tests/unit/test_logger.py::TestLogWithContext::test_log_with_context_basic PASSED [ 66%]
+tests/unit/test_logger.py::TestLogWithContext::test_log_with_context_levels PASSED [ 66%]
+tests/unit/test_logger.py::TestSanitizeSensitiveData::test_sanitize_password PASSED [ 66%]
+tests/unit/test_logger.py::TestSanitizeSensitiveData::test_sanitize_api_key PASSED [ 66%]
+tests/unit/test_logger.py::TestSanitizeSensitiveData::test_sanitize_multiple_patterns PASSED [ 66%]
+tests/unit/test_logger.py::TestSanitizeSensitiveData::test_sanitize_nested_dict PASSED [ 67%]
+tests/unit/test_logger.py::TestSanitizeSensitiveData::test_sanitize_list_of_dicts PASSED [ 67%]
+tests/unit/test_logger.py::TestSanitizeSensitiveData::test_sanitize_case_insensitive PASSED [ 67%]
+tests/unit/test_logger.py::TestSanitizeSensitiveData::test_sanitize_string PASSED [ 67%]
+tests/unit/test_logger.py::TestSanitizeSensitiveData::test_sanitize_no_redact PASSED [ 67%]
+tests/unit/test_logger.py::TestContextualJSONFormatter::test_json_formatter_basic PASSED [ 67%]
+tests/unit/test_logger.py::TestContextualJSONFormatter::test_json_formatter_with_context PASSED [ 67%]
+tests/unit/test_logger.py::TestContextualJSONFormatter::test_json_formatter_sanitizes_sensitive_data PASSED [ 67%]
+tests/unit/test_logger.py::TestThreadSafety::test_concurrent_logging PASSED [ 68%]
+tests/unit/test_logger.py::TestThreadSafety::test_concurrent_context PASSED [ 68%]
+tests/unit/test_logger.py::TestLogRotation::test_log_rotation PASSED     [ 68%]
+tests/unit/test_logger.py::TestRichHandler::test_rich_handler_with_context PASSED [ 68%]
+tests/unit/test_logger.py::TestRichHandler::test_rich_handler_with_extra_context PASSED [ 68%]
+tests/unit/test_logger.py::TestRichHandler::test_rich_handler_console_rendering PASSED [ 68%]
+tests/unit/test_logger.py::TestGetLoggerEdgeCases::test_get_logger_initializes_default PASSED [ 68%]
+tests/unit/test_logger.py::TestGetLoggerEdgeCases::test_get_logger_with_name_initializes_default PASSED [ 69%]
+tests/unit/test_logger.py::TestSanitizeEdgeCases::test_sanitize_non_string_non_dict PASSED [ 69%]
+tests/unit/test_logger.py::TestSanitizeEdgeCases::test_sanitize_empty_dict PASSED [ 69%]
+tests/unit/test_logger.py::TestLoggerIntegration::test_end_to_end_json_logging PASSED [ 69%]
+tests/unit/test_logger.py::TestLoggerIntegration::test_end_to_end_text_logging PASSED [ 69%]
+tests/unit/test_registry.py::TestRegistryInitialization::test_registry_creation PASSED [ 69%]
+tests/unit/test_registry.py::TestRegistryInitialization::test_registry_starts_empty PASSED [ 69%]
+tests/unit/test_registry.py::TestRegistryInitialization::test_registry_stats_starts_at_zero PASSED [ 69%]
+tests/unit/test_registry.py::TestToolRegistration::test_register_tool PASSED [ 70%]
+tests/unit/test_registry.py::TestToolRegistration::test_register_multiple_tools PASSED [ 70%]
+tests/unit/test_registry.py::TestToolRegistration::test_register_duplicate_tool PASSED [ 70%]
+tests/unit/test_registry.py::TestToolRegistration::test_register_tool_case_insensitive PASSED [ 70%]
+tests/unit/test_registry.py::TestToolRegistration::test_register_tool_with_metadata PASSED [ 70%]
+tests/unit/test_registry.py::TestPromptRegistration::test_register_prompt PASSED [ 70%]
+tests/unit/test_registry.py::TestPromptRegistration::test_register_multiple_prompts PASSED [ 70%]
+tests/unit/test_registry.py::TestPromptRegistration::test_register_duplicate_prompt PASSED [ 71%]
+tests/unit/test_registry.py::TestPromptRegistration::test_register_prompt_case_insensitive PASSED [ 71%]
+tests/unit/test_registry.py::TestPromptRegistration::test_register_prompt_with_handler PASSED [ 71%]
+tests/unit/test_registry.py::TestResourceRegistration::test_register_resource PASSED [ 71%]
+tests/unit/test_registry.py::TestResourceRegistration::test_register_multiple_resources PASSED [ 71%]
+tests/unit/test_registry.py::TestResourceRegistration::test_register_duplicate_resource PASSED [ 71%]
+tests/unit/test_registry.py::TestResourceRegistration::test_register_resource_uri_exact_match PASSED [ 71%]
+tests/unit/test_registry.py::TestQueryMethods::test_get_tool PASSED      [ 71%]
+tests/unit/test_registry.py::TestQueryMethods::test_get_tool_case_insensitive PASSED [ 72%]
+tests/unit/test_registry.py::TestQueryMethods::test_get_tool_not_found PASSED [ 72%]
+tests/unit/test_registry.py::TestQueryMethods::test_get_prompt PASSED    [ 72%]
+tests/unit/test_registry.py::TestQueryMethods::test_get_prompt_case_insensitive PASSED [ 72%]
+tests/unit/test_registry.py::TestQueryMethods::test_get_prompt_not_found PASSED [ 72%]
+tests/unit/test_registry.py::TestQueryMethods::test_get_resource PASSED  [ 72%]
+tests/unit/test_registry.py::TestQueryMethods::test_get_resource_not_found PASSED [ 72%]
+tests/unit/test_registry.py::TestListMethods::test_list_tools_empty PASSED [ 73%]
+tests/unit/test_registry.py::TestListMethods::test_list_tools PASSED     [ 73%]
+tests/unit/test_registry.py::TestListMethods::test_list_prompts_empty PASSED [ 73%]
+tests/unit/test_registry.py::TestListMethods::test_list_prompts PASSED   [ 73%]
+tests/unit/test_registry.py::TestListMethods::test_list_resources_empty PASSED [ 73%]
+tests/unit/test_registry.py::TestListMethods::test_list_resources PASSED [ 73%]
+tests/unit/test_registry.py::TestHasMethods::test_has_tool_exists PASSED [ 73%]
+tests/unit/test_registry.py::TestHasMethods::test_has_tool_not_exists PASSED [ 73%]
+tests/unit/test_registry.py::TestHasMethods::test_has_tool_case_insensitive PASSED [ 74%]
+tests/unit/test_registry.py::TestHasMethods::test_has_prompt_exists PASSED [ 74%]
+tests/unit/test_registry.py::TestHasMethods::test_has_prompt_not_exists PASSED [ 74%]
+tests/unit/test_registry.py::TestHasMethods::test_has_prompt_case_insensitive PASSED [ 74%]
+tests/unit/test_registry.py::TestHasMethods::test_has_resource_exists PASSED [ 74%]
+tests/unit/test_registry.py::TestHasMethods::test_has_resource_not_exists PASSED [ 74%]
+tests/unit/test_registry.py::TestUnregisterMethods::test_unregister_tool_success PASSED [ 74%]
+tests/unit/test_registry.py::TestUnregisterMethods::test_unregister_tool_not_found PASSED [ 75%]
+tests/unit/test_registry.py::TestUnregisterMethods::test_unregister_tool_case_insensitive PASSED [ 75%]
+tests/unit/test_registry.py::TestUnregisterMethods::test_unregister_prompt_success PASSED [ 75%]
+tests/unit/test_registry.py::TestUnregisterMethods::test_unregister_prompt_not_found PASSED [ 75%]
+tests/unit/test_registry.py::TestUnregisterMethods::test_unregister_prompt_case_insensitive PASSED [ 75%]
+tests/unit/test_registry.py::TestUnregisterMethods::test_unregister_resource_success PASSED [ 75%]
+tests/unit/test_registry.py::TestUnregisterMethods::test_unregister_resource_not_found PASSED [ 75%]
+tests/unit/test_registry.py::TestClearMethod::test_clear_empty_registry PASSED [ 75%]
+tests/unit/test_registry.py::TestClearMethod::test_clear_populated_registry PASSED [ 76%]
+tests/unit/test_registry.py::TestClearMethod::test_clear_and_re_register PASSED [ 76%]
+tests/unit/test_registry.py::TestGetStatsMethod::test_get_stats_empty PASSED [ 76%]
+tests/unit/test_registry.py::TestGetStatsMethod::test_get_stats_with_components PASSED [ 76%]
+tests/unit/test_registry.py::TestGetStatsMethod::test_get_stats_multiple_components PASSED [ 76%]
+tests/unit/test_registry.py::TestThreadSafety::test_concurrent_tool_registration PASSED [ 76%]
+tests/unit/test_registry.py::TestThreadSafety::test_concurrent_mixed_operations PASSED [ 76%]
+tests/unit/test_registry.py::TestThreadSafety::test_concurrent_unregister PASSED [ 77%]
+tests/unit/test_registry.py::TestThreadSafety::test_concurrent_clear PASSED [ 77%]
+tests/unit/test_registry.py::TestEdgeCases::test_empty_name_handling PASSED [ 77%]
+tests/unit/test_registry.py::TestEdgeCases::test_special_characters_in_names PASSED [ 77%]
+tests/unit/test_registry.py::TestEdgeCases::test_unicode_in_names PASSED [ 77%]
+tests/unit/test_registry.py::TestEdgeCases::test_resource_uri_edge_cases PASSED [ 77%]
+tests/unit/test_registry.py::TestEdgeCases::test_large_number_of_components PASSED [ 77%]
+tests/unit/test_schema.py::TestPythonTypeToJsonSchemaType::test_basic_types PASSED [ 77%]
+tests/unit/test_schema.py::TestPythonTypeToJsonSchemaType::test_none_type PASSED [ 78%]
+tests/unit/test_schema.py::TestPythonTypeToJsonSchemaType::test_list_type PASSED [ 78%]
+tests/unit/test_schema.py::TestPythonTypeToJsonSchemaType::test_dict_type PASSED [ 78%]
+tests/unit/test_schema.py::TestPythonTypeToJsonSchemaType::test_optional_type PASSED [ 78%]
+tests/unit/test_schema.py::TestPythonTypeToJsonSchemaType::test_union_type PASSED [ 78%]
+tests/unit/test_schema.py::TestPythonTypeToJsonSchemaType::test_any_type PASSED [ 78%]
+tests/unit/test_schema.py::TestPythonTypeToJsonSchemaType::test_nested_list PASSED [ 78%]
+tests/unit/test_schema.py::TestPythonTypeToJsonSchemaType::test_tuple_type PASSED [ 79%]
+tests/unit/test_schema.py::TestExtractDescriptionFromDocstring::test_simple_docstring PASSED [ 79%]
+tests/unit/test_schema.py::TestExtractDescriptionFromDocstring::test_google_style_docstring PASSED [ 79%]
+tests/unit/test_schema.py::TestExtractDescriptionFromDocstring::test_numpy_style_docstring PASSED [ 79%]
+tests/unit/test_schema.py::TestExtractDescriptionFromDocstring::test_multiline_description PASSED [ 79%]
+tests/unit/test_schema.py::TestExtractDescriptionFromDocstring::test_no_docstring PASSED [ 79%]
+tests/unit/test_schema.py::TestExtractDescriptionFromDocstring::test_empty_docstring PASSED [ 79%]
+tests/unit/test_schema.py::TestExtractParamDescriptionsFromDocstring::test_google_style_params PASSED [ 79%]
+tests/unit/test_schema.py::TestExtractParamDescriptionsFromDocstring::test_google_style_with_types PASSED [ 80%]
+tests/unit/test_schema.py::TestExtractParamDescriptionsFromDocstring::test_numpy_style_params PASSED [ 80%]
+tests/unit/test_schema.py::TestExtractParamDescriptionsFromDocstring::test_no_params_section PASSED [ 80%]
+tests/unit/test_schema.py::TestGenerateSchemaFromFunction::test_simple_function PASSED [ 80%]
+tests/unit/test_schema.py::TestGenerateSchemaFromFunction::test_function_with_defaults PASSED [ 80%]
+tests/unit/test_schema.py::TestGenerateSchemaFromFunction::test_function_with_optional PASSED [ 80%]
+tests/unit/test_schema.py::TestGenerateSchemaFromFunction::test_function_with_docstring_descriptions PASSED [ 80%]
+tests/unit/test_schema.py::TestGenerateSchemaFromFunction::test_function_with_mixed_types PASSED [ 81%]
+tests/unit/test_schema.py::TestGenerateSchemaFromFunction::test_function_skips_self_and_cls PASSED [ 81%]
+tests/unit/test_schema.py::TestGenerateSchemaFromFunction::test_function_without_type_hints PASSED [ 81%]
+tests/unit/test_schema.py::TestGenerateSchemaFromPydantic::test_simple_pydantic_model PASSED [ 81%]
+tests/unit/test_schema.py::TestGenerateSchemaFromPydantic::test_pydantic_with_field_descriptions PASSED [ 81%]
+tests/unit/test_schema.py::TestGenerateSchemaFromPydantic::test_pydantic_with_validators PASSED [ 81%]
+tests/unit/test_schema.py::TestGenerateSchemaFromPydantic::test_pydantic_with_optional_fields PASSED [ 81%]
+tests/unit/test_schema.py::TestGenerateSchemaFromPydantic::test_pydantic_nested_models PASSED [ 81%]
+tests/unit/test_schema.py::TestGenerateSchemaFromDataclass::test_simple_dataclass PASSED [ 82%]
+tests/unit/test_schema.py::TestGenerateSchemaFromDataclass::test_dataclass_with_defaults PASSED [ 82%]
+tests/unit/test_schema.py::TestGenerateSchemaFromDataclass::test_dataclass_with_optional PASSED [ 82%]
+tests/unit/test_schema.py::TestGenerateSchemaFromDataclass::test_dataclass_mixed_defaults PASSED [ 82%]
+tests/unit/test_schema.py::TestGenerateSchemaFromDataclass::test_non_dataclass_raises_error PASSED [ 82%]
+tests/unit/test_schema.py::TestGenerateSchemaFromTypedDict::test_simple_typeddict PASSED [ 82%]
+tests/unit/test_schema.py::TestGenerateSchemaFromTypedDict::test_typeddict_with_total_false PASSED [ 82%]
+tests/unit/test_schema.py::TestGenerateSchemaFromTypedDict::test_non_typeddict_raises_error PASSED [ 83%]
+tests/unit/test_schema.py::TestAutoGenerateSchema::test_auto_detect_function PASSED [ 83%]
+tests/unit/test_schema.py::TestAutoGenerateSchema::test_auto_detect_pydantic PASSED [ 83%]
+tests/unit/test_schema.py::TestAutoGenerateSchema::test_auto_detect_dataclass PASSED [ 83%]
+tests/unit/test_schema.py::TestAutoGenerateSchema::test_auto_detect_typeddict PASSED [ 83%]
+tests/unit/test_schema.py::TestAutoGenerateSchema::test_unsupported_type_raises_error PASSED [ 83%]
+tests/unit/test_schema.py::TestAutoGenerateSchema::test_auto_detect_lambda PASSED [ 83%]
+tests/unit/test_schema.py::TestComplexScenarios::test_nested_optional_types PASSED [ 83%]
+tests/unit/test_schema.py::TestComplexScenarios::test_union_with_multiple_types PASSED [ 84%]
+tests/unit/test_schema.py::TestComplexScenarios::test_complex_nested_structure PASSED [ 84%]
+tests/unit/test_schema.py::TestComplexScenarios::test_function_with_all_features PASSED [ 84%]
+tests/unit/test_schema.py::TestComplexScenarios::test_pydantic_with_complex_validation PASSED [ 84%]
+tests/unit/test_schema.py::TestEdgeCases::test_function_with_no_parameters PASSED [ 84%]
+tests/unit/test_schema.py::TestEdgeCases::test_function_with_varargs PASSED [ 84%]
+tests/unit/test_schema.py::TestEdgeCases::test_empty_pydantic_model PASSED [ 84%]
+tests/unit/test_schema.py::TestEdgeCases::test_pydantic_model_with_any PASSED [ 84%]
+tests/unit/test_schema.py::TestEdgeCases::test_function_with_none_default PASSED [ 85%]
+tests/unit/test_schema.py::TestEdgeCases::test_literal_type PASSED       [ 85%]
+tests/unit/test_schema.py::TestEdgeCases::test_empty_docstring_description PASSED [ 85%]
+tests/unit/test_schema.py::TestEdgeCases::test_dataclass_with_default_factory PASSED [ 85%]
+tests/unit/test_server.py::TestSimplyMCPServerInit::test_init_with_default_config PASSED [ 85%]
+tests/unit/test_server.py::TestSimplyMCPServerInit::test_init_with_custom_config PASSED [ 85%]
+tests/unit/test_server.py::TestSimplyMCPServerInit::test_mcp_server_created_with_metadata PASSED [ 85%]
+tests/unit/test_server.py::TestSimplyMCPServerInitialize::test_initialize_success PASSED [ 86%]
+tests/unit/test_server.py::TestSimplyMCPServerInitialize::test_initialize_twice_raises_error PASSED [ 86%]
+tests/unit/test_server.py::TestSimplyMCPServerInitialize::test_initialize_registers_handlers PASSED [ 86%]
+tests/unit/test_server.py::TestSimplyMCPServerToolRegistration::test_register_tool_success PASSED [ 86%]
+tests/unit/test_server.py::TestSimplyMCPServerToolRegistration::test_register_duplicate_tool_raises_error PASSED [ 86%]
+tests/unit/test_server.py::TestSimplyMCPServerToolRegistration::test_register_multiple_tools PASSED [ 86%]
+tests/unit/test_server.py::TestSimplyMCPServerPromptRegistration::test_register_prompt_with_template PASSED [ 86%]
+tests/unit/test_server.py::TestSimplyMCPServerPromptRegistration::test_register_prompt_with_handler PASSED [ 86%]
+tests/unit/test_server.py::TestSimplyMCPServerPromptRegistration::test_register_duplicate_prompt_raises_error PASSED [ 87%]
+tests/unit/test_server.py::TestSimplyMCPServerResourceRegistration::test_register_resource_success PASSED [ 87%]
+tests/unit/test_server.py::TestSimplyMCPServerResourceRegistration::test_register_duplicate_resource_raises_error PASSED [ 87%]
+tests/unit/test_server.py::TestSimplyMCPServerListTools::test_list_tools_empty PASSED [ 87%]
+tests/unit/test_server.py::TestSimplyMCPServerListTools::test_list_tools_with_registered_tools PASSED [ 87%]
+tests/unit/test_server.py::TestSimplyMCPServerCallTool::test_call_tool_success PASSED [ 87%]
+tests/unit/test_server.py::TestSimplyMCPServerCallTool::test_call_tool_not_found PASSED [ 87%]
+tests/unit/test_server.py::TestSimplyMCPServerCallTool::test_call_tool_execution_error PASSED [ 88%]
+tests/unit/test_server.py::TestSimplyMCPServerCallTool::test_call_tool_async_handler PASSED [ 88%]
+tests/unit/test_server.py::TestSimplyMCPServerCallTool::test_call_tool_dict_result PASSED [ 88%]
+tests/unit/test_server.py::TestSimplyMCPServerListPrompts::test_list_prompts_empty PASSED [ 88%]
+tests/unit/test_server.py::TestSimplyMCPServerListPrompts::test_list_prompts_with_registered_prompts PASSED [ 88%]
+tests/unit/test_server.py::TestSimplyMCPServerGetPrompt::test_get_prompt_with_template PASSED [ 88%]
+tests/unit/test_server.py::TestSimplyMCPServerGetPrompt::test_get_prompt_with_handler PASSED [ 88%]
+tests/unit/test_server.py::TestSimplyMCPServerGetPrompt::test_get_prompt_not_found PASSED [ 88%]
+tests/unit/test_server.py::TestSimplyMCPServerGetPrompt::test_get_prompt_async_handler PASSED [ 89%]
+tests/unit/test_server.py::TestSimplyMCPServerListResources::test_list_resources_empty PASSED [ 89%]
+tests/unit/test_server.py::TestSimplyMCPServerListResources::test_list_resources_with_registered_resources PASSED [ 89%]
+tests/unit/test_server.py::TestSimplyMCPServerReadResource::test_read_resource_success PASSED [ 89%]
+tests/unit/test_server.py::TestSimplyMCPServerReadResource::test_read_resource_not_found PASSED [ 89%]
+tests/unit/test_server.py::TestSimplyMCPServerReadResource::test_read_resource_string_result PASSED [ 89%]
+tests/unit/test_server.py::TestSimplyMCPServerReadResource::test_read_resource_async_handler PASSED [ 89%]
+tests/unit/test_server.py::TestSimplyMCPServerLifecycle::test_run_stdio_not_initialized_raises_error PASSED [ 90%]
+tests/unit/test_server.py::TestSimplyMCPServerLifecycle::test_run_with_transport_not_initialized_raises_error PASSED [ 90%]
+tests/unit/test_server.py::TestSimplyMCPServerLifecycle::test_stop_server PASSED [ 90%]
+tests/unit/test_server.py::TestSimplyMCPServerLifecycle::test_shutdown_server PASSED [ 90%]
+tests/unit/test_server.py::TestSimplyMCPServerProperties::test_get_mcp_server PASSED [ 90%]
+tests/unit/test_server.py::TestSimplyMCPServerProperties::test_is_initialized_property PASSED [ 90%]
+tests/unit/test_server.py::TestSimplyMCPServerProperties::test_is_initialized_after_init PASSED [ 90%]
+tests/unit/test_server.py::TestSimplyMCPServerProperties::test_is_running_property PASSED [ 90%]
+tests/unit/test_server.py::TestSimplyMCPServerProperties::test_request_count_property PASSED [ 91%]
+tests/unit/test_server.py::TestSimplyMCPServerIntegration::test_full_tool_workflow PASSED [ 91%]
+tests/unit/test_server.py::TestSimplyMCPServerIntegration::test_full_prompt_workflow PASSED [ 91%]
+tests/unit/test_server.py::TestSimplyMCPServerIntegration::test_full_resource_workflow PASSED [ 91%]
+tests/unit/test_transports.py::TestCORSMiddleware::test_init_defaults PASSED [ 91%]
+tests/unit/test_transports.py::TestCORSMiddleware::test_init_custom PASSED [ 91%]
+tests/unit/test_transports.py::TestCORSMiddleware::test_middleware_disabled PASSED [ 91%]
+tests/unit/test_transports.py::TestCORSMiddleware::test_middleware_adds_cors_headers PASSED [ 92%]
+tests/unit/test_transports.py::TestLoggingMiddleware::test_init_defaults PASSED [ 92%]
+tests/unit/test_transports.py::TestLoggingMiddleware::test_init_verbose PASSED [ 92%]
+tests/unit/test_transports.py::TestLoggingMiddleware::test_middleware_logs_request PASSED [ 92%]
+tests/unit/test_transports.py::TestRateLimitMiddleware::test_init_defaults PASSED [ 92%]
+tests/unit/test_transports.py::TestRateLimitMiddleware::test_init_custom PASSED [ 92%]
+tests/unit/test_transports.py::TestRateLimitMiddleware::test_middleware_tracks_requests PASSED [ 92%]
+tests/unit/test_transports.py::TestMiddlewareStack::test_create_middleware_stack_defaults FAILED [ 92%]
+tests/unit/test_transports.py::TestMiddlewareStack::test_create_middleware_stack_custom FAILED [ 93%]
+tests/unit/test_transports.py::TestMiddlewareStack::test_create_middleware_stack_minimal PASSED [ 93%]
+tests/unit/test_transports.py::TestHTTPTransport::test_init PASSED       [ 93%]
+tests/unit/test_transports.py::TestHTTPTransport::test_start_stop PASSED [ 93%]
+tests/unit/test_transports.py::TestHTTPTransport::test_error_on_double_start PASSED [ 93%]
+tests/unit/test_transports.py::TestHTTPTransport::test_create_success_response PASSED [ 93%]
+tests/unit/test_transports.py::TestHTTPTransport::test_create_error_response PASSED [ 93%]
+tests/unit/test_transports.py::TestSSEConnection::test_init PASSED       [ 94%]
+tests/unit/test_transports.py::TestSSEConnection::test_send_event PASSED [ 94%]
+tests/unit/test_transports.py::TestSSEConnection::test_send_ping PASSED  [ 94%]
+tests/unit/test_transports.py::TestSSEConnection::test_close PASSED      [ 94%]
+tests/unit/test_transports.py::TestSSETransport::test_init PASSED        [ 94%]
+tests/unit/test_transports.py::TestSSETransport::test_start_stop PASSED  [ 94%]
+tests/unit/test_transports.py::TestSSETransport::test_broadcast_event PASSED [ 94%]
+tests/unit/test_transports.py::TestTransportFactory::test_create_http_transport PASSED [ 94%]
+tests/unit/test_transports.py::TestTransportFactory::test_create_sse_transport PASSED [ 95%]
+tests/unit/test_transports.py::TestTransportFactory::test_create_invalid_transport PASSED [ 95%]
+tests/unit/test_transports.py::TestTransportFactory::test_create_transport_case_insensitive PASSED [ 95%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_http_with_rate_limiter PASSED [ 95%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_http_with_auth_provider PASSED [ 95%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_root PASSED [ 95%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_health PASSED [ 95%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_mcp_request_parse_error PASSED [ 96%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_mcp_request_invalid_structure PASSED [ 96%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_method_tools_list PASSED [ 96%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_method_tools_call PASSED [ 96%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_method_tools_call_missing_name PASSED [ 96%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_method_tools_call_not_found PASSED [ 96%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_method_tools_call_async PASSED [ 96%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_method_prompts_list PASSED [ 96%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_method_prompts_get_with_handler PASSED [ 97%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_method_prompts_get_with_template PASSED [ 97%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_method_prompts_get_missing_name PASSED [ 97%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_method_resources_list PASSED [ 97%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_method_resources_read PASSED [ 97%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_method_resources_read_missing_uri PASSED [ 97%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_handle_method_unknown PASSED [ 97%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_create_error_response_with_data PASSED [ 98%]
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_create_error_response_without_data PASSED [ 98%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_with_rate_limiter PASSED [ 98%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_with_auth_provider PASSED [ 98%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_handle_root PASSED [ 98%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_handle_health PASSED [ 98%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_handle_mcp_request_parse_error PASSED [ 98%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_handle_method_tools_list PASSED [ 98%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_handle_method_tools_call PASSED [ 99%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_handle_method_unknown PASSED [ 99%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_broadcast_no_connections PASSED [ 99%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_broadcast_error_handling PASSED [ 99%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_connection_send_event_when_disconnected PASSED [ 99%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_connection_send_event_error PASSED [ 99%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_connection_send_ping_when_disconnected PASSED [ 99%]
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_connection_send_ping_error PASSED [100%]
+
+=================================== FAILURES ===================================
+__________ TestMiddlewareStack.test_create_middleware_stack_defaults ___________
+tests/unit/test_transports.py:175: in test_create_middleware_stack_defaults
+    assert isinstance(middlewares[0], LoggingMiddleware)
+E   assert False
+E    +  where False = isinstance(__call__, LoggingMiddleware)
+___________ TestMiddlewareStack.test_create_middleware_stack_custom ____________
+tests/unit/test_transports.py:188: in test_create_middleware_stack_custom
+    assert any(isinstance(m, LoggingMiddleware) for m in middlewares)
+E   assert False
+E    +  where False = any(<generator object TestMiddlewareStack.test_create_middleware_stack_custom.<locals>.<genexpr> at 0x72a2add98d60>)
+----------------------------- Captured stdout call -----------------------------
+                    INFO     Rate limiter initialized        rate_limiter.py:178
+                                                   ├─                           
+                             requests_per_minute: 60                            
+                                                   ├─                           
+                             burst_size: 10                                     
+                                                   ├─                           
+                             max_clients: 10000                                 
+                                                   └─                           
+                             refill_rate: 1.0                                   
+=============================== warnings summary ===============================
+venv/lib/python3.12/site-packages/pythonjsonlogger/jsonlogger.py:11
+  /mnt/Shared/cs-projects/simply-mcp-py/venv/lib/python3.12/site-packages/pythonjsonlogger/jsonlogger.py:11: DeprecationWarning: pythonjsonlogger.jsonlogger has been moved to pythonjsonlogger.json
+    warnings.warn(
+
+tests/security/test_auth.py:382
+  /mnt/Shared/cs-projects/simply-mcp-py/tests/security/test_auth.py:382: DeprecationWarning: Decorator `@unittest_run_loop` is no longer needed in aiohttp 3.8+
+    @unittest_run_loop
+
+tests/security/test_auth.py:403
+  /mnt/Shared/cs-projects/simply-mcp-py/tests/security/test_auth.py:403: DeprecationWarning: Decorator `@unittest_run_loop` is no longer needed in aiohttp 3.8+
+    @unittest_run_loop
+
+tests/security/test_auth.py:433
+  /mnt/Shared/cs-projects/simply-mcp-py/tests/security/test_auth.py:433: DeprecationWarning: Decorator `@unittest_run_loop` is no longer needed in aiohttp 3.8+
+    @unittest_run_loop
+
+tests/security/test_auth.py:454
+  /mnt/Shared/cs-projects/simply-mcp-py/tests/security/test_auth.py:454: DeprecationWarning: Decorator `@unittest_run_loop` is no longer needed in aiohttp 3.8+
+    @unittest_run_loop
+
+tests/security/test_auth.py:481
+  /mnt/Shared/cs-projects/simply-mcp-py/tests/security/test_auth.py:481: DeprecationWarning: Decorator `@unittest_run_loop` is no longer needed in aiohttp 3.8+
+    @unittest_run_loop
+
+tests/security/test_auth.py:524
+  /mnt/Shared/cs-projects/simply-mcp-py/tests/security/test_auth.py:524: DeprecationWarning: Decorator `@unittest_run_loop` is no longer needed in aiohttp 3.8+
+    @unittest_run_loop
+
+tests/cli/test_watch.py::TestServerReloadHandler::test_debouncing
+  /mnt/Shared/cs-projects/simply-mcp-py/venv/lib/python3.12/site-packages/_pytest/unraisableexception.py:67: PytestUnraisableExceptionWarning: Exception ignored in: <coroutine object run.<locals>.run_server at 0x72a2adc641a0>
+  
+  Traceback (most recent call last):
+    File "<string>", line 1, in <lambda>
+  KeyError: '__import__'
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+
+tests/cli/test_watch.py::TestServerReloadHandler::test_debouncing
+  /mnt/Shared/cs-projects/simply-mcp-py/venv/lib/python3.12/site-packages/_pytest/unraisableexception.py:67: PytestUnraisableExceptionWarning: Exception ignored in: <coroutine object run.<locals>.run_server at 0x72a2ade0f8a0>
+  
+  Traceback (most recent call last):
+    File "<string>", line 1, in <lambda>
+  KeyError: '__import__'
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+
+tests/cli/test_watch.py::TestServerReloadHandler::test_debouncing
+  /mnt/Shared/cs-projects/simply-mcp-py/venv/lib/python3.12/site-packages/_pytest/unraisableexception.py:67: PytestUnraisableExceptionWarning: Exception ignored in: <coroutine object run.<locals>.run_server at 0x72a2ade0f1c0>
+  
+  Traceback (most recent call last):
+    File "<string>", line 1, in <lambda>
+  KeyError: '__import__'
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+
+tests/cli/test_watch.py::TestServerReloadHandler::test_debouncing
+  /mnt/Shared/cs-projects/simply-mcp-py/venv/lib/python3.12/site-packages/_pytest/unraisableexception.py:67: PytestUnraisableExceptionWarning: Exception ignored in: <coroutine object run.<locals>.run_server at 0x72a2ade0da60>
+  
+  Traceback (most recent call last):
+    File "<string>", line 1, in <lambda>
+  KeyError: '__import__'
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+
+tests/cli/test_watch.py::TestServerReloadHandler::test_debouncing
+  /mnt/Shared/cs-projects/simply-mcp-py/venv/lib/python3.12/site-packages/_pytest/unraisableexception.py:67: PytestUnraisableExceptionWarning: Exception ignored in: <coroutine object run.<locals>.run_server at 0x72a2ade0cb40>
+  
+  Traceback (most recent call last):
+    File "<string>", line 1, in <lambda>
+  KeyError: '__import__'
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+
+tests/unit/test_cli.py::test_config_show_json
+  /mnt/Shared/cs-projects/simply-mcp-py/venv/lib/python3.12/site-packages/rich/text.py:1142: RuntimeWarning: coroutine 'run.<locals>.run_server' was never awaited
+    _line_appends = [line._spans.append for line in new_lines._lines]
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/unit/test_registry.py::TestEdgeCases::test_large_number_of_components
+  /mnt/Shared/cs-projects/simply-mcp-py/venv/lib/python3.12/site-packages/rich/style.py:437: RuntimeWarning: coroutine 'run.<locals>.run_server' was never awaited
+    def __hash__(self) -> int:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/unit/test_server.py::TestSimplyMCPServerReadResource::test_read_resource_success
+  /mnt/Shared/cs-projects/simply-mcp-py/tests/unit/test_server.py:823: DeprecationWarning: Returning str or bytes from read_resource is deprecated. Use Iterable[ReadResourceContents] instead.
+    result = await handler(request)
+
+tests/unit/test_server.py::TestSimplyMCPServerReadResource::test_read_resource_string_result
+  /mnt/Shared/cs-projects/simply-mcp-py/tests/unit/test_server.py:879: DeprecationWarning: Returning str or bytes from read_resource is deprecated. Use Iterable[ReadResourceContents] instead.
+    result = await handler(request)
+
+tests/unit/test_server.py::TestSimplyMCPServerReadResource::test_read_resource_async_handler
+  /mnt/Shared/cs-projects/simply-mcp-py/tests/unit/test_server.py:915: DeprecationWarning: Returning str or bytes from read_resource is deprecated. Use Iterable[ReadResourceContents] instead.
+    result = await handler(request)
+
+tests/unit/test_server.py::TestSimplyMCPServerIntegration::test_full_resource_workflow
+  /mnt/Shared/cs-projects/simply-mcp-py/tests/unit/test_server.py:1158: DeprecationWarning: Returning str or bytes from read_resource is deprecated. Use Iterable[ReadResourceContents] instead.
+    read_result = await read_handler(
+
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_http_with_rate_limiter
+  /mnt/Shared/cs-projects/simply-mcp-py/venv/lib/python3.12/site-packages/aiohttp/web_app.py:305: DeprecationWarning: old-style middleware "<simply_mcp.transports.middleware.RateLimitMiddleware object at 0x72a2adde8c80>" deprecated, see #2252
+    self._middlewares_handlers = tuple(self._prepare_middleware())
+
+tests/unit/test_transports.py::TestHTTPTransportAdvanced::test_http_with_auth_provider
+  /mnt/Shared/cs-projects/simply-mcp-py/venv/lib/python3.12/site-packages/aiohttp/web_app.py:305: DeprecationWarning: old-style middleware "<simply_mcp.transports.middleware.AuthMiddleware object at 0x72a2addeb530>" deprecated, see #2252
+    self._middlewares_handlers = tuple(self._prepare_middleware())
+
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_with_rate_limiter
+  /mnt/Shared/cs-projects/simply-mcp-py/venv/lib/python3.12/site-packages/aiohttp/web_app.py:305: DeprecationWarning: old-style middleware "<simply_mcp.transports.middleware.RateLimitMiddleware object at 0x72a2adc76360>" deprecated, see #2252
+    self._middlewares_handlers = tuple(self._prepare_middleware())
+
+tests/unit/test_transports.py::TestSSETransportAdvanced::test_sse_with_auth_provider
+  /mnt/Shared/cs-projects/simply-mcp-py/venv/lib/python3.12/site-packages/aiohttp/web_app.py:305: DeprecationWarning: old-style middleware "<simply_mcp.transports.middleware.AuthMiddleware object at 0x72a2addbc080>" deprecated, see #2252
+    self._middlewares_handlers = tuple(self._prepare_middleware())
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.3-final-0 ________________
+
+Name                                      Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------------
+src/simply_mcp/__init__.py                    7      0   100%
+src/simply_mcp/api/__init__.py                3      0   100%
+src/simply_mcp/api/builder.py               121      6    95%   44-46, 178, 486, 521
+src/simply_mcp/api/decorators.py            127      5    96%   41-43, 193, 481
+src/simply_mcp/cli/__init__.py                2      0   100%
+src/simply_mcp/cli/bundle.py                134     58    57%   232-233, 241, 347-485, 496-500
+src/simply_mcp/cli/config.py                131     34    74%   40, 120-122, 150-172, 198-203, 240-256, 279-281
+src/simply_mcp/cli/dev.py                   185     27    85%   129-130, 210, 218, 251-255, 259-268, 361-362, 370, 446, 464-467, 479-483
+src/simply_mcp/cli/list_cmd.py               97     16    84%   83-84, 88-90, 119-120, 122-123, 157-160, 233, 235, 254
+src/simply_mcp/cli/main.py                   17      1    94%   43
+src/simply_mcp/cli/run.py                    98     39    60%   146-147, 151-153, 187-246, 255-258
+src/simply_mcp/cli/utils.py                  73      6    92%   54, 90-92, 100-101
+src/simply_mcp/cli/watch.py                 155     28    82%   116, 151-152, 157, 199, 244-258, 266-280, 383-384, 402, 453-457
+src/simply_mcp/core/__init__.py               4      0   100%
+src/simply_mcp/core/config.py               133     14    89%   13, 281, 293-294, 301, 304-313, 358-359
+src/simply_mcp/core/errors.py               135      0   100%
+src/simply_mcp/core/logger.py               170     10    94%   96-101, 127, 133, 176, 482
+src/simply_mcp/core/registry.py             129      0   100%
+src/simply_mcp/core/server.py               335    104    69%   160-185, 205-228, 301-312, 344-348, 360, 365, 370, 379, 389, 439-452, 498-509, 543-544, 552-554, 597-610, 652-663, 695-696, 703-718, 725-742, 772-785, 903-913, 945-954, 987-1016, 1044-1073, 1088
+src/simply_mcp/core/types.py                119      4    97%   182, 214, 219, 224
+src/simply_mcp/features/__init__.py           3      0   100%
+src/simply_mcp/features/binary.py            96      1    99%   461
+src/simply_mcp/features/progress.py         109      2    98%   135-136
+src/simply_mcp/handlers/__init__.py           0      0   100%
+src/simply_mcp/security/__init__.py           3      0   100%
+src/simply_mcp/security/auth.py             106      1    99%   82
+src/simply_mcp/security/rate_limiter.py     138      0   100%
+src/simply_mcp/transports/__init__.py         6      0   100%
+src/simply_mcp/transports/factory.py         13      0   100%
+src/simply_mcp/transports/http.py           173     23    87%   334-349, 424, 431, 440, 445, 469, 475, 572-607
+src/simply_mcp/transports/middleware.py     133     17    87%   93, 112-114, 134-135, 221-239, 319-347, 442
+src/simply_mcp/transports/sse.py            205     54    74%   206, 309, 393-461, 494-530, 565, 569, 575, 622-631, 668-703
+src/simply_mcp/transports/stdio.py            6      2    67%   26-27
+src/simply_mcp/validation/__init__.py         0      0   100%
+src/simply_mcp/validation/schema.py         194     23    88%   28-31, 109, 113, 117, 163, 239-240, 315, 323, 330-331, 399-400, 445-450, 461-462
+-----------------------------------------------------------------------
+TOTAL                                      3360    475    86%
+Coverage HTML written to dir htmlcov
+Coverage XML written to file coverage.xml
+=========================== short test summary info ============================
+FAILED tests/unit/test_transports.py::TestMiddlewareStack::test_create_middleware_stack_defaults
+FAILED tests/unit/test_transports.py::TestMiddlewareStack::test_create_middleware_stack_custom
+============ 2 failed, 750 passed, 1 skipped, 22 warnings in 41.90s ============

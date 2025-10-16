@@ -1348,9 +1348,9 @@ If you've tried these troubleshooting steps and still have issues:
 
 1. Check the [GitHub Issues](https://github.com/Clockwork-Innovations/simply-mcp-py/issues) for similar problems
 2. Join discussions on [GitHub Discussions](https://github.com/Clockwork-Innovations/simply-mcp-py/discussions)
-3. Review the [API Reference](../api/index.md) for detailed documentation
+3. Review the API documentation for detailed information
 4. Check the [Configuration Guide](configuration.md) for setup options
-5. Look at [Examples](../../examples/) for working code
+5. Look at [Examples](../examples/index.md) for working code
 
 When reporting issues, include:
 - Simply-MCP version (`pip show simply-mcp`)
@@ -1367,4 +1367,4 @@ When reporting issues, include:
 - [Configuration Guide](configuration.md) - Server configuration options
 - [Deployment Guide](deployment.md) - Production deployment best practices
 - [Testing Guide](testing.md) - Testing your MCP servers
-- [API Reference](../api/index.md) - Complete API documentation
+- [Examples](../examples/index.md) - Complete code examples
