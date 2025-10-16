@@ -213,12 +213,12 @@ def validate_server_file(server_file: str) -> bool:
         # Check for common MCP patterns
         module_vars = dir(module)
 
-        # Check for SimplyMCP usage
-        from simply_mcp.api.builder import SimplyMCP
+        # Check for BuildMCPServer usage
+        from simply_mcp.api.builder import BuildMCPServer
 
         for var_name in module_vars:
             var = getattr(module, var_name)
-            if isinstance(var, SimplyMCP):
+            if isinstance(var, BuildMCPServer):
                 return True
 
         # Check for decorator API usage
@@ -365,7 +365,7 @@ def bundle(
                 "No MCP server found in the file.\n\n"
                 "Make sure your file contains a valid MCP server using:\n"
                 "  - Decorator API: @tool(), @prompt(), @resource()\n"
-                "  - Builder API: SimplyMCP(...)\n"
+                "  - Builder API: BuildMCPServer(...)\n"
                 "  - Class API: @mcp_server class",
                 "Invalid Server",
             )

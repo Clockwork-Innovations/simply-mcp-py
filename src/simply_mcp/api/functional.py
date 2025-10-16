@@ -239,6 +239,7 @@ class MCPBuilder:
         """
         if self.config["tools"] is None:
             self.config["tools"] = []
+        assert self.config["tools"] is not None  # Type narrowing for mypy
         self.config["tools"].append(tool)
         return self
 
@@ -260,6 +261,7 @@ class MCPBuilder:
         """
         if self.config["prompts"] is None:
             self.config["prompts"] = []
+        assert self.config["prompts"] is not None  # Type narrowing for mypy
         self.config["prompts"].append(prompt)
         return self
 
@@ -283,6 +285,7 @@ class MCPBuilder:
         """
         if self.config["resources"] is None:
             self.config["resources"] = []
+        assert self.config["resources"] is not None  # Type narrowing for mypy
         self.config["resources"].append(resource)
         return self
 
