@@ -30,7 +30,6 @@ Example:
     ...     return {"version": "1.0.0"}
 """
 
-import functools
 import inspect
 from collections.abc import Callable
 from typing import Any, TypeVar

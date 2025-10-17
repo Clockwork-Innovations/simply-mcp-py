@@ -34,7 +34,6 @@ Example:
     >>> await server.configure(log_level="DEBUG").initialize().run()
 """
 
-import functools
 import inspect
 from collections.abc import Callable
 from typing import Any, TypeVar
