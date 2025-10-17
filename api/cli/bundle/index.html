@@ -3166,7 +3166,7 @@ simply-mcp bundle server.py --clean
 <a id="__codelineno-0-333" name="__codelineno-0-333"></a>    <span class="k">try</span><span class="p">:</span>
 <a id="__codelineno-0-334" name="__codelineno-0-334"></a>        <span class="c1"># Check if PyInstaller is available</span>
 <a id="__codelineno-0-335" name="__codelineno-0-335"></a>        <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-0-336" name="__codelineno-0-336"></a>            <span class="kn">import</span><span class="w"> </span><span class="nn">PyInstaller</span>  <span class="c1"># type: ignore[import-untyped]  # noqa: F401</span>
+<a id="__codelineno-0-336" name="__codelineno-0-336"></a>            <span class="kn">import</span><span class="w"> </span><span class="nn">PyInstaller</span>  <span class="c1"># noqa: F401</span>
 <a id="__codelineno-0-337" name="__codelineno-0-337"></a>        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
 <a id="__codelineno-0-338" name="__codelineno-0-338"></a>            <span class="n">format_error</span><span class="p">(</span>
 <a id="__codelineno-0-339" name="__codelineno-0-339"></a>                <span class="s2">&quot;PyInstaller is not installed.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
