@@ -262,7 +262,7 @@ class SimplyMCPServer:
     def _register_list_tools_handler(self) -> None:
         """Register handler for listing tools."""
 
-        @self.mcp_server.list_tools()  # type: ignore[misc, no-untyped-call]
+        @self.mcp_server.list_tools()
         async def handle_list_tools() -> list[types.Tool]:
             """Handle list_tools request from MCP client."""
             request_id = f"req-{uuid.uuid4().hex[:8]}"
@@ -314,7 +314,7 @@ class SimplyMCPServer:
     def _register_call_tool_handler(self) -> None:
         """Register handler for calling tools."""
 
-        @self.mcp_server.call_tool()  # type: ignore[misc]
+        @self.mcp_server.call_tool()
         async def handle_call_tool(
             name: str, arguments: dict[str, Any]
         ) -> list[types.TextContent | types.ImageContent | types.EmbeddedResource]:
@@ -454,7 +454,7 @@ class SimplyMCPServer:
     def _register_list_prompts_handler(self) -> None:
         """Register handler for listing prompts."""
 
-        @self.mcp_server.list_prompts()  # type: ignore[misc, no-untyped-call]
+        @self.mcp_server.list_prompts()
         async def handle_list_prompts() -> list[types.Prompt]:
             """Handle list_prompts request from MCP client."""
             request_id = f"req-{uuid.uuid4().hex[:8]}"
@@ -511,7 +511,7 @@ class SimplyMCPServer:
     def _register_get_prompt_handler(self) -> None:
         """Register handler for getting prompts."""
 
-        @self.mcp_server.get_prompt()  # type: ignore[misc, no-untyped-call]
+        @self.mcp_server.get_prompt()
         async def handle_get_prompt(
             name: str, arguments: dict[str, str] | None
         ) -> types.GetPromptResult:
@@ -612,7 +612,7 @@ class SimplyMCPServer:
     def _register_list_resources_handler(self) -> None:
         """Register handler for listing resources."""
 
-        @self.mcp_server.list_resources()  # type: ignore[misc, no-untyped-call]
+        @self.mcp_server.list_resources()
         async def handle_list_resources() -> list[types.Resource]:
             """Handle list_resources request from MCP client."""
             request_id = f"req-{uuid.uuid4().hex[:8]}"
@@ -665,7 +665,7 @@ class SimplyMCPServer:
     def _register_read_resource_handler(self) -> None:
         """Register handler for reading resources."""
 
-        @self.mcp_server.read_resource()  # type: ignore[misc, no-untyped-call]
+        @self.mcp_server.read_resource()
         async def handle_read_resource(uri: AnyUrl) -> str:
             """Handle read_resource request from MCP client."""
             request_id = f"req-{uuid.uuid4().hex[:8]}"

@@ -32,14 +32,25 @@ Example:
 
 import inspect
 from collections.abc import Callable
-from typing import Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
-try:
+# Use TYPE_CHECKING pattern for optional pydantic dependency
+# This allows type checkers to see BaseModel type while handling runtime ImportError
+if TYPE_CHECKING:
     from pydantic import BaseModel
-    PYDANTIC_AVAILABLE = True
-except ImportError:
-    BaseModel = object  # type: ignore[assignment,misc]
-    PYDANTIC_AVAILABLE = False
+    # Define for type checker - assumes pydantic is available at type-check time
+    PYDANTIC_AVAILABLE: bool = True
+else:
+    try:
+        from pydantic import BaseModel
+        PYDANTIC_AVAILABLE = True
+    except ImportError:
+        PYDANTIC_AVAILABLE = False
+
+        # Stub class for when pydantic is not installed
+        class BaseModel:  # type: ignore[no-redef]
+            """Stub for pydantic BaseModel when not installed."""
+            pass
 
 from simply_mcp.core.config import SimplyMCPConfig, get_default_config
 from simply_mcp.core.server import SimplyMCPServer
@@ -205,9 +216,10 @@ def tool(
             handler=func,
         )
 
-        # Store metadata on function - these are dynamic attributes added at runtime
-        func._mcp_tool_config = config  # type: ignore[attr-defined]
-        func._mcp_component_type = 'tool'  # type: ignore[attr-defined]
+        # Store metadata on function - use setattr for dynamic attributes
+        # This is cleaner than direct assignment for runtime-added attributes
+        setattr(func, '_mcp_tool_config', config)
+        setattr(func, '_mcp_component_type', 'tool')
 
         # Auto-register with global server
         server = get_global_server()
@@ -285,9 +297,10 @@ def prompt(
             template=None,
         )
 
-        # Store metadata on function - these are dynamic attributes added at runtime
-        func._mcp_prompt_config = config  # type: ignore[attr-defined]
-        func._mcp_component_type = 'prompt'  # type: ignore[attr-defined]
+        # Store metadata on function - use setattr for dynamic attributes
+        # This is cleaner than direct assignment for runtime-added attributes
+        setattr(func, '_mcp_prompt_config', config)
+        setattr(func, '_mcp_component_type', 'prompt')
 
         # Auto-register with global server
         server = get_global_server()
@@ -363,9 +376,10 @@ def resource(
             handler=func,
         )
 
-        # Store metadata on function - these are dynamic attributes added at runtime
-        func._mcp_resource_config = config  # type: ignore[attr-defined]
-        func._mcp_component_type = 'resource'  # type: ignore[attr-defined]
+        # Store metadata on function - use setattr for dynamic attributes
+        # This is cleaner than direct assignment for runtime-added attributes
+        setattr(func, '_mcp_resource_config', config)
+        setattr(func, '_mcp_component_type', 'resource')
 
         # Auto-register with global server
         server = get_global_server()
@@ -527,11 +541,10 @@ def mcp_server(
             """
             return server
 
-        # Create classmethod and attach to class - dynamic attributes added at runtime
-        cls.get_server = classmethod(get_server_impl)  # type: ignore[attr-defined]
-
-        # Store server reference on class - dynamic attribute added at runtime
-        cls._mcp_server = server  # type: ignore[attr-defined]
+        # Create classmethod and attach to class - use setattr for dynamic attributes
+        # This approach is cleaner for runtime-added attributes
+        setattr(cls, 'get_server', classmethod(get_server_impl))
+        setattr(cls, '_mcp_server', server)
 
         return cls
 

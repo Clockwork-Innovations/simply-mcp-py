@@ -13,21 +13,32 @@ All security features are configurable and can be enabled/disabled as needed.
 
 import re
 import time
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-try:
+if TYPE_CHECKING:
+    # Type checking only - imports always succeed for static analysis
     from fastapi import Request, Response
     from fastapi.responses import JSONResponse
     from starlette.middleware.base import BaseHTTPMiddleware
     from starlette.middleware.cors import CORSMiddleware
-    FASTAPI_AVAILABLE = True
-except ImportError:
-    FASTAPI_AVAILABLE = False
-    Request = None  # type: ignore[misc]
-    Response = None  # type: ignore[misc]
-    JSONResponse = None  # type: ignore[misc]
-    CORSMiddleware = None  # type: ignore[misc]
-    BaseHTTPMiddleware = None  # type: ignore[misc]
+
+    FASTAPI_AVAILABLE: bool
+else:
+    # Runtime behavior - handle optional FastAPI gracefully
+    try:
+        from fastapi import Request, Response
+        from fastapi.responses import JSONResponse
+        from starlette.middleware.base import BaseHTTPMiddleware
+        from starlette.middleware.cors import CORSMiddleware
+        FASTAPI_AVAILABLE = True
+    except ImportError:
+        FASTAPI_AVAILABLE = False
+        # Provide stub implementations for runtime
+        Request = Any
+        Response = Any
+        JSONResponse = Any
+        CORSMiddleware = Any
+        BaseHTTPMiddleware = Any
 
 from simply_mcp.core.logger import get_logger
 
@@ -376,7 +387,7 @@ class InputValidationMiddleware:
                 async def receive() -> dict[str, Any]:
                     return {"type": "http.request", "body": body}
 
-                request._receive = receive  # type: ignore[attr-defined]
+                setattr(request, "_receive", receive)
 
             except Exception as e:
                 logger.debug(f"Could not validate request body: {e}")

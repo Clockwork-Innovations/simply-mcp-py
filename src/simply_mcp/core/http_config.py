@@ -19,26 +19,37 @@ Example:
 """
 
 import os
+import sys
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-try:
-    import tomli
-    TOMLI_AVAILABLE = True
-except ImportError:
+# Handle TOML library imports - for type checking assume tomllib is available
+if TYPE_CHECKING:
+    import tomllib as tomli
+    TOMLI_AVAILABLE: bool
+else:
+    # At runtime: try tomli first (backport for Python <3.11), fall back to tomllib
     try:
-        import tomllib as tomli  # type: ignore[no-redef,import-not-found]
+        import tomli
+
         TOMLI_AVAILABLE = True
     except ImportError:
-        TOMLI_AVAILABLE = False
-        tomli = None  # type: ignore[misc]
+        try:
+            import tomllib as tomli  # type: ignore[import-not-found]
 
+            TOMLI_AVAILABLE = True
+        except ImportError:
+            TOMLI_AVAILABLE = False
+            tomli = None  # type: ignore[assignment]
+
+# Handle YAML library imports
 try:
     import yaml
+
     YAML_AVAILABLE = True
 except ImportError:
     YAML_AVAILABLE = False
-    yaml = None  # type: ignore[misc]
+    yaml = None  # type: ignore[assignment]
 
 from pydantic import BaseModel, Field, field_validator
 

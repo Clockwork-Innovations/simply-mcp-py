@@ -36,33 +36,42 @@ import asyncio
 import logging
 import signal
 import uuid
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-try:
+# Foundation layer dependencies (FastAPI, uvicorn)
+# Separated for type checking to eliminate type: ignore statements
+if TYPE_CHECKING:
+    # Type checking only - imports always succeed for static analysis
     import uvicorn
     from fastapi import FastAPI, HTTPException, Request, Response, status
     from fastapi.responses import JSONResponse, PlainTextResponse
     from starlette.middleware.cors import CORSMiddleware
+else:
+    # Runtime behavior - handle optional dependencies gracefully
+    try:
+        import uvicorn
+        from fastapi import FastAPI, HTTPException, Request, Response, status
+        from fastapi.responses import JSONResponse, PlainTextResponse
+        from starlette.middleware.cors import CORSMiddleware
 
-    FASTAPI_AVAILABLE = True
-except ImportError:
-    FASTAPI_AVAILABLE = False
-    FastAPI = None  # type: ignore[misc]
-    HTTPException = None  # type: ignore[misc]
-    Request = None  # type: ignore[misc]
-    Response = None  # type: ignore[misc]
-    status = None  # type: ignore[misc]
-    JSONResponse = None  # type: ignore[misc]
-    PlainTextResponse = None  # type: ignore[misc]
-    CORSMiddleware = None  # type: ignore[misc]
-    uvicorn = None  # type: ignore[misc]
+        FASTAPI_AVAILABLE = True
+    except ImportError:
+        FASTAPI_AVAILABLE = False
+        # Provide stub implementations for runtime when dependencies missing
+        FastAPI = Any
+        HTTPException = Exception
+        Request = Any
+        Response = Any
+        status = Any
+        JSONResponse = Any
+        PlainTextResponse = Any
+        CORSMiddleware = Any
+        uvicorn = Any
 
-from simply_mcp.core.auth import ApiKey, ApiKeyManager, BearerTokenValidator
-from simply_mcp.core.logger import LoggerContext, get_logger
-from simply_mcp.core.rate_limit import RateLimitConfig, RateLimiter
-
-# Import polish layer components (optional)
-try:
+# Polish layer dependencies (configuration, metrics, security)
+# Separated for type checking to eliminate type: ignore statements
+if TYPE_CHECKING:
+    # Type checking only - imports always succeed for static analysis
     from simply_mcp.core.http_config import HttpConfig
     from simply_mcp.core.security import (
         InputValidationMiddleware,
@@ -71,16 +80,33 @@ try:
         SecurityHeadersMiddleware,
     )
     from simply_mcp.monitoring.http_metrics import HttpMetrics, get_metrics
-    POLISH_LAYER_AVAILABLE = True
-except ImportError:
-    POLISH_LAYER_AVAILABLE = False
-    HttpConfig = None  # type: ignore[misc]
-    HttpMetrics = None  # type: ignore[misc]
-    get_metrics = None  # type: ignore[misc]
-    SecurityHeadersMiddleware = None  # type: ignore[misc]
-    RequestSizeLimitMiddleware = None  # type: ignore[misc]
-    RequestTimeoutMiddleware = None  # type: ignore[misc]
-    InputValidationMiddleware = None  # type: ignore[misc]
+else:
+    # Runtime behavior - handle optional polish layer gracefully
+    try:
+        from simply_mcp.core.http_config import HttpConfig
+        from simply_mcp.core.security import (
+            InputValidationMiddleware,
+            RequestSizeLimitMiddleware,
+            RequestTimeoutMiddleware,
+            SecurityHeadersMiddleware,
+        )
+        from simply_mcp.monitoring.http_metrics import HttpMetrics, get_metrics
+
+        POLISH_LAYER_AVAILABLE = True
+    except ImportError:
+        POLISH_LAYER_AVAILABLE = False
+        # Provide stub implementations for runtime when dependencies missing
+        HttpConfig = Any
+        HttpMetrics = Any
+        get_metrics = None
+        SecurityHeadersMiddleware = Any
+        RequestSizeLimitMiddleware = Any
+        RequestTimeoutMiddleware = Any
+        InputValidationMiddleware = Any
+
+from simply_mcp.core.auth import ApiKey, ApiKeyManager, BearerTokenValidator
+from simply_mcp.core.logger import LoggerContext, get_logger
+from simply_mcp.core.rate_limit import RateLimitConfig, RateLimiter
 
 logger = get_logger(__name__)
 

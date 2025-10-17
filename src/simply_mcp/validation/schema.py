@@ -14,6 +14,7 @@ import inspect
 import re
 from collections.abc import Callable
 from typing import (
+    TYPE_CHECKING,
     Any,
     Union,
     get_args,
@@ -21,14 +22,24 @@ from typing import (
     get_type_hints,
 )
 
+if TYPE_CHECKING:
+    from pydantic import BaseModel
+    from pydantic.fields import FieldInfo
+
 try:
     from pydantic import BaseModel
     from pydantic.fields import FieldInfo
     PYDANTIC_AVAILABLE = True
 except ImportError:
-    BaseModel = object  # type: ignore[assignment,misc]
-    FieldInfo = object  # type: ignore[assignment,misc]
     PYDANTIC_AVAILABLE = False
+
+    class BaseModel:  # type: ignore[no-redef]
+        """Stub for pydantic BaseModel when not installed."""
+        pass
+
+    class FieldInfo:  # type: ignore[no-redef]
+        """Stub for pydantic FieldInfo when not installed."""
+        pass
 
 
 class SchemaGenerationError(Exception):

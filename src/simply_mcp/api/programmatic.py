@@ -36,14 +36,25 @@ Example:
 
 import inspect
 from collections.abc import Callable
-from typing import Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
-try:
+# Use TYPE_CHECKING pattern for optional pydantic dependency
+if TYPE_CHECKING:
     from pydantic import BaseModel
-    PYDANTIC_AVAILABLE = True
-except ImportError:
-    BaseModel = object  # type: ignore[assignment,misc]
-    PYDANTIC_AVAILABLE = False
+
+    PYDANTIC_AVAILABLE: bool = True
+else:
+    try:
+        from pydantic import BaseModel
+
+        PYDANTIC_AVAILABLE = True
+    except ImportError:
+        PYDANTIC_AVAILABLE = False
+
+        class BaseModel:  # type: ignore[no-redef]
+            """Stub for pydantic BaseModel when not installed."""
+
+            pass
 
 from simply_mcp.core.config import (
     ServerMetadataModel,
@@ -463,6 +474,7 @@ class BuildMCPServer:
 
         # Update logging config if log_level provided
         if log_level is not None:
+            from typing import cast
 
             # Validate log level
             valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
@@ -470,7 +482,8 @@ class BuildMCPServer:
                 raise ValueError(
                     f"Invalid log level: {log_level}. Must be one of {valid_levels}"
                 )
-            self.config.logging.level = log_level.upper()  # type: ignore[assignment]
+            # Cast to the appropriate type (LogLevel) which accepts these strings
+            self.config.logging.level = cast("Any", log_level.upper())
 
         # Handle additional kwargs (extend as needed)
         for _key, _value in kwargs.items():

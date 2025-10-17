@@ -42,7 +42,7 @@ SENSITIVE_PATTERNS = [
 ]
 
 
-class ContextualJSONFormatter(jsonlogger.JsonFormatter):  # type: ignore[misc, name-defined]
+class ContextualJSONFormatter(jsonlogger.JsonFormatter):  # type: ignore[misc,name-defined]
     """JSON formatter that includes contextual information.
 
     Formats log records as JSON with consistent fields including:
@@ -151,9 +151,9 @@ class ContextualRichHandler(RichHandler):
     - Message with syntax highlighting
     """
 
-    def render_message(  # type: ignore[override]
+    def render_message(
         self, record: logging.LogRecord, message: str
-    ) -> Text | str:
+    ) -> Text:
         """Render message with contextual information.
 
         Args:

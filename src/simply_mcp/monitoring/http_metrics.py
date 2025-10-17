@@ -11,9 +11,10 @@ Metrics are exposed in Prometheus format and can be scraped by monitoring system
 """
 
 import time
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-try:
+if TYPE_CHECKING:
+    # Type checking only - imports always succeed for static analysis
     from prometheus_client import (
         CONTENT_TYPE_LATEST,
         CollectorRegistry,
@@ -23,16 +24,29 @@ try:
         Info,
         generate_latest,
     )
-    PROMETHEUS_AVAILABLE = True
-except ImportError:
-    PROMETHEUS_AVAILABLE = False
-    Counter = None  # type: ignore[misc]
-    Gauge = None  # type: ignore[misc]
-    Histogram = None  # type: ignore[misc]
-    Info = None  # type: ignore[misc]
-    generate_latest = None  # type: ignore[misc]
-    CONTENT_TYPE_LATEST = None  # type: ignore[misc]
-    CollectorRegistry = None  # type: ignore[misc]
+else:
+    # Runtime behavior - handle optional prometheus gracefully
+    try:
+        from prometheus_client import (
+            CONTENT_TYPE_LATEST,
+            CollectorRegistry,
+            Counter,
+            Gauge,
+            Histogram,
+            Info,
+            generate_latest,
+        )
+        PROMETHEUS_AVAILABLE = True
+    except ImportError:
+        PROMETHEUS_AVAILABLE = False
+        # Provide stub implementations for runtime
+        Counter = Any
+        Gauge = Any
+        Histogram = Any
+        Info = Any
+        generate_latest = Any
+        CONTENT_TYPE_LATEST = Any
+        CollectorRegistry = Any
 
 from simply_mcp.core.logger import get_logger
 

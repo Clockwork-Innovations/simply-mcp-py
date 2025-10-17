@@ -7,12 +7,24 @@ from multiple sources (files, environment variables) with proper precedence.
 import os
 import sys
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-if sys.version_info < (3, 11):
-    import tomli as tomllib
+# Handle TOML library - use stdlib tomllib in Python 3.11+, fall back to tomli
+if TYPE_CHECKING:
+    # For type checking: assume tomllib is available (Python 3.11+) or tomli (backport)
+    if sys.version_info >= (3, 11):
+        import tomllib
+    else:
+        import tomli as tomllib
 else:
-    import tomllib
+    # At runtime: use appropriate implementation
+    if sys.version_info >= (3, 11):
+        import tomllib
+    else:
+        try:
+            import tomli as tomllib  # type: ignore[import-not-found]
+        except ImportError:
+            tomllib = None  # type: ignore[assignment]
 
 from pydantic import BaseModel, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
