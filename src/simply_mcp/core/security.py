@@ -387,7 +387,7 @@ class InputValidationMiddleware:
                 async def receive() -> dict[str, Any]:
                     return {"type": "http.request", "body": body}
 
-                setattr(request, "_receive", receive)
+                request._receive = receive  # type: ignore[attr-defined]
 
             except Exception as e:
                 logger.debug(f"Could not validate request body: {e}")

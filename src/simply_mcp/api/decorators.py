@@ -216,10 +216,9 @@ def tool(
             handler=func,
         )
 
-        # Store metadata on function - use setattr for dynamic attributes
-        # This is cleaner than direct assignment for runtime-added attributes
-        setattr(func, '_mcp_tool_config', config)
-        setattr(func, '_mcp_component_type', 'tool')
+        # Store metadata on function - dynamic attributes added at runtime
+        func._mcp_tool_config = config  # type: ignore[attr-defined]
+        func._mcp_component_type = 'tool'  # type: ignore[attr-defined]
 
         # Auto-register with global server
         server = get_global_server()
@@ -297,10 +296,9 @@ def prompt(
             template=None,
         )
 
-        # Store metadata on function - use setattr for dynamic attributes
-        # This is cleaner than direct assignment for runtime-added attributes
-        setattr(func, '_mcp_prompt_config', config)
-        setattr(func, '_mcp_component_type', 'prompt')
+        # Store metadata on function - dynamic attributes added at runtime
+        func._mcp_prompt_config = config  # type: ignore[attr-defined]
+        func._mcp_component_type = 'prompt'  # type: ignore[attr-defined]
 
         # Auto-register with global server
         server = get_global_server()
@@ -376,10 +374,9 @@ def resource(
             handler=func,
         )
 
-        # Store metadata on function - use setattr for dynamic attributes
-        # This is cleaner than direct assignment for runtime-added attributes
-        setattr(func, '_mcp_resource_config', config)
-        setattr(func, '_mcp_component_type', 'resource')
+        # Store metadata on function - dynamic attributes added at runtime
+        func._mcp_resource_config = config  # type: ignore[attr-defined]
+        func._mcp_component_type = 'resource'  # type: ignore[attr-defined]
 
         # Auto-register with global server
         server = get_global_server()
@@ -541,10 +538,9 @@ def mcp_server(
             """
             return server
 
-        # Create classmethod and attach to class - use setattr for dynamic attributes
-        # This approach is cleaner for runtime-added attributes
-        setattr(cls, 'get_server', classmethod(get_server_impl))
-        setattr(cls, '_mcp_server', server)
+        # Create classmethod and attach to class - dynamic attributes added at runtime
+        cls.get_server = classmethod(get_server_impl)  # type: ignore[attr-defined]
+        cls._mcp_server = server  # type: ignore[attr-defined]
 
         return cls
 
