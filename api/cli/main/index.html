@@ -1969,6 +1969,10 @@ simply-mcp dev server.py
 simply-mcp run server.py
 
 
+# Build a portable package
+simply-mcp build server.py
+
+
 # List components
 simply-mcp list server.py
 
@@ -2006,7 +2010,11 @@ simply-mcp config init
 <span class="normal"><a href="#__codelineno-0-40">40</a></span>
 <span class="normal"><a href="#__codelineno-0-41">41</a></span>
 <span class="normal"><a href="#__codelineno-0-42">42</a></span>
-<span class="normal"><a href="#__codelineno-0-43">43</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="nd">@click</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
+<span class="normal"><a href="#__codelineno-0-43">43</a></span>
+<span class="normal"><a href="#__codelineno-0-44">44</a></span>
+<span class="normal"><a href="#__codelineno-0-45">45</a></span>
+<span class="normal"><a href="#__codelineno-0-46">46</a></span>
+<span class="normal"><a href="#__codelineno-0-47">47</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="nd">@click</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
 <a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="nd">@click</span><span class="o">.</span><span class="n">version_option</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">__version__</span><span class="p">,</span> <span class="n">prog_name</span><span class="o">=</span><span class="s2">&quot;simply-mcp&quot;</span><span class="p">)</span>
 <a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="k">def</span><span class="w"> </span><span class="nf">cli</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Simply-MCP: Easy MCP server development for Python.</span>
@@ -2025,14 +2033,18 @@ simply-mcp config init
 <a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="sd">        simply-mcp run server.py</span>
 <a id="__codelineno-0-34" name="__codelineno-0-34"></a>
 <a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="sd">        \b</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="sd">        # List components</span>
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="sd">        simply-mcp list server.py</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="sd">        # Build a portable package</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="sd">        simply-mcp build server.py</span>
 <a id="__codelineno-0-38" name="__codelineno-0-38"></a>
 <a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="sd">        \b</span>
-<a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="sd">        # Initialize config</span>
-<a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="sd">        simply-mcp config init</span>
-<a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-43" name="__codelineno-0-43"></a>    <span class="k">pass</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="sd">        # List components</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="sd">        simply-mcp list server.py</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42"></a>
+<a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="sd">        \b</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="sd">        # Initialize config</span>
+<a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="sd">        simply-mcp config init</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47"></a>    <span class="k">pass</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
