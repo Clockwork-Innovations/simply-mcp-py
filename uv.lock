@@ -2558,6 +2558,7 @@ dev = [
     { name = "pytest-mock" },
     { name = "ruff" },
     { name = "twine" },
+    { name = "types-pyinstaller" },
 ]
 docs = [
     { name = "mkdocs" },
@@ -2601,6 +2602,7 @@ requires-dist = [
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.1.0" },
     { name = "tomli", marker = "python_full_version < '3.11'", specifier = ">=2.0.0" },
     { name = "twine", marker = "extra == 'dev'", specifier = ">=4.0.0" },
+    { name = "types-pyinstaller", marker = "extra == 'dev'", specifier = ">=6.0.0" },
     { name = "typing-extensions", specifier = ">=4.0.0" },
     { name = "watchdog", specifier = ">=4.0.0" },
 ]
@@ -2716,6 +2718,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/e0/a8/949edebe3a82774c1ec34f637f5dd82d1cf22c25e963b7d63771083bbee5/twine-6.2.0.tar.gz", hash = "sha256:e5ed0d2fd70c9959770dce51c8f39c8945c574e18173a7b81802dab51b4b75cf", size = 172262, upload-time = "2025-09-04T15:43:17.255Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/3a/7a/882d99539b19b1490cac5d77c67338d126e4122c8276bf640e411650c830/twine-6.2.0-py3-none-any.whl", hash = "sha256:418ebf08ccda9a8caaebe414433b0ba5e25eb5e4a927667122fbe8f829f985d8", size = 42727, upload-time = "2025-09-04T15:43:15.994Z" },
+]
+
+[[package]]
+name = "types-pyinstaller"
+version = "6.16.0.20250918"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f7/92/c1ff9b5ca1d1963e3ea352f24c5542b0ca64eb7097a005dc1bfe89d432f5/types_pyinstaller-6.16.0.20250918.tar.gz", hash = "sha256:0becf0bb2f6a419ff6ad0c0cfa483962a5f845ebc1bab92bf040d90a5f685b39", size = 19590, upload-time = "2025-09-18T02:50:35.173Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8f/bd/788d678dcba390ffb34a804b8b546efb663ff248e1d8f17d35ba29500288/types_pyinstaller-6.16.0.20250918-py3-none-any.whl", hash = "sha256:1bf7bc3d9bc1a10a11851ba70439feb771ecc050b5a587188a49305d24336322", size = 22072, upload-time = "2025-09-18T02:50:33.92Z" },
 ]
 
 [[package]]
