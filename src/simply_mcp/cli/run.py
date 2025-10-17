@@ -83,8 +83,6 @@ def install_bundle_dependencies(bundle_path: Path, venv_path: Path) -> None:
     Raises:
         RuntimeError: If dependency installation fails
     """
-    pyproject_path = bundle_path / "pyproject.toml"
-
     format_info(f"Creating virtual environment at: {venv_path}")
 
     # Create venv using uv
@@ -95,9 +93,9 @@ def install_bundle_dependencies(bundle_path: Path, venv_path: Path) -> None:
             capture_output=True,
         )
     except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"Failed to create venv: {e.stderr.decode()}")
-    except FileNotFoundError:
-        raise RuntimeError("uv is not installed. Please install uv: https://docs.astral.sh/uv/")
+        raise RuntimeError(f"Failed to create venv: {e.stderr.decode()}") from e
+    except FileNotFoundError as e:
+        raise RuntimeError("uv is not installed. Please install uv: https://docs.astral.sh/uv/") from e
 
     format_info("Installing dependencies from pyproject.toml...")
 
@@ -110,7 +108,7 @@ def install_bundle_dependencies(bundle_path: Path, venv_path: Path) -> None:
             env={**os.environ, "VIRTUAL_ENV": str(venv_path)},
         )
     except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"Failed to install dependencies: {e.stderr.decode()}")
+        raise RuntimeError(f"Failed to install dependencies: {e.stderr.decode()}") from e
 
     format_success("Dependencies installed successfully")
 
