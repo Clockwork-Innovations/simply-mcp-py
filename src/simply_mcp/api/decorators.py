@@ -214,9 +214,6 @@ def tool(
         server = get_global_server()
         server.register_tool(config)
 
-        # Preserve function metadata
-        functools.update_wrapper(func, func)
-
         return func
 
     return decorator
@@ -297,9 +294,6 @@ def prompt(
         server = get_global_server()
         server.register_prompt(config)
 
-        # Preserve function metadata
-        functools.update_wrapper(func, func)
-
         return func
 
     return decorator
@@ -377,9 +371,6 @@ def resource(
         # Auto-register with global server
         server = get_global_server()
         server.register_resource(config)
-
-        # Preserve function metadata
-        functools.update_wrapper(func, func)
 
         return func
 

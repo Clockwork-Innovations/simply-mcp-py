@@ -20,6 +20,85 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional transport options
 - Enhanced monitoring and observability features
 
+## [0.1.0b4] - 2025-10-16
+
+### Added
+- **Bundle-Based Server Support**: Run MCP servers from bundle directories with automatic dependency management
+  - `simply-mcp run ./bundle/` - Automatically detects bundles with pyproject.toml
+  - Server discovery: `src/{package}/server.py` (standard), `server.py` (root), `main.py` (fallback)
+  - Automatic virtual environment creation with `uv` package manager
+  - Automatic dependency installation from pyproject.toml
+  - `--venv-path` option for persistent virtual environments (faster subsequent runs: 2-3 seconds vs 25-55 first run)
+  - Automatic path resolution (relative paths converted to absolute)
+- **Enhanced .pyz Package Support**: Improved loading and validation of packaged servers
+  - Full ZIP file validation
+  - Package metadata validation (package.json)
+  - Comprehensive error handling with helpful messages
+  - Temp directory automatic cleanup
+
+### Changed
+- **CLI run command**: Now supports three server sources (Python files, bundles, .pyz packages)
+- **Module loading**: Enhanced to detect and handle different source types
+- **Documentation**: Updated run command help text with bundle examples
+
+### Fixed
+- Removed redundant `functools.update_wrapper(func, func)` calls in decorators and programmatic API
+
+### Testing
+- Added 28 comprehensive unit tests for bundle support
+  - Bundle server discovery (standard, root, main.py layouts)
+  - Dependency installation with uv integration
+  - .pyz package loading and validation
+  - Error handling for all failure scenarios
+  - 100% test pass rate (28/28)
+- Manual testing verified all functionality with gemini-server reference bundle
+
+### Documentation
+- Updated run command documentation with bundle examples
+- Added ARCHITECTURE.md explaining bundle system design (500+ lines)
+- Added BUNDLE_SETUP.md comprehensive guide (1000+ lines)
+- Added IMPLEMENTATION_COMPLETE.md (400+ lines)
+- Demo gemini-server updated as reference implementation
+
+### Dependencies
+- **New requirement**: `uv` package manager for bundle dependency installation
+  - User-facing: Installation instructions provided if uv not found
+  - Note: uv is automatically available when using `uvx simply-mcp run`
+- No new Python package dependencies
+
+### Performance
+- First run (fresh): 25-55 seconds (dependencies downloaded)
+- Subsequent runs: 2-3 seconds (with --venv-path for persistent venv)
+- UVX caching provides fast startup on repeat runs
+- Server initialization: <1 second
+
+### Examples
+The gemini-server bundle demonstrates best practices:
+- Standard src/{package_name}/ layout
+- Complete pyproject.toml with dependency declarations
+- Production-ready server with 6 tools, 2 resources, 3 prompts
+- Ready for use in Claude Code configuration
+
+### Breaking Changes
+None. All changes are additive.
+
+### Upgrade Notes
+No breaking changes. Existing commands continue to work:
+- `simply-mcp run server.py` - Still works
+- `simply-mcp run package.pyz` - Still works
+- New: `simply-mcp run ./bundle/` - Now works
+
+### Known Limitations
+1. Venv reuse: Each run creates a new venv by default (use --venv-path to persist)
+2. Bundle setup: Root-level bundles require explicit hatchling configuration
+3. First-run download: Dependencies download on first execution
+
+### Future Improvements
+- Venv caching by default
+- Bundle marketplace/registry
+- Auto-detection and setup of root-level bundles
+- Multi-transport bundle configurations
+
 ## [0.1.0b3] - 2025-10-15
 
 ### Breaking Changes

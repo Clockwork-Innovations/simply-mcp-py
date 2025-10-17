@@ -1,12 +1,20 @@
 """Run command for Simply-MCP CLI.
 
 This module implements the 'run' command which loads and executes
-MCP servers from Python files. It supports auto-detection of API
-styles and multiple transport types.
+MCP servers from Python files, packaged .pyz files, or server bundles.
+It supports auto-detection of API styles, multiple transport types,
+and automatic dependency installation from bundle pyproject.toml files.
 """
 
 import asyncio
+import json
+import os
+import subprocess
 import sys
+import tempfile
+import zipfile
+from pathlib import Path
+from typing import Any
 
 import click
 from rich.panel import Panel
@@ -21,6 +29,176 @@ from simply_mcp.cli.utils import (
 )
 from simply_mcp.core.config import load_config
 from simply_mcp.core.errors import SimplyMCPError
+
+
+def find_bundle_server(bundle_path: Path) -> Path:
+    """Find the server entry point in a bundle directory.
+
+    Searches for:
+    1. src/{package_name}/server.py (standard layout)
+    2. {package_name}.py (simple layout)
+    3. server.py (root layout)
+
+    Args:
+        bundle_path: Path to the bundle directory
+
+    Returns:
+        Path to the server file
+
+    Raises:
+        FileNotFoundError: If no server file is found
+    """
+    # Check for pyproject.toml
+    pyproject_path = bundle_path / "pyproject.toml"
+    if not pyproject_path.exists():
+        raise FileNotFoundError(f"No pyproject.toml found in {bundle_path}")
+
+    # Try standard src/ layout first
+    src_dir = bundle_path / "src"
+    if src_dir.exists():
+        for item in src_dir.iterdir():
+            if item.is_dir():
+                server_py = item / "server.py"
+                if server_py.exists():
+                    return server_py
+
+    # Try simple layout in root
+    for pattern in ["server.py", "main.py"]:
+        simple_server = bundle_path / pattern
+        if simple_server.exists():
+            return simple_server
+
+    raise FileNotFoundError(
+        f"No server.py or main.py found in {bundle_path} or src/ subdirectories"
+    )
+
+
+def install_bundle_dependencies(bundle_path: Path, venv_path: Path) -> None:
+    """Install bundle dependencies using uv into a virtual environment.
+
+    Args:
+        bundle_path: Path to the bundle directory (with pyproject.toml)
+        venv_path: Path to create/use as virtual environment
+
+    Raises:
+        RuntimeError: If dependency installation fails
+    """
+    pyproject_path = bundle_path / "pyproject.toml"
+
+    format_info(f"Creating virtual environment at: {venv_path}")
+
+    # Create venv using uv
+    try:
+        subprocess.run(
+            ["uv", "venv", str(venv_path)],
+            check=True,
+            capture_output=True,
+        )
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(f"Failed to create venv: {e.stderr.decode()}")
+    except FileNotFoundError:
+        raise RuntimeError("uv is not installed. Please install uv: https://docs.astral.sh/uv/")
+
+    format_info("Installing dependencies from pyproject.toml...")
+
+    # Install dependencies using uv
+    try:
+        subprocess.run(
+            ["uv", "pip", "install", "-e", str(bundle_path)],
+            check=True,
+            cwd=str(venv_path),
+            env={**os.environ, "VIRTUAL_ENV": str(venv_path)},
+        )
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(f"Failed to install dependencies: {e.stderr.decode()}")
+
+    format_success("Dependencies installed successfully")
+
+
+def load_packaged_server(pyz_path: str) -> tuple[str, Any]:
+    """Load an MCP server from a .pyz package file.
+
+    Args:
+        pyz_path: Path to .pyz package file
+
+    Returns:
+        Tuple of (api_style, server_instance)
+
+    Raises:
+        ValueError: If package is invalid or malformed
+        FileNotFoundError: If package file doesn't exist
+    """
+    pyz_file = Path(pyz_path)
+
+    if not pyz_file.exists():
+        raise FileNotFoundError(f"Package file not found: {pyz_path}")
+
+    if not pyz_file.suffix == ".pyz":
+        raise ValueError(f"Not a .pyz file: {pyz_path}")
+
+    # Verify it's a valid ZIP file
+    if not zipfile.is_zipfile(pyz_file):
+        raise ValueError(f"Invalid .pyz package (not a ZIP file): {pyz_path}")
+
+    # Extract to temporary directory
+    temp_dir = tempfile.mkdtemp(prefix="simply_mcp_")
+    temp_path = Path(temp_dir)
+
+    try:
+        # Extract the package
+        with zipfile.ZipFile(pyz_file, "r") as zf:
+            zf.extractall(temp_path)
+
+        # Load package.json metadata
+        package_json = temp_path / "package.json"
+        if not package_json.exists():
+            raise ValueError(
+                "Invalid .pyz package: missing package.json metadata.\n"
+                "This may not be a valid Simply-MCP package."
+            )
+
+        try:
+            with package_json.open("r", encoding="utf-8") as f:
+                metadata = json.load(f)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid package.json: {e}") from e
+
+        # Extract metadata
+        original_file = metadata.get("original_file")
+        if not original_file:
+            raise ValueError("Invalid package.json: missing 'original_file' field")
+
+        # Determine server module name (without .py extension)
+        server_module_name = Path(original_file).stem
+        server_file = temp_path / f"{server_module_name}.py"
+
+        if not server_file.exists():
+            raise ValueError(
+                f"Invalid .pyz package: server file '{server_module_name}.py' not found"
+            )
+
+        # Load the server module from extracted location
+        try:
+            module = load_python_module(str(server_file))
+        except Exception as e:
+            raise ValueError(f"Failed to load server module: {e}") from e
+
+        # Detect API style and get server instance
+        api_style, server = detect_api_style(module)
+
+        if server is None:
+            raise ValueError(
+                "No MCP server found in the packaged file.\n"
+                "The package may be corrupted or invalid."
+            )
+
+        return (api_style, server)
+
+    except Exception:
+        # Clean up temp directory on error
+        import shutil
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        raise
 
 
 @click.command()
@@ -59,6 +237,12 @@ from simply_mcp.core.errors import SimplyMCPError
     is_flag=True,
     help="Enable auto-reload on file changes (Phase 4)",
 )
+@click.option(
+    "--venv-path",
+    type=click.Path(),
+    default=None,
+    help="Path for virtual environment (used for bundles with dependencies)",
+)
 def run(
     server_file: str,
     transport: str,
@@ -67,35 +251,39 @@ def run(
     cors: bool,
     config: str | None,
     watch: bool,
+    venv_path: str | None,
 ) -> None:
-    """Run an MCP server from a Python file.
+    """Run an MCP server from a Python file, bundle, or .pyz package.
 
-    This command loads a Python file containing an MCP server definition
-    and runs it with the specified transport. It automatically detects
-    the API style (decorator, builder, or class-based) and initializes
-    the server appropriately.
+    This command loads and executes MCP servers from multiple sources:
+    - Python file: simply-mcp run server.py
+    - Bundle directory with pyproject.toml: simply-mcp run ./my-bundle/
+    - Packaged .pyz file: simply-mcp run package.pyz
+
+    For bundles, dependencies are automatically installed using uv into
+    a virtual environment before running the server.
 
     Examples:
 
         \b
-        # Run with stdio transport (default)
+        # Run Python file with stdio transport (default)
         simply-mcp run server.py
 
         \b
-        # Run with explicit transport
-        simply-mcp run server.py --transport stdio
+        # Run a bundle (auto-installs dependencies)
+        simply-mcp run ./gemini-server/
+
+        \b
+        # Run packaged .pyz file
+        simply-mcp run package.pyz
+
+        \b
+        # Run bundle with custom venv location
+        simply-mcp run ./gemini-server/ --venv-path ./my-venv
 
         \b
         # Run with HTTP transport
         simply-mcp run server.py --transport http --port 8080
-
-        \b
-        # Run with SSE transport
-        simply-mcp run server.py --transport sse --port 8080
-
-        \b
-        # Run with custom host and CORS disabled
-        simply-mcp run server.py --transport http --host localhost --no-cors
 
         \b
         # Run with custom config
@@ -138,34 +326,95 @@ def run(
         if port and server_config:
             server_config.transport.port = port
 
-        # Load the Python module
-        console.print("[dim]Loading server module...[/dim]")
-        try:
-            module = load_python_module(server_file)
-        except FileNotFoundError as e:
-            format_error(str(e), "File Not Found")
-            sys.exit(1)
-        except ImportError as e:
-            format_error(f"Failed to import module: {e}", "Import Error")
-            sys.exit(1)
-        except Exception as e:
-            format_error(f"Error loading module: {e}", "Load Error")
-            sys.exit(1)
+        # Detect file type and load appropriately
+        file_path = Path(server_file).resolve()
+        is_directory = file_path.is_dir()
+        is_pyz = file_path.suffix == ".pyz"
+        is_bundle = is_directory and (file_path / "pyproject.toml").exists()
 
-        # Detect API style and get server instance
-        console.print("[dim]Detecting API style...[/dim]")
-        api_style, server = detect_api_style(module)
+        if is_bundle:
+            # Handle bundle (directory with pyproject.toml)
+            console.print("[dim]Loading server bundle...[/dim]")
+            try:
+                # Find server entry point
+                server_entry = find_bundle_server(file_path)
+                format_info(f"Found server: {server_entry.relative_to(file_path)}")
 
-        if server is None:
-            format_error(
-                "No MCP server found in the file.\n\n"
-                "Make sure your file uses one of:\n"
-                "  - Decorator API: @tool(), @prompt(), @resource()\n"
-                "  - Builder API: SimplyMCP(...)\n"
-                "  - Class API: @mcp_server class",
-                "No Server Found"
-            )
-            sys.exit(1)
+                # Install dependencies if needed
+                if venv_path is None:
+                    venv_path = str(tempfile.mkdtemp(prefix="simply_mcp_venv_"))
+
+                venv_path_obj = Path(venv_path)
+                install_bundle_dependencies(file_path, venv_path_obj)
+
+                # Load server from the bundle
+                module = load_python_module(str(server_entry))
+                api_style, server = detect_api_style(module)
+
+                if server is None:
+                    format_error(
+                        "No MCP server found in the bundle.\n\n"
+                        "Make sure your server file uses one of:\n"
+                        "  - Decorator API: @tool(), @prompt(), @resource()\n"
+                        "  - Builder API: SimplyMCP(...)\n"
+                        "  - Class API: @mcp_server class",
+                        "No Server Found"
+                    )
+                    sys.exit(1)
+
+            except FileNotFoundError as e:
+                format_error(str(e), "Bundle Error")
+                sys.exit(1)
+            except RuntimeError as e:
+                format_error(str(e), "Dependency Installation Error")
+                sys.exit(1)
+            except Exception as e:
+                format_error(f"Error loading bundle: {e}", "Load Error")
+                sys.exit(1)
+
+        elif is_pyz:
+            # Load from .pyz package
+            console.print("[dim]Loading packaged server...[/dim]")
+            try:
+                api_style, server = load_packaged_server(server_file)
+            except FileNotFoundError as e:
+                format_error(str(e), "File Not Found")
+                sys.exit(1)
+            except ValueError as e:
+                format_error(str(e), "Invalid Package")
+                sys.exit(1)
+            except Exception as e:
+                format_error(f"Error loading package: {e}", "Load Error")
+                sys.exit(1)
+        else:
+            # Load from Python source file
+            console.print("[dim]Loading server module...[/dim]")
+            try:
+                module = load_python_module(server_file)
+            except FileNotFoundError as e:
+                format_error(str(e), "File Not Found")
+                sys.exit(1)
+            except ImportError as e:
+                format_error(f"Failed to import module: {e}", "Import Error")
+                sys.exit(1)
+            except Exception as e:
+                format_error(f"Error loading module: {e}", "Load Error")
+                sys.exit(1)
+
+            # Detect API style and get server instance
+            console.print("[dim]Detecting API style...[/dim]")
+            api_style, server = detect_api_style(module)
+
+            if server is None:
+                format_error(
+                    "No MCP server found in the file.\n\n"
+                    "Make sure your file uses one of:\n"
+                    "  - Decorator API: @tool(), @prompt(), @resource()\n"
+                    "  - Builder API: SimplyMCP(...)\n"
+                    "  - Class API: @mcp_server class",
+                    "No Server Found"
+                )
+                sys.exit(1)
 
         format_success(f"Detected {api_style} API style")
 

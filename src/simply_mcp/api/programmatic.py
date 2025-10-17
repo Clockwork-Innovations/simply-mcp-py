@@ -235,9 +235,6 @@ class BuildMCPServer:
             # Register the tool
             self.add_tool(tool_name, func, description=description, input_schema=input_schema)
 
-            # Preserve function metadata
-            functools.update_wrapper(func, func)
-
             return func
 
         return decorator
@@ -335,9 +332,6 @@ class BuildMCPServer:
 
             # Register the prompt
             self.add_prompt(prompt_name, func, description=description, arguments=arguments)
-
-            # Preserve function metadata
-            functools.update_wrapper(func, func)
 
             return func
 
@@ -438,9 +432,6 @@ class BuildMCPServer:
 
             # Register the resource
             self.add_resource(uri, func, name=resource_name, description=description, mime_type=mime_type)
-
-            # Preserve function metadata
-            functools.update_wrapper(func, func)
 
             return func
 

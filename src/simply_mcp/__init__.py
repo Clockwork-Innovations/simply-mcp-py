@@ -76,7 +76,7 @@ from simply_mcp.core.errors import (
 )
 from simply_mcp.core.server import SimplyMCPServer
 
-__version__ = "0.1.0b3"
+__version__ = "0.1.0b4"
 
 __all__ = [
     # Programmatic API (mirrors TypeScript BuildMCPServer)
