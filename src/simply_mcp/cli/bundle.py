@@ -333,7 +333,7 @@ def bundle(
     try:
         # Check if PyInstaller is available
         try:
-            import PyInstaller  # type: ignore[import-untyped]  # noqa: F401
+            import PyInstaller  # noqa: F401
         except ImportError:
             format_error(
                 "PyInstaller is not installed.\n\n"

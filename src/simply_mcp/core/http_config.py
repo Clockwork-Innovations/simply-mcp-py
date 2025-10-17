@@ -27,18 +27,18 @@ try:
     TOMLI_AVAILABLE = True
 except ImportError:
     try:
-        import tomllib as tomli  # type: ignore[no-redef]
+        import tomllib as tomli  # type: ignore[no-redef,import-not-found]
         TOMLI_AVAILABLE = True
     except ImportError:
         TOMLI_AVAILABLE = False
-        tomli = None  # type: ignore
+        tomli = None  # type: ignore[misc]
 
 try:
     import yaml
     YAML_AVAILABLE = True
 except ImportError:
     YAML_AVAILABLE = False
-    yaml = None  # type: ignore
+    yaml = None  # type: ignore[misc]
 
 from pydantic import BaseModel, Field, field_validator
 

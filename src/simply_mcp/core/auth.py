@@ -274,6 +274,15 @@ class ApiKeyManager:
         """
         return len(self._keys)
 
+    @property
+    def keys(self) -> dict[str, ApiKey]:
+        """Get all registered API keys.
+
+        Returns:
+            Dictionary mapping key strings to ApiKey objects
+        """
+        return self._keys
+
 
 class BearerTokenValidator:
     """Validates Bearer tokens from Authorization headers.

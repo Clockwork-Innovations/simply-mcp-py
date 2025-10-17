@@ -23,11 +23,11 @@ try:
     FASTAPI_AVAILABLE = True
 except ImportError:
     FASTAPI_AVAILABLE = False
-    Request = None  # type: ignore
-    Response = None  # type: ignore
-    JSONResponse = None  # type: ignore
-    CORSMiddleware = None  # type: ignore
-    BaseHTTPMiddleware = None  # type: ignore
+    Request = None  # type: ignore[misc]
+    Response = None  # type: ignore[misc]
+    JSONResponse = None  # type: ignore[misc]
+    CORSMiddleware = None  # type: ignore[misc]
+    BaseHTTPMiddleware = None  # type: ignore[misc]
 
 from simply_mcp.core.logger import get_logger
 
@@ -376,7 +376,7 @@ class InputValidationMiddleware:
                 async def receive() -> dict[str, Any]:
                     return {"type": "http.request", "body": body}
 
-                request._receive = receive  # type: ignore
+                request._receive = receive  # type: ignore[attr-defined]
 
             except Exception as e:
                 logger.debug(f"Could not validate request body: {e}")

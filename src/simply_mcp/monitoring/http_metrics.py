@@ -26,13 +26,13 @@ try:
     PROMETHEUS_AVAILABLE = True
 except ImportError:
     PROMETHEUS_AVAILABLE = False
-    Counter = None  # type: ignore
-    Gauge = None  # type: ignore
-    Histogram = None  # type: ignore
-    Info = None  # type: ignore
-    generate_latest = None  # type: ignore
-    CONTENT_TYPE_LATEST = None  # type: ignore
-    CollectorRegistry = None  # type: ignore
+    Counter = None  # type: ignore[misc]
+    Gauge = None  # type: ignore[misc]
+    Histogram = None  # type: ignore[misc]
+    Info = None  # type: ignore[misc]
+    generate_latest = None  # type: ignore[misc]
+    CONTENT_TYPE_LATEST = None  # type: ignore[misc]
+    CollectorRegistry = None  # type: ignore[misc]
 
 from simply_mcp.core.logger import get_logger
 
@@ -349,6 +349,8 @@ class HttpMetrics:
         Returns:
             Metrics in Prometheus text format
         """
+        if generate_latest is None:
+            raise RuntimeError("Prometheus client not available")
         return generate_latest(self.registry)
 
     def get_content_type(self) -> str:
@@ -357,6 +359,8 @@ class HttpMetrics:
         Returns:
             Content type string
         """
+        if CONTENT_TYPE_LATEST is None:
+            raise RuntimeError("Prometheus client not available")
         return CONTENT_TYPE_LATEST
 
     @staticmethod

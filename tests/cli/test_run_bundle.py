@@ -624,8 +624,10 @@ class TestRelativePathResolution:
             resolved_path = relative_path.resolve()
 
             assert resolved_path.is_absolute()
-            assert resolved_path == bundle_dir
-            assert str(resolved_path) == str(bundle_dir)
+            # On macOS, temp directories have symlinks (/var -> /private/var)
+            # so we need to resolve both paths before comparing
+            assert resolved_path.resolve() == bundle_dir.resolve()
+            assert str(resolved_path.resolve()) == str(bundle_dir.resolve())
         finally:
             os.chdir(original_cwd)
 
@@ -670,7 +672,8 @@ class TestRunBundleIntegration:
         server_file.write_text("from simply_mcp import SimplyMCP\nserver = SimplyMCP('test')")
 
         # Mock bundle operations
-        mock_find_server.return_value = server_file
+        # Resolve paths to handle macOS symlink differences (/var -> /private/var)
+        mock_find_server.return_value = server_file.resolve()
         mock_install_deps.return_value = None
 
         mock_module = MagicMock()
@@ -686,8 +689,8 @@ class TestRunBundleIntegration:
 
         mock_asyncio_run.side_effect = KeyboardInterrupt()
 
-        # Run the bundle
-        result = self.runner.invoke(run, [str(bundle_path)])
+        # Run the bundle (resolve path to handle macOS symlinks)
+        result = self.runner.invoke(run, [str(bundle_path.resolve())])
 
         # Verify execution
         assert result.exit_code == 0
@@ -725,7 +728,8 @@ class TestRunBundleIntegration:
 
         custom_venv = Path(self.temp_dir) / "my_venv"
 
-        mock_find_server.return_value = server_file
+        # Resolve paths to handle macOS symlink differences
+        mock_find_server.return_value = server_file.resolve()
         mock_install_deps.return_value = None
 
         with patch("simply_mcp.cli.run.load_python_module"), \
@@ -743,7 +747,7 @@ class TestRunBundleIntegration:
 
             result = self.runner.invoke(
                 run,
-                [str(bundle_path), "--venv-path", str(custom_venv)]
+                [str(bundle_path.resolve()), "--venv-path", str(custom_venv)]
             )
 
             assert result.exit_code == 0
@@ -801,10 +805,11 @@ class TestRunBundleIntegration:
         server_file = bundle_path / "server.py"
         server_file.write_text("# Server")
 
-        mock_find_server.return_value = server_file
+        # Resolve paths to handle macOS symlink differences
+        mock_find_server.return_value = server_file.resolve()
         mock_install_deps.side_effect = RuntimeError("uv is not installed")
 
-        result = self.runner.invoke(run, [str(bundle_path)])
+        result = self.runner.invoke(run, [str(bundle_path.resolve())])
 
         assert result.exit_code == 1
         assert "Dependency Installation Error" in result.output
@@ -837,14 +842,15 @@ class TestRunBundleIntegration:
         server_file = bundle_path / "server.py"
         server_file.write_text("# No server defined")
 
-        mock_find_server.return_value = server_file
+        # Resolve paths to handle macOS symlink differences
+        mock_find_server.return_value = server_file.resolve()
         mock_install_deps.return_value = None
 
         mock_module = MagicMock()
         mock_load_module.return_value = mock_module
         mock_detect_api_style.return_value = ("Unknown", None)
 
-        result = self.runner.invoke(run, [str(bundle_path)])
+        result = self.runner.invoke(run, [str(bundle_path.resolve())])
 
         assert result.exit_code == 1
         assert "No MCP server found in the bundle" in result.output

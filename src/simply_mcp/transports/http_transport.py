@@ -47,15 +47,15 @@ try:
     FASTAPI_AVAILABLE = True
 except ImportError:
     FASTAPI_AVAILABLE = False
-    FastAPI = None  # type: ignore
-    HTTPException = None  # type: ignore
-    Request = None  # type: ignore
-    Response = None  # type: ignore
-    status = None  # type: ignore
-    JSONResponse = None  # type: ignore
-    PlainTextResponse = None  # type: ignore
-    CORSMiddleware = None  # type: ignore
-    uvicorn = None  # type: ignore
+    FastAPI = None  # type: ignore[misc]
+    HTTPException = None  # type: ignore[misc]
+    Request = None  # type: ignore[misc]
+    Response = None  # type: ignore[misc]
+    status = None  # type: ignore[misc]
+    JSONResponse = None  # type: ignore[misc]
+    PlainTextResponse = None  # type: ignore[misc]
+    CORSMiddleware = None  # type: ignore[misc]
+    uvicorn = None  # type: ignore[misc]
 
 from simply_mcp.core.auth import ApiKey, ApiKeyManager, BearerTokenValidator
 from simply_mcp.core.logger import LoggerContext, get_logger
@@ -74,13 +74,13 @@ try:
     POLISH_LAYER_AVAILABLE = True
 except ImportError:
     POLISH_LAYER_AVAILABLE = False
-    HttpConfig = None  # type: ignore
-    HttpMetrics = None  # type: ignore
-    get_metrics = None  # type: ignore
-    SecurityHeadersMiddleware = None  # type: ignore
-    RequestSizeLimitMiddleware = None  # type: ignore
-    RequestTimeoutMiddleware = None  # type: ignore
-    InputValidationMiddleware = None  # type: ignore
+    HttpConfig = None  # type: ignore[misc]
+    HttpMetrics = None  # type: ignore[misc]
+    get_metrics = None  # type: ignore[misc]
+    SecurityHeadersMiddleware = None  # type: ignore[misc]
+    RequestSizeLimitMiddleware = None  # type: ignore[misc]
+    RequestTimeoutMiddleware = None  # type: ignore[misc]
+    InputValidationMiddleware = None  # type: ignore[misc]
 
 logger = get_logger(__name__)
 
@@ -179,12 +179,13 @@ class HttpTransport:
         # Initialize metrics if polish layer available and enabled
         self.metrics: Any | None = None
         if POLISH_LAYER_AVAILABLE and config and config.monitoring.prometheus_enabled:
-            self.metrics = get_metrics()
-            self.metrics.set_server_info(
-                name=server.name,
-                version=server.version,
-                environment=config.environment,
-            )
+            if get_metrics is not None:
+                self.metrics = get_metrics()
+                self.metrics.set_server_info(
+                    name=server.name,
+                    version=server.version,
+                    environment=config.environment,
+                )
 
         logger.info(
             f"HTTP transport initialized: {self.host}:{self.port}",
@@ -213,7 +214,7 @@ class HttpTransport:
         )
 
         # Add CORS middleware if polish layer enabled
-        if POLISH_LAYER_AVAILABLE and self.config and self.config.cors.enabled:
+        if POLISH_LAYER_AVAILABLE and self.config and self.config.cors.enabled and CORSMiddleware is not None:
             app.add_middleware(
                 CORSMiddleware,
                 allow_origins=self.config.cors.allow_origins,
@@ -227,7 +228,7 @@ class HttpTransport:
         # Add security middleware if polish layer enabled
         if POLISH_LAYER_AVAILABLE and self.config:
             # Security headers
-            if self.config.security.security_headers:
+            if self.config.security.security_headers and SecurityHeadersMiddleware is not None:
                 @app.middleware("http")
                 async def security_headers_middleware(request: Request, call_next: Any) -> Response:
                     middleware = SecurityHeadersMiddleware(
@@ -241,26 +242,29 @@ class HttpTransport:
                 logger.info("Security headers middleware enabled")
 
             # Request size limit
-            @app.middleware("http")
-            async def size_limit_middleware(request: Request, call_next: Any) -> Response:
-                middleware = RequestSizeLimitMiddleware(
-                    max_size=self.config.security.max_request_size
-                )
-                return await middleware(request, call_next)
+            if RequestSizeLimitMiddleware is not None:
+                @app.middleware("http")
+                async def size_limit_middleware(request: Request, call_next: Any) -> Response:
+                    middleware = RequestSizeLimitMiddleware(
+                        max_size=self.config.security.max_request_size
+                    )
+                    return await middleware(request, call_next)
 
             # Request timeout
-            @app.middleware("http")
-            async def timeout_middleware(request: Request, call_next: Any) -> Response:
-                middleware = RequestTimeoutMiddleware(
-                    timeout=self.config.security.request_timeout
-                )
-                return await middleware(request, call_next)
+            if RequestTimeoutMiddleware is not None:
+                @app.middleware("http")
+                async def timeout_middleware(request: Request, call_next: Any) -> Response:
+                    middleware = RequestTimeoutMiddleware(
+                        timeout=self.config.security.request_timeout
+                    )
+                    return await middleware(request, call_next)
 
             # Input validation
-            @app.middleware("http")
-            async def input_validation_middleware(request: Request, call_next: Any) -> Response:
-                middleware = InputValidationMiddleware()
-                return await middleware(request, call_next)
+            if InputValidationMiddleware is not None:
+                @app.middleware("http")
+                async def input_validation_middleware(request: Request, call_next: Any) -> Response:
+                    middleware = InputValidationMiddleware()
+                    return await middleware(request, call_next)
 
         # Add metrics middleware if polish layer enabled
         if self.metrics:
@@ -285,13 +289,14 @@ class HttpTransport:
 
                 # Log request with correlation ID
                 with LoggerContext(correlation_id=correlation_id):
+                    client_host = request.client.host if request.client is not None else "unknown"
                     logger.info(
                         f"{request.method} {request.url.path}",
                         extra={
                             "context": {
                                 "method": request.method,
                                 "path": request.url.path,
-                                "client": request.client.host if request.client else "unknown",
+                                "client": client_host,
                             }
                         },
                     )
@@ -395,7 +400,7 @@ class HttpTransport:
                         key_for_limit = request.state.api_key.key
                     elif not self.enable_auth:
                         # If auth is disabled, use IP address for rate limiting
-                        key_for_limit = request.client.host if request.client else "unknown"
+                        key_for_limit = request.client.host if request.client is not None else "unknown"
 
                     if key_for_limit:
                         allowed, rate_info = self.rate_limiter.check_limit(key_for_limit)
@@ -433,11 +438,12 @@ class HttpTransport:
                 response = await call_next(request)
 
                 # Add rate limit headers to response if available
-                if self.enable_rate_limiting and hasattr(request.state, "rate_limit_info") and request.state.rate_limit_info:
+                if self.enable_rate_limiting and hasattr(request.state, "rate_limit_info"):
                     rate_info = request.state.rate_limit_info
-                    response.headers["X-RateLimit-Limit"] = str(rate_info.limit)
-                    response.headers["X-RateLimit-Remaining"] = str(rate_info.remaining)
-                    response.headers["X-RateLimit-Reset"] = str(int(rate_info.reset_at))
+                    if rate_info is not None:
+                        response.headers["X-RateLimit-Limit"] = str(rate_info.limit)
+                        response.headers["X-RateLimit-Remaining"] = str(rate_info.remaining)
+                        response.headers["X-RateLimit-Reset"] = str(int(rate_info.reset_at))
 
                 return response
 
@@ -475,13 +481,14 @@ class HttpTransport:
 
                 # Rate limiting component
                 if self.enable_rate_limiting:
+                    strategy = self.config.rate_limit.strategy if self.config is not None else "token_bucket"
                     components["rate_limiting"] = {
                         "status": "enabled",
-                        "strategy": self.config.rate_limit.strategy if self.config else "token_bucket",
+                        "strategy": strategy,
                     }
 
                 # Metrics component
-                if self.metrics:
+                if self.metrics and self.config is not None:
                     components["metrics"] = {
                         "status": "enabled",
                         "endpoint": self.config.monitoring.prometheus_path,
@@ -500,11 +507,14 @@ class HttpTransport:
             return health_data
 
         # Metrics endpoint (if metrics enabled)
-        if self.metrics:
-            @app.get(self.config.monitoring.prometheus_path if self.config else "/metrics")
+        if self.metrics and PlainTextResponse is not None:
+            metrics_path = self.config.monitoring.prometheus_path if self.config else "/metrics"
+            @app.get(metrics_path)
             async def metrics_endpoint() -> Response:
                 """Prometheus metrics endpoint."""
                 logger.debug("Metrics request received")
+                if self.metrics is None:
+                    raise HTTPException(status_code=500, detail="Metrics not available")
                 metrics_data = self.metrics.get_latest_metrics()
                 return PlainTextResponse(
                     content=metrics_data,
@@ -705,11 +715,11 @@ class HttpTransport:
         self.app = self._create_app()
 
         # Determine TLS configuration
-        ssl_keyfile = None
-        ssl_certfile = None
-        ssl_ca_certs = None
+        ssl_keyfile: str | None = None
+        ssl_certfile: str | None = None
+        ssl_ca_certs: str | None = None
 
-        if self.config and self.config.tls.enabled:
+        if self.config is not None and self.config.tls.enabled:
             ssl_certfile = self.config.tls.cert_file
             ssl_keyfile = self.config.tls.key_file
             ssl_ca_certs = self.config.tls.ca_file
@@ -785,7 +795,7 @@ class HttpTransport:
 
         # Determine graceful timeout from config
         graceful_timeout = 30.0
-        if self.config:
+        if self.config is not None:
             graceful_timeout = float(self.config.server.graceful_timeout)
 
         try:
