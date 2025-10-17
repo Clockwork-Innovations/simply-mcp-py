@@ -65,6 +65,7 @@ dev = [
     "ruff>=0.1.0",
     "mypy>=1.0.0",
     "types-pyinstaller>=6.0.0",  # Type stubs for PyInstaller
+    "tomli>=2.0.0",  # Needed for mypy type checking even on Python 3.11+
     "pre-commit>=3.0.0",
 
     # Build
