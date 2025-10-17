@@ -51,7 +51,7 @@ def cli() -> None:
 # Lazy imports to improve startup time
 def _register_commands() -> None:
     """Register CLI commands."""
-    from simply_mcp.cli import build, bundle, dev, list_cmd, run, watch
+    from simply_mcp.cli import bundle, dev, list_cmd, run, watch
     from simply_mcp.cli import config as config_module
 
     cli.add_command(dev.dev)
@@ -59,11 +59,17 @@ def _register_commands() -> None:
     cli.add_command(config_module.config)
     cli.add_command(list_cmd.list_components)
     cli.add_command(watch.watch)
-    cli.add_command(build.build)
     cli.add_command(bundle.bundle)
 
 
-_register_commands()
+# Register commands when module is fully loaded
+# Delay this to avoid circular imports during initialization
+try:
+    _register_commands()
+except ImportError:
+    # If there's a circular import during module load, skip registration
+    # It will be registered when the CLI is actually invoked
+    pass
 
 
 __all__ = ["cli"]

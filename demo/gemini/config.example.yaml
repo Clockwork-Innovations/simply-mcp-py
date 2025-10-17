@@ -1,0 +1,71 @@
+# Gemini MCP Server Configuration Example
+#
+# This file demonstrates all configuration options including
+# the new session persistence storage backends.
+
+# Storage Configuration (Phase 1.3)
+storage:
+  # Backend type: sqlite, postgresql, mongodb
+  backend: "sqlite"
+
+  # SQLite Configuration (Foundation Layer)
+  database_path: "./gemini_sessions.db"
+
+  # PostgreSQL Configuration (Polish Layer)
+  # Uncomment to use PostgreSQL instead of SQLite
+  # backend: "postgresql"
+  # connection_string: "postgresql://user:password@localhost:5432/gemini_mcp"
+  # min_pool_size: 5
+  # max_pool_size: 20
+
+  # MongoDB Configuration (Polish Layer)
+  # Uncomment to use MongoDB instead of SQLite
+  # backend: "mongodb"
+  # connection_string: "mongodb://localhost:27017"
+  # options:
+  #   database_name: "gemini_mcp"
+
+  # Session Management
+  auto_save: true
+  expiry_hours: 72  # Sessions expire after 72 hours of inactivity
+
+# Upload Configuration (Phase 1.2)
+upload:
+  chunk_size: 5242880  # 5MB chunks
+  max_parallel: 3
+  bandwidth_limit: 10485760  # 10MB/s
+  resume_enabled: true
+  session_expiry_hours: 24
+
+# HTTP Server Configuration (Phase 1.1)
+server:
+  host: "0.0.0.0"
+  port: 8000
+  max_connections: 100
+  timeout: 300  # 5 minutes
+
+# Authentication Configuration (Phase 1.1)
+auth:
+  enabled: true
+  api_keys_file: "./api_keys.yaml"
+  rate_limit:
+    window_seconds: 3600
+    max_requests: 100
+
+# Gemini API Configuration
+gemini:
+  api_key: "${GEMINI_API_KEY}"  # Load from environment
+  default_model: "gemini-2.5-flash"
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "./gemini_server.log"
+
+# Backup Configuration
+backup:
+  enabled: true
+  directory: "./backups"
+  interval_hours: 24
+  keep_backups: 7  # Keep last 7 backups

@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gemini-mcp-server-bundle"
+version = "0.1.0"
+description = "Gemini MCP Server Bundle - Use with: uvx simply-mcp run {bundle}"
+authors = [
+    {name = "Clockwork Innovations", email = "info@clockwork-innovations.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = [
+    "mcp",
+    "model-context-protocol",
+    "gemini",
+    "google-genai",
+    "ai",
+    "llm",
+    "server",
+    "bundle"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# Runtime dependencies - these will be automatically installed by uvx + simply-mcp run
+# Note: simply-mcp is provided by the run command, don't include it here
+dependencies = [
+    "google-genai>=0.3.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "tomli>=2.0.0; python_version < '3.11'",
+]
+
+[project.urls]
+Homepage = "https://github.com/Clockwork-Innovations/simply-mcp-py"
+Repository = "https://github.com/Clockwork-Innovations/simply-mcp-py"
+Issues = "https://github.com/Clockwork-Innovations/simply-mcp-py/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gemini_server"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310']
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

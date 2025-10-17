@@ -1,0 +1,99 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║              CLAUDE MCP ADD - COPY & PASTE COMMAND                         ║
+║                                                                            ║
+║  Simply copy, replace YOUR_API_KEY with your actual key, and run!        ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 THE COMMAND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+claude mcp add --transport stdio gemini-server \
+  --env GEMINI_API_KEY=YOUR_API_KEY_HERE \
+  -- uvx simply-mcp run /mnt/Shared/cs-projects/simply-mcp-py/demo/gemini/server.py
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔑 GET YOUR API KEY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Go to: https://aistudio.google.com/app/apikey
+2. Click "Create API key"
+3. Copy the key
+4. Replace YOUR_API_KEY_HERE with it
+
+Example:
+claude mcp add --transport stdio gemini-server \
+  --env GEMINI_API_KEY=AIzaSyB8fxcQqvILoDXsjIaJdqdrwZauE57UE \
+  -- uvx simply-mcp run /mnt/Shared/cs-projects/simply-mcp-py/demo/gemini/server.py
+
+⚠️  KEEP YOUR KEY SECRET! Don't share or commit to git.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3️⃣ STEPS AFTER RUNNING COMMAND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. ✅ Wait for command to complete
+   Should say: "Successfully added"
+
+2. ✅ Quit Claude Code completely
+   • macOS: Command + Q
+   • Windows: Close application
+   • Linux: Close window
+   • ⚠️  Important: Don't just close the window!
+
+3. ✅ Wait 3 seconds
+
+4. ✅ Reopen Claude Code
+
+5. ✅ Look for tools
+   Should see: mcp__gemini-server__* tools
+   Example: mcp__gemini-server__start_chat
+
+✅ Done!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 WHAT EACH PART MEANS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+claude mcp add              → Add MCP server command
+--transport stdio          → Use stdio transport (for Claude Code)
+gemini-server              → Name for this server in Claude Code
+--env GEMINI_API_KEY=...   → Pass API key as environment variable
+-- uvx                     → Use uvx to run (automatic dependencies)
+simply-mcp run             → Run the simply-mcp command with run subcommand
+/path/to/server.py         → Path to the Gemini server script
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🆘 HELP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ "uvx: command not found"
+   → Install uv: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+❌ Tools don't appear
+   → Did you quit Claude Code completely? (not just close)
+   → Did you wait 3 seconds before reopening?
+   → Did you set the API key correctly?
+
+❌ "command not found: claude"
+   → Install Claude Code: https://claude.com/download
+
+❌ API key errors
+   → Check key is valid: https://aistudio.google.com/app/apikey
+   → Regenerate if needed
+   → Update command with new key
+
+📖 For more help, see SETUP_NOW.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✨ ONE-LINER (For copy-paste convenience)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Copy this, replace API_KEY, paste, run:
+
+claude mcp add --transport stdio gemini-server --env GEMINI_API_KEY=YOUR_KEY_HERE -- uvx simply-mcp run /mnt/Shared/cs-projects/simply-mcp-py/demo/gemini/server.py
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+That's it! Setup takes 5 minutes. 🚀
+

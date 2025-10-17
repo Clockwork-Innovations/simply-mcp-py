@@ -1,0 +1,173 @@
+{
+  "manifest_version": "1.0",
+  "name": "gemini-server",
+  "display_name": "Gemini MCP Server",
+  "version": "0.1.0",
+  "description": "Google Gemini API integration with file uploads, content generation, and interactive chat sessions",
+  "author": {
+    "name": "Clockwork Innovations",
+    "url": "https://github.com/Clockwork-Innovations/simply-mcp-py"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/Clockwork-Innovations/simply-mcp-py",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Clockwork-Innovations/simply-mcp-py"
+  },
+  "keywords": [
+    "gemini",
+    "google",
+    "ai",
+    "content-generation",
+    "chat",
+    "multimodal",
+    "file-upload",
+    "mcp"
+  ],
+  "categories": ["ai", "content-generation"],
+
+  "server": {
+    "type": "python",
+    "entry_point": "server.py",
+    "transport": "stdio",
+    "python_version": ">=3.10",
+    "required_packages": [
+      "google-genai>=1.0.0",
+      "python-dotenv>=1.0.0",
+      "simply-mcp>=0.1.0"
+    ]
+  },
+
+  "tools": [
+    {
+      "name": "upload_file",
+      "description": "Upload a file to Gemini Files API for use in prompts",
+      "tags": ["file-management", "upload"]
+    },
+    {
+      "name": "generate_content",
+      "description": "Generate content using Gemini with optional file context",
+      "tags": ["content-generation", "ai"]
+    },
+    {
+      "name": "start_chat",
+      "description": "Start a new chat session with Gemini and send initial message",
+      "tags": ["chat", "conversation"]
+    },
+    {
+      "name": "send_message",
+      "description": "Send a message in an existing chat session",
+      "tags": ["chat", "conversation"]
+    },
+    {
+      "name": "list_files",
+      "description": "List all uploaded files in the Gemini Files API with metadata",
+      "tags": ["file-management", "list"]
+    },
+    {
+      "name": "delete_file",
+      "description": "Delete a file from Gemini Files API",
+      "tags": ["file-management", "delete"]
+    }
+  ],
+
+  "prompts": [
+    {
+      "name": "analyze_media",
+      "description": "Template for analyzing uploaded media files (audio, video, image, or document)",
+      "tags": ["analysis", "media"]
+    },
+    {
+      "name": "document_qa",
+      "description": "Template for document question-answering (summary, detailed analysis, or information extraction)",
+      "tags": ["qa", "document"]
+    },
+    {
+      "name": "multimodal_analysis",
+      "description": "Template for analyzing multiple files together (compare, synthesize, or create timeline)",
+      "tags": ["analysis", "multimodal"]
+    }
+  ],
+
+  "resources": [
+    {
+      "uri_template": "chat-history://{session_id}",
+      "name": "Chat History",
+      "description": "Retrieve metadata and status for an active chat session",
+      "tags": ["chat"]
+    },
+    {
+      "uri_template": "file-info://{file_name}",
+      "name": "File Information",
+      "description": "Retrieve metadata for an uploaded file",
+      "tags": ["files"]
+    }
+  ],
+
+  "user_config": {
+    "api_key": {
+      "type": "string",
+      "description": "Google Gemini API Key",
+      "required": true,
+      "sensitive": true,
+      "label": "Gemini API Key",
+      "hint": "Get your API key from https://aistudio.google.com/app/apikey",
+      "env_var": "GEMINI_API_KEY"
+    },
+    "default_model": {
+      "type": "string",
+      "description": "Default Gemini model to use for content generation",
+      "required": false,
+      "default": "gemini-2.5-flash",
+      "label": "Default Model",
+      "enum": [
+        "gemini-2.5-flash",
+        "gemini-1.5-pro",
+        "gemini-1.5-flash",
+        "gemini-1.0-pro"
+      ],
+      "env_var": "GEMINI_DEFAULT_MODEL"
+    }
+  },
+
+  "environment": {
+    "GEMINI_API_KEY": {
+      "description": "Your Google Gemini API key",
+      "required": true,
+      "sensitive": true
+    },
+    "GEMINI_DEFAULT_MODEL": {
+      "description": "Default model for content generation",
+      "required": false,
+      "default": "gemini-2.5-flash"
+    },
+    "GEMINI_FILE_WARNING_HOURS": {
+      "description": "Hours before file expiration to warn (default: 24)",
+      "required": false,
+      "default": "24"
+    }
+  },
+
+  "capabilities": {
+    "file_handling": true,
+    "streaming": false,
+    "authentication": "environment-variable",
+    "rate_limiting": true,
+    "session_management": true
+  },
+
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "claude_versions": [">=0.10.0"],
+    "python_versions": [">=3.10", "<4"]
+  },
+
+  "documentation": {
+    "quick_start": "https://github.com/Clockwork-Innovations/simply-mcp-py/blob/main/demo/gemini/SETUP_GUIDE.md",
+    "readme": "https://github.com/Clockwork-Innovations/simply-mcp-py/blob/main/demo/gemini/README.md",
+    "issues": "https://github.com/Clockwork-Innovations/simply-mcp-py/issues"
+  },
+
+  "icon": "icon.png",
+  "preview_image": "preview.png"
+}

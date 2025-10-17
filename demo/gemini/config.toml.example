@@ -1,0 +1,92 @@
+# Gemini MCP Server Configuration
+#
+# This file demonstrates all available configuration options for the Gemini MCP server.
+# Copy this file to 'config.toml' and customize the values for your environment.
+#
+# Configuration precedence (highest to lowest):
+#   1. Environment variables (GEMINI_API_KEY, GEMINI_DEFAULT_MODEL, etc.)
+#   2. This config.toml file
+#   3. .env file in current directory or demo/gemini/
+#   4. Built-in defaults
+#
+# Usage:
+#   1. Copy this file: cp config.toml.example config.toml
+#   2. Edit config.toml with your settings
+#   3. Run the server: simply-mcp dev demo/gemini/server.py
+
+[gemini]
+
+# ===================================================================
+# API Configuration
+# ===================================================================
+
+# Gemini API key (required)
+# Can also be set via GEMINI_API_KEY environment variable
+# Get your API key from: https://ai.google.dev/
+#
+# Example:
+#   api_key = "AIzaSyABC123..."
+#
+# Best practice: Use environment variable instead of storing key in this file
+# api_key = "your-api-key-here"
+
+# ===================================================================
+# Model Configuration
+# ===================================================================
+
+# Default Gemini model to use for content generation and chat
+# Can also be set via GEMINI_DEFAULT_MODEL environment variable
+#
+# Available models (as of 2025):
+#   - "gemini-2.5-flash"      (latest, fastest, recommended)
+#   - "gemini-1.5-pro"        (production, most capable)
+#   - "gemini-1.5-flash"      (production, balanced)
+#   - "gemini-1.0-pro"        (stable)
+#
+# Default: "gemini-2.5-flash"
+default_model = "gemini-2.5-flash"
+
+# ===================================================================
+# File Management Configuration
+# ===================================================================
+
+# Number of hours before file expiration to show warnings
+# Gemini files typically expire after 48 hours
+# Can also be set via GEMINI_FILE_WARNING_HOURS environment variable
+#
+# Default: 24 hours
+file_warning_hours = 24
+
+# Maximum file size in bytes for uploads
+# Gemini API limits: 2GB per file
+# Can also be set via GEMINI_MAX_FILE_SIZE environment variable
+#
+# Examples:
+#   - 2GB: 2147483648
+#   - 1GB: 1073741824
+#   - 500MB: 524288000
+#
+# Default: 2147483648 (2GB)
+max_file_size = 2147483648
+
+# ===================================================================
+# Example Configurations
+# ===================================================================
+
+# Production configuration example:
+# [gemini]
+# default_model = "gemini-1.5-pro"
+# file_warning_hours = 24
+# max_file_size = 2147483648
+
+# Development configuration example:
+# [gemini]
+# default_model = "gemini-2.5-flash"
+# file_warning_hours = 12
+# max_file_size = 1073741824
+
+# Conservative configuration example (smaller files, more warnings):
+# [gemini]
+# default_model = "gemini-1.5-flash"
+# file_warning_hours = 36
+# max_file_size = 524288000
