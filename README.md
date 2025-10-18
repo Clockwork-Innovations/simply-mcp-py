@@ -4,7 +4,7 @@
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/status-alpha-orange.svg)]()
+[![Status](https://img.shields.io/badge/status-stable-brightgreen.svg)]()
 
 Simply-MCP-PY is the Python implementation of [simply-mcp-ts](https://github.com/Clockwork-Innovations/simply-mcp-ts), bringing the same ease-of-use and flexibility to the Python ecosystem for building MCP servers.
 
@@ -261,7 +261,7 @@ Check out the `examples/` directory:
 
 ## Development Status
 
-🚧 **Currently in Alpha** - Core features are implemented and functional, but the API may change. See [ROADMAP.md](docs/ROADMAP.md) for development progress.
+✅ **v0.1.0 Stable Release** - Production ready. Core features are fully implemented and tested. The API is stable and suitable for production use. See [ROADMAP.md](docs/ROADMAP.md) for planned features in future versions.
 
 ## Contributing
 

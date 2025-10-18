@@ -20,6 +20,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional transport options
 - Enhanced monitoring and observability features
 
+## [0.1.0] - 2025-10-18
+
+### Status
+**🎉 STABLE RELEASE** - Production ready. No breaking changes since 0.1.0b4.
+
+### Added
+- **MCP-UI Resource Support**: Full support for UI resources with helper functions
+  - `create_inline_html_resource()` - Create inline HTML UI resources
+  - `create_external_url_resource()` - Create external URL resources
+  - `create_remote_dom_resource()` - Create remote DOM resources
+  - `UIResource`, `UIResourcePayload`, `UIResourceOptions` types
+  - Complete validation and error handling for UI resource URIs and MIME types
+
+### Changed
+- **Release Status**: Transitioned from beta (0.1.0b4) to stable production release
+- Updated development status badge in README to indicate production readiness
+
+### Fixed
+- **Wrapper Loop Bug**: Completely resolved the "wrapper loop when unwrapping" error
+  - Removed all circular `functools.update_wrapper(func, func)` calls
+  - Decorator implementations now preserve function metadata correctly
+  - All decorator styles (builder, functional, decorator API) now work without errors
+
+### Quality
+- All 1057 unit tests passing
+- 100% mypy type checking compliance
+- Full ruff linting compliance
+- No deprecation warnings
+
+### Upgrade Notes
+- No breaking changes from 0.1.0b4
+- All existing code continues to work
+- Recommended for all users currently on beta versions
+
 ## [0.1.0b4] - 2025-10-16
 
 ### Added
