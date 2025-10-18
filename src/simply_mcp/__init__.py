@@ -92,7 +92,7 @@ from simply_mcp.core.ui_types import (
     UIResourcePayload,
 )
 
-__version__ = "0.1.0b4"
+__version__ = "0.1.0"
 
 __all__ = [
     # Programmatic API (mirrors TypeScript BuildMCPServer)
