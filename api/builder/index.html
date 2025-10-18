@@ -973,6 +973,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#simply_mcp.api.builder.BuildMCPServer.add_ui_resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;add_ui_resource
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#simply_mcp.api.builder.BuildMCPServer.configure" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;configure
@@ -2078,6 +2087,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#simply_mcp.api.builder.BuildMCPServer.add_ui_resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;add_ui_resource
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#simply_mcp.api.builder.BuildMCPServer.configure" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;configure
@@ -2854,7 +2872,105 @@ await server.initialize().run()</p>
 <span class="normal"><a href="#__codelineno-0-599">599</a></span>
 <span class="normal"><a href="#__codelineno-0-600">600</a></span>
 <span class="normal"><a href="#__codelineno-0-601">601</a></span>
-<span class="normal"><a href="#__codelineno-0-602">602</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-76" name="__codelineno-0-76"></a><span class="k">class</span><span class="w"> </span><span class="nc">BuildMCPServer</span><span class="p">:</span>
+<span class="normal"><a href="#__codelineno-0-602">602</a></span>
+<span class="normal"><a href="#__codelineno-0-603">603</a></span>
+<span class="normal"><a href="#__codelineno-0-604">604</a></span>
+<span class="normal"><a href="#__codelineno-0-605">605</a></span>
+<span class="normal"><a href="#__codelineno-0-606">606</a></span>
+<span class="normal"><a href="#__codelineno-0-607">607</a></span>
+<span class="normal"><a href="#__codelineno-0-608">608</a></span>
+<span class="normal"><a href="#__codelineno-0-609">609</a></span>
+<span class="normal"><a href="#__codelineno-0-610">610</a></span>
+<span class="normal"><a href="#__codelineno-0-611">611</a></span>
+<span class="normal"><a href="#__codelineno-0-612">612</a></span>
+<span class="normal"><a href="#__codelineno-0-613">613</a></span>
+<span class="normal"><a href="#__codelineno-0-614">614</a></span>
+<span class="normal"><a href="#__codelineno-0-615">615</a></span>
+<span class="normal"><a href="#__codelineno-0-616">616</a></span>
+<span class="normal"><a href="#__codelineno-0-617">617</a></span>
+<span class="normal"><a href="#__codelineno-0-618">618</a></span>
+<span class="normal"><a href="#__codelineno-0-619">619</a></span>
+<span class="normal"><a href="#__codelineno-0-620">620</a></span>
+<span class="normal"><a href="#__codelineno-0-621">621</a></span>
+<span class="normal"><a href="#__codelineno-0-622">622</a></span>
+<span class="normal"><a href="#__codelineno-0-623">623</a></span>
+<span class="normal"><a href="#__codelineno-0-624">624</a></span>
+<span class="normal"><a href="#__codelineno-0-625">625</a></span>
+<span class="normal"><a href="#__codelineno-0-626">626</a></span>
+<span class="normal"><a href="#__codelineno-0-627">627</a></span>
+<span class="normal"><a href="#__codelineno-0-628">628</a></span>
+<span class="normal"><a href="#__codelineno-0-629">629</a></span>
+<span class="normal"><a href="#__codelineno-0-630">630</a></span>
+<span class="normal"><a href="#__codelineno-0-631">631</a></span>
+<span class="normal"><a href="#__codelineno-0-632">632</a></span>
+<span class="normal"><a href="#__codelineno-0-633">633</a></span>
+<span class="normal"><a href="#__codelineno-0-634">634</a></span>
+<span class="normal"><a href="#__codelineno-0-635">635</a></span>
+<span class="normal"><a href="#__codelineno-0-636">636</a></span>
+<span class="normal"><a href="#__codelineno-0-637">637</a></span>
+<span class="normal"><a href="#__codelineno-0-638">638</a></span>
+<span class="normal"><a href="#__codelineno-0-639">639</a></span>
+<span class="normal"><a href="#__codelineno-0-640">640</a></span>
+<span class="normal"><a href="#__codelineno-0-641">641</a></span>
+<span class="normal"><a href="#__codelineno-0-642">642</a></span>
+<span class="normal"><a href="#__codelineno-0-643">643</a></span>
+<span class="normal"><a href="#__codelineno-0-644">644</a></span>
+<span class="normal"><a href="#__codelineno-0-645">645</a></span>
+<span class="normal"><a href="#__codelineno-0-646">646</a></span>
+<span class="normal"><a href="#__codelineno-0-647">647</a></span>
+<span class="normal"><a href="#__codelineno-0-648">648</a></span>
+<span class="normal"><a href="#__codelineno-0-649">649</a></span>
+<span class="normal"><a href="#__codelineno-0-650">650</a></span>
+<span class="normal"><a href="#__codelineno-0-651">651</a></span>
+<span class="normal"><a href="#__codelineno-0-652">652</a></span>
+<span class="normal"><a href="#__codelineno-0-653">653</a></span>
+<span class="normal"><a href="#__codelineno-0-654">654</a></span>
+<span class="normal"><a href="#__codelineno-0-655">655</a></span>
+<span class="normal"><a href="#__codelineno-0-656">656</a></span>
+<span class="normal"><a href="#__codelineno-0-657">657</a></span>
+<span class="normal"><a href="#__codelineno-0-658">658</a></span>
+<span class="normal"><a href="#__codelineno-0-659">659</a></span>
+<span class="normal"><a href="#__codelineno-0-660">660</a></span>
+<span class="normal"><a href="#__codelineno-0-661">661</a></span>
+<span class="normal"><a href="#__codelineno-0-662">662</a></span>
+<span class="normal"><a href="#__codelineno-0-663">663</a></span>
+<span class="normal"><a href="#__codelineno-0-664">664</a></span>
+<span class="normal"><a href="#__codelineno-0-665">665</a></span>
+<span class="normal"><a href="#__codelineno-0-666">666</a></span>
+<span class="normal"><a href="#__codelineno-0-667">667</a></span>
+<span class="normal"><a href="#__codelineno-0-668">668</a></span>
+<span class="normal"><a href="#__codelineno-0-669">669</a></span>
+<span class="normal"><a href="#__codelineno-0-670">670</a></span>
+<span class="normal"><a href="#__codelineno-0-671">671</a></span>
+<span class="normal"><a href="#__codelineno-0-672">672</a></span>
+<span class="normal"><a href="#__codelineno-0-673">673</a></span>
+<span class="normal"><a href="#__codelineno-0-674">674</a></span>
+<span class="normal"><a href="#__codelineno-0-675">675</a></span>
+<span class="normal"><a href="#__codelineno-0-676">676</a></span>
+<span class="normal"><a href="#__codelineno-0-677">677</a></span>
+<span class="normal"><a href="#__codelineno-0-678">678</a></span>
+<span class="normal"><a href="#__codelineno-0-679">679</a></span>
+<span class="normal"><a href="#__codelineno-0-680">680</a></span>
+<span class="normal"><a href="#__codelineno-0-681">681</a></span>
+<span class="normal"><a href="#__codelineno-0-682">682</a></span>
+<span class="normal"><a href="#__codelineno-0-683">683</a></span>
+<span class="normal"><a href="#__codelineno-0-684">684</a></span>
+<span class="normal"><a href="#__codelineno-0-685">685</a></span>
+<span class="normal"><a href="#__codelineno-0-686">686</a></span>
+<span class="normal"><a href="#__codelineno-0-687">687</a></span>
+<span class="normal"><a href="#__codelineno-0-688">688</a></span>
+<span class="normal"><a href="#__codelineno-0-689">689</a></span>
+<span class="normal"><a href="#__codelineno-0-690">690</a></span>
+<span class="normal"><a href="#__codelineno-0-691">691</a></span>
+<span class="normal"><a href="#__codelineno-0-692">692</a></span>
+<span class="normal"><a href="#__codelineno-0-693">693</a></span>
+<span class="normal"><a href="#__codelineno-0-694">694</a></span>
+<span class="normal"><a href="#__codelineno-0-695">695</a></span>
+<span class="normal"><a href="#__codelineno-0-696">696</a></span>
+<span class="normal"><a href="#__codelineno-0-697">697</a></span>
+<span class="normal"><a href="#__codelineno-0-698">698</a></span>
+<span class="normal"><a href="#__codelineno-0-699">699</a></span>
+<span class="normal"><a href="#__codelineno-0-700">700</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-76" name="__codelineno-0-76"></a><span class="k">class</span><span class="w"> </span><span class="nc">BuildMCPServer</span><span class="p">:</span>
 <a id="__codelineno-0-77" name="__codelineno-0-77"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Programmatic API for MCP server construction.</span>
 <a id="__codelineno-0-78" name="__codelineno-0-78"></a>
 <a id="__codelineno-0-79" name="__codelineno-0-79"></a><span class="sd">    Provides explicit control over MCP server construction and configuration.</span>
@@ -3228,159 +3344,257 @@ await server.initialize().run()</p>
 <a id="__codelineno-0-447" name="__codelineno-0-447"></a>
 <a id="__codelineno-0-448" name="__codelineno-0-448"></a>        <span class="k">return</span> <span class="n">decorator</span>
 <a id="__codelineno-0-449" name="__codelineno-0-449"></a>
-<a id="__codelineno-0-450" name="__codelineno-0-450"></a>    <span class="c1"># Configuration</span>
+<a id="__codelineno-0-450" name="__codelineno-0-450"></a>    <span class="c1"># UI Resource Management (MCP-UI)</span>
 <a id="__codelineno-0-451" name="__codelineno-0-451"></a>
-<a id="__codelineno-0-452" name="__codelineno-0-452"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">configure</span><span class="p">(</span>
+<a id="__codelineno-0-452" name="__codelineno-0-452"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_ui_resource</span><span class="p">(</span>
 <a id="__codelineno-0-453" name="__codelineno-0-453"></a>        <span class="bp">self</span><span class="p">,</span>
-<a id="__codelineno-0-454" name="__codelineno-0-454"></a>        <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<a id="__codelineno-0-455" name="__codelineno-0-455"></a>        <span class="n">log_level</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<a id="__codelineno-0-456" name="__codelineno-0-456"></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-<a id="__codelineno-0-457" name="__codelineno-0-457"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BuildMCPServer&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-458" name="__codelineno-0-458"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Configure the server.</span>
-<a id="__codelineno-0-459" name="__codelineno-0-459"></a>
-<a id="__codelineno-0-460" name="__codelineno-0-460"></a><span class="sd">        Args:</span>
-<a id="__codelineno-0-461" name="__codelineno-0-461"></a><span class="sd">            port: Server port (for network transports)</span>
-<a id="__codelineno-0-462" name="__codelineno-0-462"></a><span class="sd">            log_level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)</span>
-<a id="__codelineno-0-463" name="__codelineno-0-463"></a><span class="sd">            **kwargs: Additional configuration options</span>
-<a id="__codelineno-0-464" name="__codelineno-0-464"></a>
-<a id="__codelineno-0-465" name="__codelineno-0-465"></a><span class="sd">        Returns:</span>
-<a id="__codelineno-0-466" name="__codelineno-0-466"></a><span class="sd">            Self for method chaining</span>
-<a id="__codelineno-0-467" name="__codelineno-0-467"></a>
-<a id="__codelineno-0-468" name="__codelineno-0-468"></a><span class="sd">        Example:</span>
-<a id="__codelineno-0-469" name="__codelineno-0-469"></a><span class="sd">            &gt;&gt;&gt; mcp.configure(port=3000, log_level=&quot;DEBUG&quot;)</span>
-<a id="__codelineno-0-470" name="__codelineno-0-470"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-471" name="__codelineno-0-471"></a>        <span class="c1"># Update transport config if port provided</span>
-<a id="__codelineno-0-472" name="__codelineno-0-472"></a>        <span class="k">if</span> <span class="n">port</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-473" name="__codelineno-0-473"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
-<a id="__codelineno-0-474" name="__codelineno-0-474"></a>
-<a id="__codelineno-0-475" name="__codelineno-0-475"></a>        <span class="c1"># Update logging config if log_level provided</span>
-<a id="__codelineno-0-476" name="__codelineno-0-476"></a>        <span class="k">if</span> <span class="n">log_level</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-477" name="__codelineno-0-477"></a>            <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">cast</span>
+<a id="__codelineno-0-454" name="__codelineno-0-454"></a>        <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-455" name="__codelineno-0-455"></a>        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-456" name="__codelineno-0-456"></a>        <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-457" name="__codelineno-0-457"></a>        <span class="n">mime_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-458" name="__codelineno-0-458"></a>        <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+<a id="__codelineno-0-459" name="__codelineno-0-459"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BuildMCPServer&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-460" name="__codelineno-0-460"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a UI resource to the server (convenience method for MCP-UI).</span>
+<a id="__codelineno-0-461" name="__codelineno-0-461"></a>
+<a id="__codelineno-0-462" name="__codelineno-0-462"></a><span class="sd">        This is syntactic sugar for add_resource() that automatically</span>
+<a id="__codelineno-0-463" name="__codelineno-0-463"></a><span class="sd">        validates UI resource URIs and MIME types. Mirrors the TypeScript</span>
+<a id="__codelineno-0-464" name="__codelineno-0-464"></a><span class="sd">        implementation&#39;s addUIResource method.</span>
+<a id="__codelineno-0-465" name="__codelineno-0-465"></a>
+<a id="__codelineno-0-466" name="__codelineno-0-466"></a><span class="sd">        UI resources are special resources with specific MIME types that</span>
+<a id="__codelineno-0-467" name="__codelineno-0-467"></a><span class="sd">        indicate they should be rendered as interactive UI elements:</span>
+<a id="__codelineno-0-468" name="__codelineno-0-468"></a><span class="sd">        - text/html: Inline HTML content (Foundation Layer)</span>
+<a id="__codelineno-0-469" name="__codelineno-0-469"></a><span class="sd">        - text/uri-list: External URLs (Feature Layer)</span>
+<a id="__codelineno-0-470" name="__codelineno-0-470"></a><span class="sd">        - application/vnd.mcp-ui.remote-dom+javascript: Remote DOM (Layer 3)</span>
+<a id="__codelineno-0-471" name="__codelineno-0-471"></a>
+<a id="__codelineno-0-472" name="__codelineno-0-472"></a><span class="sd">        Args:</span>
+<a id="__codelineno-0-473" name="__codelineno-0-473"></a><span class="sd">            uri: UI resource URI (must start with &quot;ui://&quot;)</span>
+<a id="__codelineno-0-474" name="__codelineno-0-474"></a><span class="sd">            name: Display name for the resource</span>
+<a id="__codelineno-0-475" name="__codelineno-0-475"></a><span class="sd">            description: Human-readable description</span>
+<a id="__codelineno-0-476" name="__codelineno-0-476"></a><span class="sd">            mime_type: MIME type (text/html, text/uri-list, or application/vnd.mcp-ui.remote-dom+*)</span>
+<a id="__codelineno-0-477" name="__codelineno-0-477"></a><span class="sd">            content: HTML/URL/script content or function that returns it</span>
 <a id="__codelineno-0-478" name="__codelineno-0-478"></a>
-<a id="__codelineno-0-479" name="__codelineno-0-479"></a>            <span class="c1"># Validate log level</span>
-<a id="__codelineno-0-480" name="__codelineno-0-480"></a>            <span class="n">valid_levels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">]</span>
-<a id="__codelineno-0-481" name="__codelineno-0-481"></a>            <span class="k">if</span> <span class="n">log_level</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_levels</span><span class="p">:</span>
-<a id="__codelineno-0-482" name="__codelineno-0-482"></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-<a id="__codelineno-0-483" name="__codelineno-0-483"></a>                    <span class="sa">f</span><span class="s2">&quot;Invalid log level: </span><span class="si">{</span><span class="n">log_level</span><span class="si">}</span><span class="s2">. Must be one of </span><span class="si">{</span><span class="n">valid_levels</span><span class="si">}</span><span class="s2">&quot;</span>
-<a id="__codelineno-0-484" name="__codelineno-0-484"></a>                <span class="p">)</span>
-<a id="__codelineno-0-485" name="__codelineno-0-485"></a>            <span class="c1"># Cast to the appropriate type (LogLevel) which accepts these strings</span>
-<a id="__codelineno-0-486" name="__codelineno-0-486"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="s2">&quot;Any&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
-<a id="__codelineno-0-487" name="__codelineno-0-487"></a>
-<a id="__codelineno-0-488" name="__codelineno-0-488"></a>        <span class="c1"># Handle additional kwargs (extend as needed)</span>
-<a id="__codelineno-0-489" name="__codelineno-0-489"></a>        <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<a id="__codelineno-0-490" name="__codelineno-0-490"></a>            <span class="c1"># You can add more configuration options here</span>
-<a id="__codelineno-0-491" name="__codelineno-0-491"></a>            <span class="c1"># For now, we&#39;ll just ignore unknown options</span>
-<a id="__codelineno-0-492" name="__codelineno-0-492"></a>            <span class="k">pass</span>
-<a id="__codelineno-0-493" name="__codelineno-0-493"></a>
-<a id="__codelineno-0-494" name="__codelineno-0-494"></a>        <span class="k">return</span> <span class="bp">self</span>
+<a id="__codelineno-0-479" name="__codelineno-0-479"></a><span class="sd">        Returns:</span>
+<a id="__codelineno-0-480" name="__codelineno-0-480"></a><span class="sd">            Self for method chaining</span>
+<a id="__codelineno-0-481" name="__codelineno-0-481"></a>
+<a id="__codelineno-0-482" name="__codelineno-0-482"></a><span class="sd">        Raises:</span>
+<a id="__codelineno-0-483" name="__codelineno-0-483"></a><span class="sd">            ValueError: If URI doesn&#39;t start with &quot;ui://&quot;</span>
+<a id="__codelineno-0-484" name="__codelineno-0-484"></a><span class="sd">            ValueError: If MIME type is not a valid UI resource MIME type</span>
+<a id="__codelineno-0-485" name="__codelineno-0-485"></a>
+<a id="__codelineno-0-486" name="__codelineno-0-486"></a><span class="sd">        Example:</span>
+<a id="__codelineno-0-487" name="__codelineno-0-487"></a><span class="sd">            Inline HTML resource:</span>
+<a id="__codelineno-0-488" name="__codelineno-0-488"></a><span class="sd">            &gt;&gt;&gt; server.add_ui_resource(</span>
+<a id="__codelineno-0-489" name="__codelineno-0-489"></a><span class="sd">            ...     &#39;ui://product-card/v1&#39;,</span>
+<a id="__codelineno-0-490" name="__codelineno-0-490"></a><span class="sd">            ...     &#39;Product Card&#39;,</span>
+<a id="__codelineno-0-491" name="__codelineno-0-491"></a><span class="sd">            ...     &#39;Displays a product selector&#39;,</span>
+<a id="__codelineno-0-492" name="__codelineno-0-492"></a><span class="sd">            ...     &#39;text/html&#39;,</span>
+<a id="__codelineno-0-493" name="__codelineno-0-493"></a><span class="sd">            ...     &#39;&lt;div&gt;&lt;h2&gt;Select a product&lt;/h2&gt;&lt;button&gt;Widget A&lt;/button&gt;&lt;/div&gt;&#39;</span>
+<a id="__codelineno-0-494" name="__codelineno-0-494"></a><span class="sd">            ... )</span>
 <a id="__codelineno-0-495" name="__codelineno-0-495"></a>
-<a id="__codelineno-0-496" name="__codelineno-0-496"></a>    <span class="c1"># Lifecycle</span>
-<a id="__codelineno-0-497" name="__codelineno-0-497"></a>
-<a id="__codelineno-0-498" name="__codelineno-0-498"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BuildMCPServer&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-499" name="__codelineno-0-499"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the server.</span>
-<a id="__codelineno-0-500" name="__codelineno-0-500"></a>
-<a id="__codelineno-0-501" name="__codelineno-0-501"></a><span class="sd">        Must be called before running the server.</span>
-<a id="__codelineno-0-502" name="__codelineno-0-502"></a>
-<a id="__codelineno-0-503" name="__codelineno-0-503"></a><span class="sd">        Returns:</span>
-<a id="__codelineno-0-504" name="__codelineno-0-504"></a><span class="sd">            Self for method chaining</span>
-<a id="__codelineno-0-505" name="__codelineno-0-505"></a>
-<a id="__codelineno-0-506" name="__codelineno-0-506"></a><span class="sd">        Example:</span>
-<a id="__codelineno-0-507" name="__codelineno-0-507"></a><span class="sd">            &gt;&gt;&gt; await mcp.initialize()</span>
-<a id="__codelineno-0-508" name="__codelineno-0-508"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-509" name="__codelineno-0-509"></a>        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
-<a id="__codelineno-0-510" name="__codelineno-0-510"></a>        <span class="k">return</span> <span class="bp">self</span>
-<a id="__codelineno-0-511" name="__codelineno-0-511"></a>
-<a id="__codelineno-0-512" name="__codelineno-0-512"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transport</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;stdio&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-513" name="__codelineno-0-513"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the server with specified transport.</span>
-<a id="__codelineno-0-514" name="__codelineno-0-514"></a>
-<a id="__codelineno-0-515" name="__codelineno-0-515"></a><span class="sd">        Args:</span>
-<a id="__codelineno-0-516" name="__codelineno-0-516"></a><span class="sd">            transport: Transport type (stdio, http, sse)</span>
-<a id="__codelineno-0-517" name="__codelineno-0-517"></a>
-<a id="__codelineno-0-518" name="__codelineno-0-518"></a><span class="sd">        Raises:</span>
-<a id="__codelineno-0-519" name="__codelineno-0-519"></a><span class="sd">            RuntimeError: If server is not initialized</span>
-<a id="__codelineno-0-520" name="__codelineno-0-520"></a><span class="sd">            ValueError: If transport type is unsupported</span>
-<a id="__codelineno-0-521" name="__codelineno-0-521"></a>
-<a id="__codelineno-0-522" name="__codelineno-0-522"></a><span class="sd">        Example:</span>
-<a id="__codelineno-0-523" name="__codelineno-0-523"></a><span class="sd">            &gt;&gt;&gt; await mcp.run()  # stdio</span>
-<a id="__codelineno-0-524" name="__codelineno-0-524"></a><span class="sd">            &gt;&gt;&gt; await mcp.run(&quot;stdio&quot;)</span>
-<a id="__codelineno-0-525" name="__codelineno-0-525"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-526" name="__codelineno-0-526"></a>        <span class="k">if</span> <span class="n">transport</span> <span class="o">==</span> <span class="s2">&quot;stdio&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-527" name="__codelineno-0-527"></a>            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">run_stdio</span><span class="p">()</span>
-<a id="__codelineno-0-528" name="__codelineno-0-528"></a>        <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-0-529" name="__codelineno-0-529"></a>            <span class="c1"># For now, only stdio is implemented</span>
-<a id="__codelineno-0-530" name="__codelineno-0-530"></a>            <span class="c1"># Future: support http, sse</span>
-<a id="__codelineno-0-531" name="__codelineno-0-531"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported transport: </span><span class="si">{</span><span class="n">transport</span><span class="si">}</span><span class="s2">. Only &#39;stdio&#39; is currently supported.&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-532" name="__codelineno-0-532"></a>
-<a id="__codelineno-0-533" name="__codelineno-0-533"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run_stdio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-534" name="__codelineno-0-534"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the server with stdio transport.</span>
-<a id="__codelineno-0-535" name="__codelineno-0-535"></a>
-<a id="__codelineno-0-536" name="__codelineno-0-536"></a><span class="sd">        Convenience method for run(&quot;stdio&quot;).</span>
-<a id="__codelineno-0-537" name="__codelineno-0-537"></a>
-<a id="__codelineno-0-538" name="__codelineno-0-538"></a><span class="sd">        Raises:</span>
-<a id="__codelineno-0-539" name="__codelineno-0-539"></a><span class="sd">            RuntimeError: If server is not initialized</span>
-<a id="__codelineno-0-540" name="__codelineno-0-540"></a>
-<a id="__codelineno-0-541" name="__codelineno-0-541"></a><span class="sd">        Example:</span>
-<a id="__codelineno-0-542" name="__codelineno-0-542"></a><span class="sd">            &gt;&gt;&gt; await mcp.run_stdio()</span>
-<a id="__codelineno-0-543" name="__codelineno-0-543"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-544" name="__codelineno-0-544"></a>        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">run_stdio</span><span class="p">()</span>
-<a id="__codelineno-0-545" name="__codelineno-0-545"></a>
-<a id="__codelineno-0-546" name="__codelineno-0-546"></a>    <span class="c1"># Server Access</span>
+<a id="__codelineno-0-496" name="__codelineno-0-496"></a><span class="sd">            External URL resource:</span>
+<a id="__codelineno-0-497" name="__codelineno-0-497"></a><span class="sd">            &gt;&gt;&gt; server.add_ui_resource(</span>
+<a id="__codelineno-0-498" name="__codelineno-0-498"></a><span class="sd">            ...     &#39;ui://analytics/dashboard&#39;,</span>
+<a id="__codelineno-0-499" name="__codelineno-0-499"></a><span class="sd">            ...     &#39;Analytics Dashboard&#39;,</span>
+<a id="__codelineno-0-500" name="__codelineno-0-500"></a><span class="sd">            ...     &#39;External analytics dashboard&#39;,</span>
+<a id="__codelineno-0-501" name="__codelineno-0-501"></a><span class="sd">            ...     &#39;text/uri-list&#39;,</span>
+<a id="__codelineno-0-502" name="__codelineno-0-502"></a><span class="sd">            ...     &#39;https://example.com/dashboard&#39;</span>
+<a id="__codelineno-0-503" name="__codelineno-0-503"></a><span class="sd">            ... )</span>
+<a id="__codelineno-0-504" name="__codelineno-0-504"></a>
+<a id="__codelineno-0-505" name="__codelineno-0-505"></a><span class="sd">            Dynamic content with handler:</span>
+<a id="__codelineno-0-506" name="__codelineno-0-506"></a><span class="sd">            &gt;&gt;&gt; def get_html() -&gt; str:</span>
+<a id="__codelineno-0-507" name="__codelineno-0-507"></a><span class="sd">            ...     return &#39;&lt;div&gt;Dynamic HTML&lt;/div&gt;&#39;</span>
+<a id="__codelineno-0-508" name="__codelineno-0-508"></a><span class="sd">            ...</span>
+<a id="__codelineno-0-509" name="__codelineno-0-509"></a><span class="sd">            &gt;&gt;&gt; server.add_ui_resource(</span>
+<a id="__codelineno-0-510" name="__codelineno-0-510"></a><span class="sd">            ...     &#39;ui://dynamic/card&#39;,</span>
+<a id="__codelineno-0-511" name="__codelineno-0-511"></a><span class="sd">            ...     &#39;Dynamic Card&#39;,</span>
+<a id="__codelineno-0-512" name="__codelineno-0-512"></a><span class="sd">            ...     &#39;Dynamically generated UI&#39;,</span>
+<a id="__codelineno-0-513" name="__codelineno-0-513"></a><span class="sd">            ...     &#39;text/html&#39;,</span>
+<a id="__codelineno-0-514" name="__codelineno-0-514"></a><span class="sd">            ...     get_html</span>
+<a id="__codelineno-0-515" name="__codelineno-0-515"></a><span class="sd">            ... )</span>
+<a id="__codelineno-0-516" name="__codelineno-0-516"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-517" name="__codelineno-0-517"></a>        <span class="c1"># Validate URI starts with ui://</span>
+<a id="__codelineno-0-518" name="__codelineno-0-518"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ui://&quot;</span><span class="p">):</span>
+<a id="__codelineno-0-519" name="__codelineno-0-519"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;UI resource URI must start with &quot;ui://&quot;, got: &quot;</span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
+<a id="__codelineno-0-520" name="__codelineno-0-520"></a>
+<a id="__codelineno-0-521" name="__codelineno-0-521"></a>        <span class="c1"># Validate MIME type</span>
+<a id="__codelineno-0-522" name="__codelineno-0-522"></a>        <span class="n">valid_mime_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;text/html&quot;</span><span class="p">,</span> <span class="s2">&quot;text/uri-list&quot;</span><span class="p">]</span>
+<a id="__codelineno-0-523" name="__codelineno-0-523"></a>        <span class="n">is_remote_dom</span> <span class="o">=</span> <span class="n">mime_type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;application/vnd.mcp-ui.remote-dom+&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-524" name="__codelineno-0-524"></a>
+<a id="__codelineno-0-525" name="__codelineno-0-525"></a>        <span class="k">if</span> <span class="n">mime_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_mime_types</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_remote_dom</span><span class="p">:</span>
+<a id="__codelineno-0-526" name="__codelineno-0-526"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<a id="__codelineno-0-527" name="__codelineno-0-527"></a>                <span class="sa">f</span><span class="s1">&#39;Invalid UI resource MIME type: &quot;</span><span class="si">{</span><span class="n">mime_type</span><span class="si">}</span><span class="s1">&quot;. &#39;</span>
+<a id="__codelineno-0-528" name="__codelineno-0-528"></a>                <span class="sa">f</span><span class="s2">&quot;Must be one of: text/html, text/uri-list, &quot;</span>
+<a id="__codelineno-0-529" name="__codelineno-0-529"></a>                <span class="sa">f</span><span class="s2">&quot;or application/vnd.mcp-ui.remote-dom+&lt;framework&gt;&quot;</span>
+<a id="__codelineno-0-530" name="__codelineno-0-530"></a>            <span class="p">)</span>
+<a id="__codelineno-0-531" name="__codelineno-0-531"></a>
+<a id="__codelineno-0-532" name="__codelineno-0-532"></a>        <span class="c1"># Wrap string content in a lambda if needed</span>
+<a id="__codelineno-0-533" name="__codelineno-0-533"></a>        <span class="c1"># add_resource expects a callable, so we need to convert strings</span>
+<a id="__codelineno-0-534" name="__codelineno-0-534"></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-0-535" name="__codelineno-0-535"></a>            <span class="n">handler</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">content</span>  <span class="c1"># noqa: E731</span>
+<a id="__codelineno-0-536" name="__codelineno-0-536"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-537" name="__codelineno-0-537"></a>            <span class="n">handler</span> <span class="o">=</span> <span class="n">content</span>
+<a id="__codelineno-0-538" name="__codelineno-0-538"></a>
+<a id="__codelineno-0-539" name="__codelineno-0-539"></a>        <span class="c1"># Delegate to add_resource</span>
+<a id="__codelineno-0-540" name="__codelineno-0-540"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_resource</span><span class="p">(</span>
+<a id="__codelineno-0-541" name="__codelineno-0-541"></a>            <span class="n">uri</span><span class="o">=</span><span class="n">uri</span><span class="p">,</span>
+<a id="__codelineno-0-542" name="__codelineno-0-542"></a>            <span class="n">handler</span><span class="o">=</span><span class="n">handler</span><span class="p">,</span>
+<a id="__codelineno-0-543" name="__codelineno-0-543"></a>            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+<a id="__codelineno-0-544" name="__codelineno-0-544"></a>            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+<a id="__codelineno-0-545" name="__codelineno-0-545"></a>            <span class="n">mime_type</span><span class="o">=</span><span class="n">mime_type</span><span class="p">,</span>
+<a id="__codelineno-0-546" name="__codelineno-0-546"></a>        <span class="p">)</span>
 <a id="__codelineno-0-547" name="__codelineno-0-547"></a>
-<a id="__codelineno-0-548" name="__codelineno-0-548"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_server</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimplyMCPServer</span><span class="p">:</span>
-<a id="__codelineno-0-549" name="__codelineno-0-549"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the underlying server instance.</span>
-<a id="__codelineno-0-550" name="__codelineno-0-550"></a>
-<a id="__codelineno-0-551" name="__codelineno-0-551"></a><span class="sd">        Returns:</span>
-<a id="__codelineno-0-552" name="__codelineno-0-552"></a><span class="sd">            The underlying SimplyMCPServer instance</span>
-<a id="__codelineno-0-553" name="__codelineno-0-553"></a>
-<a id="__codelineno-0-554" name="__codelineno-0-554"></a><span class="sd">        Example:</span>
-<a id="__codelineno-0-555" name="__codelineno-0-555"></a><span class="sd">            &gt;&gt;&gt; server = mcp.get_server()</span>
-<a id="__codelineno-0-556" name="__codelineno-0-556"></a><span class="sd">            &gt;&gt;&gt; print(server.config.server.name)</span>
-<a id="__codelineno-0-557" name="__codelineno-0-557"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-558" name="__codelineno-0-558"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span>
-<a id="__codelineno-0-559" name="__codelineno-0-559"></a>
-<a id="__codelineno-0-560" name="__codelineno-0-560"></a>    <span class="c1"># Component Query</span>
-<a id="__codelineno-0-561" name="__codelineno-0-561"></a>
-<a id="__codelineno-0-562" name="__codelineno-0-562"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">list_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<a id="__codelineno-0-563" name="__codelineno-0-563"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;List registered tool names.</span>
-<a id="__codelineno-0-564" name="__codelineno-0-564"></a>
-<a id="__codelineno-0-565" name="__codelineno-0-565"></a><span class="sd">        Returns:</span>
-<a id="__codelineno-0-566" name="__codelineno-0-566"></a><span class="sd">            List of tool names</span>
-<a id="__codelineno-0-567" name="__codelineno-0-567"></a>
-<a id="__codelineno-0-568" name="__codelineno-0-568"></a><span class="sd">        Example:</span>
-<a id="__codelineno-0-569" name="__codelineno-0-569"></a><span class="sd">            &gt;&gt;&gt; tools = mcp.list_tools()</span>
-<a id="__codelineno-0-570" name="__codelineno-0-570"></a><span class="sd">            &gt;&gt;&gt; print(tools)</span>
-<a id="__codelineno-0-571" name="__codelineno-0-571"></a><span class="sd">            [&#39;add&#39;, &#39;multiply&#39;]</span>
-<a id="__codelineno-0-572" name="__codelineno-0-572"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-573" name="__codelineno-0-573"></a>        <span class="n">tool_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_tools</span><span class="p">()</span>
-<a id="__codelineno-0-574" name="__codelineno-0-574"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">tool_configs</span><span class="p">]</span>
-<a id="__codelineno-0-575" name="__codelineno-0-575"></a>
-<a id="__codelineno-0-576" name="__codelineno-0-576"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">list_prompts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<a id="__codelineno-0-577" name="__codelineno-0-577"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;List registered prompt names.</span>
-<a id="__codelineno-0-578" name="__codelineno-0-578"></a>
-<a id="__codelineno-0-579" name="__codelineno-0-579"></a><span class="sd">        Returns:</span>
-<a id="__codelineno-0-580" name="__codelineno-0-580"></a><span class="sd">            List of prompt names</span>
-<a id="__codelineno-0-581" name="__codelineno-0-581"></a>
-<a id="__codelineno-0-582" name="__codelineno-0-582"></a><span class="sd">        Example:</span>
-<a id="__codelineno-0-583" name="__codelineno-0-583"></a><span class="sd">            &gt;&gt;&gt; prompts = mcp.list_prompts()</span>
-<a id="__codelineno-0-584" name="__codelineno-0-584"></a><span class="sd">            &gt;&gt;&gt; print(prompts)</span>
-<a id="__codelineno-0-585" name="__codelineno-0-585"></a><span class="sd">            [&#39;greet&#39;, &#39;code_review&#39;]</span>
-<a id="__codelineno-0-586" name="__codelineno-0-586"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-587" name="__codelineno-0-587"></a>        <span class="n">prompt_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_prompts</span><span class="p">()</span>
-<a id="__codelineno-0-588" name="__codelineno-0-588"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">prompt_configs</span><span class="p">]</span>
-<a id="__codelineno-0-589" name="__codelineno-0-589"></a>
-<a id="__codelineno-0-590" name="__codelineno-0-590"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">list_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<a id="__codelineno-0-591" name="__codelineno-0-591"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;List registered resource URIs.</span>
-<a id="__codelineno-0-592" name="__codelineno-0-592"></a>
-<a id="__codelineno-0-593" name="__codelineno-0-593"></a><span class="sd">        Returns:</span>
-<a id="__codelineno-0-594" name="__codelineno-0-594"></a><span class="sd">            List of resource URIs</span>
+<a id="__codelineno-0-548" name="__codelineno-0-548"></a>    <span class="c1"># Configuration</span>
+<a id="__codelineno-0-549" name="__codelineno-0-549"></a>
+<a id="__codelineno-0-550" name="__codelineno-0-550"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">configure</span><span class="p">(</span>
+<a id="__codelineno-0-551" name="__codelineno-0-551"></a>        <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-552" name="__codelineno-0-552"></a>        <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-553" name="__codelineno-0-553"></a>        <span class="n">log_level</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-554" name="__codelineno-0-554"></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<a id="__codelineno-0-555" name="__codelineno-0-555"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BuildMCPServer&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-556" name="__codelineno-0-556"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Configure the server.</span>
+<a id="__codelineno-0-557" name="__codelineno-0-557"></a>
+<a id="__codelineno-0-558" name="__codelineno-0-558"></a><span class="sd">        Args:</span>
+<a id="__codelineno-0-559" name="__codelineno-0-559"></a><span class="sd">            port: Server port (for network transports)</span>
+<a id="__codelineno-0-560" name="__codelineno-0-560"></a><span class="sd">            log_level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)</span>
+<a id="__codelineno-0-561" name="__codelineno-0-561"></a><span class="sd">            **kwargs: Additional configuration options</span>
+<a id="__codelineno-0-562" name="__codelineno-0-562"></a>
+<a id="__codelineno-0-563" name="__codelineno-0-563"></a><span class="sd">        Returns:</span>
+<a id="__codelineno-0-564" name="__codelineno-0-564"></a><span class="sd">            Self for method chaining</span>
+<a id="__codelineno-0-565" name="__codelineno-0-565"></a>
+<a id="__codelineno-0-566" name="__codelineno-0-566"></a><span class="sd">        Example:</span>
+<a id="__codelineno-0-567" name="__codelineno-0-567"></a><span class="sd">            &gt;&gt;&gt; mcp.configure(port=3000, log_level=&quot;DEBUG&quot;)</span>
+<a id="__codelineno-0-568" name="__codelineno-0-568"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-569" name="__codelineno-0-569"></a>        <span class="c1"># Update transport config if port provided</span>
+<a id="__codelineno-0-570" name="__codelineno-0-570"></a>        <span class="k">if</span> <span class="n">port</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-571" name="__codelineno-0-571"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+<a id="__codelineno-0-572" name="__codelineno-0-572"></a>
+<a id="__codelineno-0-573" name="__codelineno-0-573"></a>        <span class="c1"># Update logging config if log_level provided</span>
+<a id="__codelineno-0-574" name="__codelineno-0-574"></a>        <span class="k">if</span> <span class="n">log_level</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-575" name="__codelineno-0-575"></a>            <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">cast</span>
+<a id="__codelineno-0-576" name="__codelineno-0-576"></a>
+<a id="__codelineno-0-577" name="__codelineno-0-577"></a>            <span class="c1"># Validate log level</span>
+<a id="__codelineno-0-578" name="__codelineno-0-578"></a>            <span class="n">valid_levels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">]</span>
+<a id="__codelineno-0-579" name="__codelineno-0-579"></a>            <span class="k">if</span> <span class="n">log_level</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_levels</span><span class="p">:</span>
+<a id="__codelineno-0-580" name="__codelineno-0-580"></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<a id="__codelineno-0-581" name="__codelineno-0-581"></a>                    <span class="sa">f</span><span class="s2">&quot;Invalid log level: </span><span class="si">{</span><span class="n">log_level</span><span class="si">}</span><span class="s2">. Must be one of </span><span class="si">{</span><span class="n">valid_levels</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-582" name="__codelineno-0-582"></a>                <span class="p">)</span>
+<a id="__codelineno-0-583" name="__codelineno-0-583"></a>            <span class="c1"># Cast to the appropriate type (LogLevel) which accepts these strings</span>
+<a id="__codelineno-0-584" name="__codelineno-0-584"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="s2">&quot;Any&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+<a id="__codelineno-0-585" name="__codelineno-0-585"></a>
+<a id="__codelineno-0-586" name="__codelineno-0-586"></a>        <span class="c1"># Handle additional kwargs (extend as needed)</span>
+<a id="__codelineno-0-587" name="__codelineno-0-587"></a>        <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-0-588" name="__codelineno-0-588"></a>            <span class="c1"># You can add more configuration options here</span>
+<a id="__codelineno-0-589" name="__codelineno-0-589"></a>            <span class="c1"># For now, we&#39;ll just ignore unknown options</span>
+<a id="__codelineno-0-590" name="__codelineno-0-590"></a>            <span class="k">pass</span>
+<a id="__codelineno-0-591" name="__codelineno-0-591"></a>
+<a id="__codelineno-0-592" name="__codelineno-0-592"></a>        <span class="k">return</span> <span class="bp">self</span>
+<a id="__codelineno-0-593" name="__codelineno-0-593"></a>
+<a id="__codelineno-0-594" name="__codelineno-0-594"></a>    <span class="c1"># Lifecycle</span>
 <a id="__codelineno-0-595" name="__codelineno-0-595"></a>
-<a id="__codelineno-0-596" name="__codelineno-0-596"></a><span class="sd">        Example:</span>
-<a id="__codelineno-0-597" name="__codelineno-0-597"></a><span class="sd">            &gt;&gt;&gt; resources = mcp.list_resources()</span>
-<a id="__codelineno-0-598" name="__codelineno-0-598"></a><span class="sd">            &gt;&gt;&gt; print(resources)</span>
-<a id="__codelineno-0-599" name="__codelineno-0-599"></a><span class="sd">            [&#39;config://app&#39;, &#39;data://stats&#39;]</span>
-<a id="__codelineno-0-600" name="__codelineno-0-600"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-601" name="__codelineno-0-601"></a>        <span class="n">resource_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_resources</span><span class="p">()</span>
-<a id="__codelineno-0-602" name="__codelineno-0-602"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">uri</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">resource_configs</span><span class="p">]</span>
+<a id="__codelineno-0-596" name="__codelineno-0-596"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BuildMCPServer&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-597" name="__codelineno-0-597"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the server.</span>
+<a id="__codelineno-0-598" name="__codelineno-0-598"></a>
+<a id="__codelineno-0-599" name="__codelineno-0-599"></a><span class="sd">        Must be called before running the server.</span>
+<a id="__codelineno-0-600" name="__codelineno-0-600"></a>
+<a id="__codelineno-0-601" name="__codelineno-0-601"></a><span class="sd">        Returns:</span>
+<a id="__codelineno-0-602" name="__codelineno-0-602"></a><span class="sd">            Self for method chaining</span>
+<a id="__codelineno-0-603" name="__codelineno-0-603"></a>
+<a id="__codelineno-0-604" name="__codelineno-0-604"></a><span class="sd">        Example:</span>
+<a id="__codelineno-0-605" name="__codelineno-0-605"></a><span class="sd">            &gt;&gt;&gt; await mcp.initialize()</span>
+<a id="__codelineno-0-606" name="__codelineno-0-606"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-607" name="__codelineno-0-607"></a>        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+<a id="__codelineno-0-608" name="__codelineno-0-608"></a>        <span class="k">return</span> <span class="bp">self</span>
+<a id="__codelineno-0-609" name="__codelineno-0-609"></a>
+<a id="__codelineno-0-610" name="__codelineno-0-610"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transport</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;stdio&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-611" name="__codelineno-0-611"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the server with specified transport.</span>
+<a id="__codelineno-0-612" name="__codelineno-0-612"></a>
+<a id="__codelineno-0-613" name="__codelineno-0-613"></a><span class="sd">        Args:</span>
+<a id="__codelineno-0-614" name="__codelineno-0-614"></a><span class="sd">            transport: Transport type (stdio, http, sse)</span>
+<a id="__codelineno-0-615" name="__codelineno-0-615"></a>
+<a id="__codelineno-0-616" name="__codelineno-0-616"></a><span class="sd">        Raises:</span>
+<a id="__codelineno-0-617" name="__codelineno-0-617"></a><span class="sd">            RuntimeError: If server is not initialized</span>
+<a id="__codelineno-0-618" name="__codelineno-0-618"></a><span class="sd">            ValueError: If transport type is unsupported</span>
+<a id="__codelineno-0-619" name="__codelineno-0-619"></a>
+<a id="__codelineno-0-620" name="__codelineno-0-620"></a><span class="sd">        Example:</span>
+<a id="__codelineno-0-621" name="__codelineno-0-621"></a><span class="sd">            &gt;&gt;&gt; await mcp.run()  # stdio</span>
+<a id="__codelineno-0-622" name="__codelineno-0-622"></a><span class="sd">            &gt;&gt;&gt; await mcp.run(&quot;stdio&quot;)</span>
+<a id="__codelineno-0-623" name="__codelineno-0-623"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-624" name="__codelineno-0-624"></a>        <span class="k">if</span> <span class="n">transport</span> <span class="o">==</span> <span class="s2">&quot;stdio&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-625" name="__codelineno-0-625"></a>            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">run_stdio</span><span class="p">()</span>
+<a id="__codelineno-0-626" name="__codelineno-0-626"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-627" name="__codelineno-0-627"></a>            <span class="c1"># For now, only stdio is implemented</span>
+<a id="__codelineno-0-628" name="__codelineno-0-628"></a>            <span class="c1"># Future: support http, sse</span>
+<a id="__codelineno-0-629" name="__codelineno-0-629"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported transport: </span><span class="si">{</span><span class="n">transport</span><span class="si">}</span><span class="s2">. Only &#39;stdio&#39; is currently supported.&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-630" name="__codelineno-0-630"></a>
+<a id="__codelineno-0-631" name="__codelineno-0-631"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run_stdio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-632" name="__codelineno-0-632"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the server with stdio transport.</span>
+<a id="__codelineno-0-633" name="__codelineno-0-633"></a>
+<a id="__codelineno-0-634" name="__codelineno-0-634"></a><span class="sd">        Convenience method for run(&quot;stdio&quot;).</span>
+<a id="__codelineno-0-635" name="__codelineno-0-635"></a>
+<a id="__codelineno-0-636" name="__codelineno-0-636"></a><span class="sd">        Raises:</span>
+<a id="__codelineno-0-637" name="__codelineno-0-637"></a><span class="sd">            RuntimeError: If server is not initialized</span>
+<a id="__codelineno-0-638" name="__codelineno-0-638"></a>
+<a id="__codelineno-0-639" name="__codelineno-0-639"></a><span class="sd">        Example:</span>
+<a id="__codelineno-0-640" name="__codelineno-0-640"></a><span class="sd">            &gt;&gt;&gt; await mcp.run_stdio()</span>
+<a id="__codelineno-0-641" name="__codelineno-0-641"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-642" name="__codelineno-0-642"></a>        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">run_stdio</span><span class="p">()</span>
+<a id="__codelineno-0-643" name="__codelineno-0-643"></a>
+<a id="__codelineno-0-644" name="__codelineno-0-644"></a>    <span class="c1"># Server Access</span>
+<a id="__codelineno-0-645" name="__codelineno-0-645"></a>
+<a id="__codelineno-0-646" name="__codelineno-0-646"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_server</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimplyMCPServer</span><span class="p">:</span>
+<a id="__codelineno-0-647" name="__codelineno-0-647"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the underlying server instance.</span>
+<a id="__codelineno-0-648" name="__codelineno-0-648"></a>
+<a id="__codelineno-0-649" name="__codelineno-0-649"></a><span class="sd">        Returns:</span>
+<a id="__codelineno-0-650" name="__codelineno-0-650"></a><span class="sd">            The underlying SimplyMCPServer instance</span>
+<a id="__codelineno-0-651" name="__codelineno-0-651"></a>
+<a id="__codelineno-0-652" name="__codelineno-0-652"></a><span class="sd">        Example:</span>
+<a id="__codelineno-0-653" name="__codelineno-0-653"></a><span class="sd">            &gt;&gt;&gt; server = mcp.get_server()</span>
+<a id="__codelineno-0-654" name="__codelineno-0-654"></a><span class="sd">            &gt;&gt;&gt; print(server.config.server.name)</span>
+<a id="__codelineno-0-655" name="__codelineno-0-655"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-656" name="__codelineno-0-656"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span>
+<a id="__codelineno-0-657" name="__codelineno-0-657"></a>
+<a id="__codelineno-0-658" name="__codelineno-0-658"></a>    <span class="c1"># Component Query</span>
+<a id="__codelineno-0-659" name="__codelineno-0-659"></a>
+<a id="__codelineno-0-660" name="__codelineno-0-660"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">list_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<a id="__codelineno-0-661" name="__codelineno-0-661"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;List registered tool names.</span>
+<a id="__codelineno-0-662" name="__codelineno-0-662"></a>
+<a id="__codelineno-0-663" name="__codelineno-0-663"></a><span class="sd">        Returns:</span>
+<a id="__codelineno-0-664" name="__codelineno-0-664"></a><span class="sd">            List of tool names</span>
+<a id="__codelineno-0-665" name="__codelineno-0-665"></a>
+<a id="__codelineno-0-666" name="__codelineno-0-666"></a><span class="sd">        Example:</span>
+<a id="__codelineno-0-667" name="__codelineno-0-667"></a><span class="sd">            &gt;&gt;&gt; tools = mcp.list_tools()</span>
+<a id="__codelineno-0-668" name="__codelineno-0-668"></a><span class="sd">            &gt;&gt;&gt; print(tools)</span>
+<a id="__codelineno-0-669" name="__codelineno-0-669"></a><span class="sd">            [&#39;add&#39;, &#39;multiply&#39;]</span>
+<a id="__codelineno-0-670" name="__codelineno-0-670"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-671" name="__codelineno-0-671"></a>        <span class="n">tool_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_tools</span><span class="p">()</span>
+<a id="__codelineno-0-672" name="__codelineno-0-672"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">tool_configs</span><span class="p">]</span>
+<a id="__codelineno-0-673" name="__codelineno-0-673"></a>
+<a id="__codelineno-0-674" name="__codelineno-0-674"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">list_prompts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<a id="__codelineno-0-675" name="__codelineno-0-675"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;List registered prompt names.</span>
+<a id="__codelineno-0-676" name="__codelineno-0-676"></a>
+<a id="__codelineno-0-677" name="__codelineno-0-677"></a><span class="sd">        Returns:</span>
+<a id="__codelineno-0-678" name="__codelineno-0-678"></a><span class="sd">            List of prompt names</span>
+<a id="__codelineno-0-679" name="__codelineno-0-679"></a>
+<a id="__codelineno-0-680" name="__codelineno-0-680"></a><span class="sd">        Example:</span>
+<a id="__codelineno-0-681" name="__codelineno-0-681"></a><span class="sd">            &gt;&gt;&gt; prompts = mcp.list_prompts()</span>
+<a id="__codelineno-0-682" name="__codelineno-0-682"></a><span class="sd">            &gt;&gt;&gt; print(prompts)</span>
+<a id="__codelineno-0-683" name="__codelineno-0-683"></a><span class="sd">            [&#39;greet&#39;, &#39;code_review&#39;]</span>
+<a id="__codelineno-0-684" name="__codelineno-0-684"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-685" name="__codelineno-0-685"></a>        <span class="n">prompt_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_prompts</span><span class="p">()</span>
+<a id="__codelineno-0-686" name="__codelineno-0-686"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">prompt_configs</span><span class="p">]</span>
+<a id="__codelineno-0-687" name="__codelineno-0-687"></a>
+<a id="__codelineno-0-688" name="__codelineno-0-688"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">list_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<a id="__codelineno-0-689" name="__codelineno-0-689"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;List registered resource URIs.</span>
+<a id="__codelineno-0-690" name="__codelineno-0-690"></a>
+<a id="__codelineno-0-691" name="__codelineno-0-691"></a><span class="sd">        Returns:</span>
+<a id="__codelineno-0-692" name="__codelineno-0-692"></a><span class="sd">            List of resource URIs</span>
+<a id="__codelineno-0-693" name="__codelineno-0-693"></a>
+<a id="__codelineno-0-694" name="__codelineno-0-694"></a><span class="sd">        Example:</span>
+<a id="__codelineno-0-695" name="__codelineno-0-695"></a><span class="sd">            &gt;&gt;&gt; resources = mcp.list_resources()</span>
+<a id="__codelineno-0-696" name="__codelineno-0-696"></a><span class="sd">            &gt;&gt;&gt; print(resources)</span>
+<a id="__codelineno-0-697" name="__codelineno-0-697"></a><span class="sd">            [&#39;config://app&#39;, &#39;data://stats&#39;]</span>
+<a id="__codelineno-0-698" name="__codelineno-0-698"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-699" name="__codelineno-0-699"></a>        <span class="n">resource_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_resources</span><span class="p">()</span>
+<a id="__codelineno-0-700" name="__codelineno-0-700"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">uri</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">resource_configs</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -5098,6 +5312,427 @@ def get_config() -&gt; dict:
 <div class="doc doc-object doc-function">
 
 
+<h4 id="simply_mcp.api.builder.BuildMCPServer.add_ui_resource" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">add_ui_resource</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">add_ui_resource</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mime_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">BuildMCPServer</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Add a UI resource to the server (convenience method for MCP-UI).</p>
+<p>This is syntactic sugar for add_resource() that automatically
+validates UI resource URIs and MIME types. Mirrors the TypeScript
+implementation's addUIResource method.</p>
+<p>UI resources are special resources with specific MIME types that
+indicate they should be rendered as interactive UI elements:
+- text/html: Inline HTML content (Foundation Layer)
+- text/uri-list: External URLs (Feature Layer)
+- application/vnd.mcp-ui.remote-dom+javascript: Remote DOM (Layer 3)</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>uri</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>UI resource URI (must start with "ui://")</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>name</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Display name for the resource</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>description</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Human-readable description</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>mime_type</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>MIME type (text/html, text/uri-list, or application/vnd.mcp-ui.remote-dom+*)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>content</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | <span title="collections.abc.Callable">Callable</span>[..., <span title="str">str</span>] | <span title="collections.abc.Callable">Callable</span>[..., <span title="typing.Any">Any</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>HTML/URL/script content or function that returns it</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            BuildMCPServer (simply_mcp.api.programmatic.BuildMCPServer)" href="#simply_mcp.api.builder.BuildMCPServer">BuildMCPServer</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Self for method chaining</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If URI doesn't start with "ui://"</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If MIME type is not a valid UI resource MIME type</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <p>Inline HTML resource:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>server.add_ui_resource(
+...     'ui://product-card/v1',
+...     'Product Card',
+...     'Displays a product selector',
+...     'text/html',
+...     '<div><h2>Select a product</h2><button>Widget A</button></div>'
+... )</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>External URL resource:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>server.add_ui_resource(
+...     'ui://analytics/dashboard',
+...     'Analytics Dashboard',
+...     'External analytics dashboard',
+...     'text/uri-list',
+...     'https://example.com/dashboard'
+... )</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>Dynamic content with handler:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>def get_html() -&gt; str:
+...     return '<div>Dynamic HTML</div>'
+...
+server.add_ui_resource(
+...     'ui://dynamic/card',
+...     'Dynamic Card',
+...     'Dynamically generated UI',
+...     'text/html',
+...     get_html
+... )</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</details>
+
+            <details class="quote">
+              <summary>Source code in <code>src/simply_mcp/api/programmatic.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-452">452</a></span>
+<span class="normal"><a href="#__codelineno-0-453">453</a></span>
+<span class="normal"><a href="#__codelineno-0-454">454</a></span>
+<span class="normal"><a href="#__codelineno-0-455">455</a></span>
+<span class="normal"><a href="#__codelineno-0-456">456</a></span>
+<span class="normal"><a href="#__codelineno-0-457">457</a></span>
+<span class="normal"><a href="#__codelineno-0-458">458</a></span>
+<span class="normal"><a href="#__codelineno-0-459">459</a></span>
+<span class="normal"><a href="#__codelineno-0-460">460</a></span>
+<span class="normal"><a href="#__codelineno-0-461">461</a></span>
+<span class="normal"><a href="#__codelineno-0-462">462</a></span>
+<span class="normal"><a href="#__codelineno-0-463">463</a></span>
+<span class="normal"><a href="#__codelineno-0-464">464</a></span>
+<span class="normal"><a href="#__codelineno-0-465">465</a></span>
+<span class="normal"><a href="#__codelineno-0-466">466</a></span>
+<span class="normal"><a href="#__codelineno-0-467">467</a></span>
+<span class="normal"><a href="#__codelineno-0-468">468</a></span>
+<span class="normal"><a href="#__codelineno-0-469">469</a></span>
+<span class="normal"><a href="#__codelineno-0-470">470</a></span>
+<span class="normal"><a href="#__codelineno-0-471">471</a></span>
+<span class="normal"><a href="#__codelineno-0-472">472</a></span>
+<span class="normal"><a href="#__codelineno-0-473">473</a></span>
+<span class="normal"><a href="#__codelineno-0-474">474</a></span>
+<span class="normal"><a href="#__codelineno-0-475">475</a></span>
+<span class="normal"><a href="#__codelineno-0-476">476</a></span>
+<span class="normal"><a href="#__codelineno-0-477">477</a></span>
+<span class="normal"><a href="#__codelineno-0-478">478</a></span>
+<span class="normal"><a href="#__codelineno-0-479">479</a></span>
+<span class="normal"><a href="#__codelineno-0-480">480</a></span>
+<span class="normal"><a href="#__codelineno-0-481">481</a></span>
+<span class="normal"><a href="#__codelineno-0-482">482</a></span>
+<span class="normal"><a href="#__codelineno-0-483">483</a></span>
+<span class="normal"><a href="#__codelineno-0-484">484</a></span>
+<span class="normal"><a href="#__codelineno-0-485">485</a></span>
+<span class="normal"><a href="#__codelineno-0-486">486</a></span>
+<span class="normal"><a href="#__codelineno-0-487">487</a></span>
+<span class="normal"><a href="#__codelineno-0-488">488</a></span>
+<span class="normal"><a href="#__codelineno-0-489">489</a></span>
+<span class="normal"><a href="#__codelineno-0-490">490</a></span>
+<span class="normal"><a href="#__codelineno-0-491">491</a></span>
+<span class="normal"><a href="#__codelineno-0-492">492</a></span>
+<span class="normal"><a href="#__codelineno-0-493">493</a></span>
+<span class="normal"><a href="#__codelineno-0-494">494</a></span>
+<span class="normal"><a href="#__codelineno-0-495">495</a></span>
+<span class="normal"><a href="#__codelineno-0-496">496</a></span>
+<span class="normal"><a href="#__codelineno-0-497">497</a></span>
+<span class="normal"><a href="#__codelineno-0-498">498</a></span>
+<span class="normal"><a href="#__codelineno-0-499">499</a></span>
+<span class="normal"><a href="#__codelineno-0-500">500</a></span>
+<span class="normal"><a href="#__codelineno-0-501">501</a></span>
+<span class="normal"><a href="#__codelineno-0-502">502</a></span>
+<span class="normal"><a href="#__codelineno-0-503">503</a></span>
+<span class="normal"><a href="#__codelineno-0-504">504</a></span>
+<span class="normal"><a href="#__codelineno-0-505">505</a></span>
+<span class="normal"><a href="#__codelineno-0-506">506</a></span>
+<span class="normal"><a href="#__codelineno-0-507">507</a></span>
+<span class="normal"><a href="#__codelineno-0-508">508</a></span>
+<span class="normal"><a href="#__codelineno-0-509">509</a></span>
+<span class="normal"><a href="#__codelineno-0-510">510</a></span>
+<span class="normal"><a href="#__codelineno-0-511">511</a></span>
+<span class="normal"><a href="#__codelineno-0-512">512</a></span>
+<span class="normal"><a href="#__codelineno-0-513">513</a></span>
+<span class="normal"><a href="#__codelineno-0-514">514</a></span>
+<span class="normal"><a href="#__codelineno-0-515">515</a></span>
+<span class="normal"><a href="#__codelineno-0-516">516</a></span>
+<span class="normal"><a href="#__codelineno-0-517">517</a></span>
+<span class="normal"><a href="#__codelineno-0-518">518</a></span>
+<span class="normal"><a href="#__codelineno-0-519">519</a></span>
+<span class="normal"><a href="#__codelineno-0-520">520</a></span>
+<span class="normal"><a href="#__codelineno-0-521">521</a></span>
+<span class="normal"><a href="#__codelineno-0-522">522</a></span>
+<span class="normal"><a href="#__codelineno-0-523">523</a></span>
+<span class="normal"><a href="#__codelineno-0-524">524</a></span>
+<span class="normal"><a href="#__codelineno-0-525">525</a></span>
+<span class="normal"><a href="#__codelineno-0-526">526</a></span>
+<span class="normal"><a href="#__codelineno-0-527">527</a></span>
+<span class="normal"><a href="#__codelineno-0-528">528</a></span>
+<span class="normal"><a href="#__codelineno-0-529">529</a></span>
+<span class="normal"><a href="#__codelineno-0-530">530</a></span>
+<span class="normal"><a href="#__codelineno-0-531">531</a></span>
+<span class="normal"><a href="#__codelineno-0-532">532</a></span>
+<span class="normal"><a href="#__codelineno-0-533">533</a></span>
+<span class="normal"><a href="#__codelineno-0-534">534</a></span>
+<span class="normal"><a href="#__codelineno-0-535">535</a></span>
+<span class="normal"><a href="#__codelineno-0-536">536</a></span>
+<span class="normal"><a href="#__codelineno-0-537">537</a></span>
+<span class="normal"><a href="#__codelineno-0-538">538</a></span>
+<span class="normal"><a href="#__codelineno-0-539">539</a></span>
+<span class="normal"><a href="#__codelineno-0-540">540</a></span>
+<span class="normal"><a href="#__codelineno-0-541">541</a></span>
+<span class="normal"><a href="#__codelineno-0-542">542</a></span>
+<span class="normal"><a href="#__codelineno-0-543">543</a></span>
+<span class="normal"><a href="#__codelineno-0-544">544</a></span>
+<span class="normal"><a href="#__codelineno-0-545">545</a></span>
+<span class="normal"><a href="#__codelineno-0-546">546</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-452" name="__codelineno-0-452"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_ui_resource</span><span class="p">(</span>
+<a id="__codelineno-0-453" name="__codelineno-0-453"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-454" name="__codelineno-0-454"></a>    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-455" name="__codelineno-0-455"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-456" name="__codelineno-0-456"></a>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-457" name="__codelineno-0-457"></a>    <span class="n">mime_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-458" name="__codelineno-0-458"></a>    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+<a id="__codelineno-0-459" name="__codelineno-0-459"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BuildMCPServer&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-460" name="__codelineno-0-460"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Add a UI resource to the server (convenience method for MCP-UI).</span>
+<a id="__codelineno-0-461" name="__codelineno-0-461"></a>
+<a id="__codelineno-0-462" name="__codelineno-0-462"></a><span class="sd">    This is syntactic sugar for add_resource() that automatically</span>
+<a id="__codelineno-0-463" name="__codelineno-0-463"></a><span class="sd">    validates UI resource URIs and MIME types. Mirrors the TypeScript</span>
+<a id="__codelineno-0-464" name="__codelineno-0-464"></a><span class="sd">    implementation&#39;s addUIResource method.</span>
+<a id="__codelineno-0-465" name="__codelineno-0-465"></a>
+<a id="__codelineno-0-466" name="__codelineno-0-466"></a><span class="sd">    UI resources are special resources with specific MIME types that</span>
+<a id="__codelineno-0-467" name="__codelineno-0-467"></a><span class="sd">    indicate they should be rendered as interactive UI elements:</span>
+<a id="__codelineno-0-468" name="__codelineno-0-468"></a><span class="sd">    - text/html: Inline HTML content (Foundation Layer)</span>
+<a id="__codelineno-0-469" name="__codelineno-0-469"></a><span class="sd">    - text/uri-list: External URLs (Feature Layer)</span>
+<a id="__codelineno-0-470" name="__codelineno-0-470"></a><span class="sd">    - application/vnd.mcp-ui.remote-dom+javascript: Remote DOM (Layer 3)</span>
+<a id="__codelineno-0-471" name="__codelineno-0-471"></a>
+<a id="__codelineno-0-472" name="__codelineno-0-472"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-473" name="__codelineno-0-473"></a><span class="sd">        uri: UI resource URI (must start with &quot;ui://&quot;)</span>
+<a id="__codelineno-0-474" name="__codelineno-0-474"></a><span class="sd">        name: Display name for the resource</span>
+<a id="__codelineno-0-475" name="__codelineno-0-475"></a><span class="sd">        description: Human-readable description</span>
+<a id="__codelineno-0-476" name="__codelineno-0-476"></a><span class="sd">        mime_type: MIME type (text/html, text/uri-list, or application/vnd.mcp-ui.remote-dom+*)</span>
+<a id="__codelineno-0-477" name="__codelineno-0-477"></a><span class="sd">        content: HTML/URL/script content or function that returns it</span>
+<a id="__codelineno-0-478" name="__codelineno-0-478"></a>
+<a id="__codelineno-0-479" name="__codelineno-0-479"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-480" name="__codelineno-0-480"></a><span class="sd">        Self for method chaining</span>
+<a id="__codelineno-0-481" name="__codelineno-0-481"></a>
+<a id="__codelineno-0-482" name="__codelineno-0-482"></a><span class="sd">    Raises:</span>
+<a id="__codelineno-0-483" name="__codelineno-0-483"></a><span class="sd">        ValueError: If URI doesn&#39;t start with &quot;ui://&quot;</span>
+<a id="__codelineno-0-484" name="__codelineno-0-484"></a><span class="sd">        ValueError: If MIME type is not a valid UI resource MIME type</span>
+<a id="__codelineno-0-485" name="__codelineno-0-485"></a>
+<a id="__codelineno-0-486" name="__codelineno-0-486"></a><span class="sd">    Example:</span>
+<a id="__codelineno-0-487" name="__codelineno-0-487"></a><span class="sd">        Inline HTML resource:</span>
+<a id="__codelineno-0-488" name="__codelineno-0-488"></a><span class="sd">        &gt;&gt;&gt; server.add_ui_resource(</span>
+<a id="__codelineno-0-489" name="__codelineno-0-489"></a><span class="sd">        ...     &#39;ui://product-card/v1&#39;,</span>
+<a id="__codelineno-0-490" name="__codelineno-0-490"></a><span class="sd">        ...     &#39;Product Card&#39;,</span>
+<a id="__codelineno-0-491" name="__codelineno-0-491"></a><span class="sd">        ...     &#39;Displays a product selector&#39;,</span>
+<a id="__codelineno-0-492" name="__codelineno-0-492"></a><span class="sd">        ...     &#39;text/html&#39;,</span>
+<a id="__codelineno-0-493" name="__codelineno-0-493"></a><span class="sd">        ...     &#39;&lt;div&gt;&lt;h2&gt;Select a product&lt;/h2&gt;&lt;button&gt;Widget A&lt;/button&gt;&lt;/div&gt;&#39;</span>
+<a id="__codelineno-0-494" name="__codelineno-0-494"></a><span class="sd">        ... )</span>
+<a id="__codelineno-0-495" name="__codelineno-0-495"></a>
+<a id="__codelineno-0-496" name="__codelineno-0-496"></a><span class="sd">        External URL resource:</span>
+<a id="__codelineno-0-497" name="__codelineno-0-497"></a><span class="sd">        &gt;&gt;&gt; server.add_ui_resource(</span>
+<a id="__codelineno-0-498" name="__codelineno-0-498"></a><span class="sd">        ...     &#39;ui://analytics/dashboard&#39;,</span>
+<a id="__codelineno-0-499" name="__codelineno-0-499"></a><span class="sd">        ...     &#39;Analytics Dashboard&#39;,</span>
+<a id="__codelineno-0-500" name="__codelineno-0-500"></a><span class="sd">        ...     &#39;External analytics dashboard&#39;,</span>
+<a id="__codelineno-0-501" name="__codelineno-0-501"></a><span class="sd">        ...     &#39;text/uri-list&#39;,</span>
+<a id="__codelineno-0-502" name="__codelineno-0-502"></a><span class="sd">        ...     &#39;https://example.com/dashboard&#39;</span>
+<a id="__codelineno-0-503" name="__codelineno-0-503"></a><span class="sd">        ... )</span>
+<a id="__codelineno-0-504" name="__codelineno-0-504"></a>
+<a id="__codelineno-0-505" name="__codelineno-0-505"></a><span class="sd">        Dynamic content with handler:</span>
+<a id="__codelineno-0-506" name="__codelineno-0-506"></a><span class="sd">        &gt;&gt;&gt; def get_html() -&gt; str:</span>
+<a id="__codelineno-0-507" name="__codelineno-0-507"></a><span class="sd">        ...     return &#39;&lt;div&gt;Dynamic HTML&lt;/div&gt;&#39;</span>
+<a id="__codelineno-0-508" name="__codelineno-0-508"></a><span class="sd">        ...</span>
+<a id="__codelineno-0-509" name="__codelineno-0-509"></a><span class="sd">        &gt;&gt;&gt; server.add_ui_resource(</span>
+<a id="__codelineno-0-510" name="__codelineno-0-510"></a><span class="sd">        ...     &#39;ui://dynamic/card&#39;,</span>
+<a id="__codelineno-0-511" name="__codelineno-0-511"></a><span class="sd">        ...     &#39;Dynamic Card&#39;,</span>
+<a id="__codelineno-0-512" name="__codelineno-0-512"></a><span class="sd">        ...     &#39;Dynamically generated UI&#39;,</span>
+<a id="__codelineno-0-513" name="__codelineno-0-513"></a><span class="sd">        ...     &#39;text/html&#39;,</span>
+<a id="__codelineno-0-514" name="__codelineno-0-514"></a><span class="sd">        ...     get_html</span>
+<a id="__codelineno-0-515" name="__codelineno-0-515"></a><span class="sd">        ... )</span>
+<a id="__codelineno-0-516" name="__codelineno-0-516"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-517" name="__codelineno-0-517"></a>    <span class="c1"># Validate URI starts with ui://</span>
+<a id="__codelineno-0-518" name="__codelineno-0-518"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ui://&quot;</span><span class="p">):</span>
+<a id="__codelineno-0-519" name="__codelineno-0-519"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;UI resource URI must start with &quot;ui://&quot;, got: &quot;</span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
+<a id="__codelineno-0-520" name="__codelineno-0-520"></a>
+<a id="__codelineno-0-521" name="__codelineno-0-521"></a>    <span class="c1"># Validate MIME type</span>
+<a id="__codelineno-0-522" name="__codelineno-0-522"></a>    <span class="n">valid_mime_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;text/html&quot;</span><span class="p">,</span> <span class="s2">&quot;text/uri-list&quot;</span><span class="p">]</span>
+<a id="__codelineno-0-523" name="__codelineno-0-523"></a>    <span class="n">is_remote_dom</span> <span class="o">=</span> <span class="n">mime_type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;application/vnd.mcp-ui.remote-dom+&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-524" name="__codelineno-0-524"></a>
+<a id="__codelineno-0-525" name="__codelineno-0-525"></a>    <span class="k">if</span> <span class="n">mime_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_mime_types</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_remote_dom</span><span class="p">:</span>
+<a id="__codelineno-0-526" name="__codelineno-0-526"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<a id="__codelineno-0-527" name="__codelineno-0-527"></a>            <span class="sa">f</span><span class="s1">&#39;Invalid UI resource MIME type: &quot;</span><span class="si">{</span><span class="n">mime_type</span><span class="si">}</span><span class="s1">&quot;. &#39;</span>
+<a id="__codelineno-0-528" name="__codelineno-0-528"></a>            <span class="sa">f</span><span class="s2">&quot;Must be one of: text/html, text/uri-list, &quot;</span>
+<a id="__codelineno-0-529" name="__codelineno-0-529"></a>            <span class="sa">f</span><span class="s2">&quot;or application/vnd.mcp-ui.remote-dom+&lt;framework&gt;&quot;</span>
+<a id="__codelineno-0-530" name="__codelineno-0-530"></a>        <span class="p">)</span>
+<a id="__codelineno-0-531" name="__codelineno-0-531"></a>
+<a id="__codelineno-0-532" name="__codelineno-0-532"></a>    <span class="c1"># Wrap string content in a lambda if needed</span>
+<a id="__codelineno-0-533" name="__codelineno-0-533"></a>    <span class="c1"># add_resource expects a callable, so we need to convert strings</span>
+<a id="__codelineno-0-534" name="__codelineno-0-534"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-0-535" name="__codelineno-0-535"></a>        <span class="n">handler</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">content</span>  <span class="c1"># noqa: E731</span>
+<a id="__codelineno-0-536" name="__codelineno-0-536"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-537" name="__codelineno-0-537"></a>        <span class="n">handler</span> <span class="o">=</span> <span class="n">content</span>
+<a id="__codelineno-0-538" name="__codelineno-0-538"></a>
+<a id="__codelineno-0-539" name="__codelineno-0-539"></a>    <span class="c1"># Delegate to add_resource</span>
+<a id="__codelineno-0-540" name="__codelineno-0-540"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_resource</span><span class="p">(</span>
+<a id="__codelineno-0-541" name="__codelineno-0-541"></a>        <span class="n">uri</span><span class="o">=</span><span class="n">uri</span><span class="p">,</span>
+<a id="__codelineno-0-542" name="__codelineno-0-542"></a>        <span class="n">handler</span><span class="o">=</span><span class="n">handler</span><span class="p">,</span>
+<a id="__codelineno-0-543" name="__codelineno-0-543"></a>        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+<a id="__codelineno-0-544" name="__codelineno-0-544"></a>        <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+<a id="__codelineno-0-545" name="__codelineno-0-545"></a>        <span class="n">mime_type</span><span class="o">=</span><span class="n">mime_type</span><span class="p">,</span>
+<a id="__codelineno-0-546" name="__codelineno-0-546"></a>    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
 <h4 id="simply_mcp.api.builder.BuildMCPServer.configure" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">configure</span>
 
@@ -5210,91 +5845,91 @@ def get_config() -&gt; dict:
 
             <details class="quote">
               <summary>Source code in <code>src/simply_mcp/api/programmatic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-452">452</a></span>
-<span class="normal"><a href="#__codelineno-0-453">453</a></span>
-<span class="normal"><a href="#__codelineno-0-454">454</a></span>
-<span class="normal"><a href="#__codelineno-0-455">455</a></span>
-<span class="normal"><a href="#__codelineno-0-456">456</a></span>
-<span class="normal"><a href="#__codelineno-0-457">457</a></span>
-<span class="normal"><a href="#__codelineno-0-458">458</a></span>
-<span class="normal"><a href="#__codelineno-0-459">459</a></span>
-<span class="normal"><a href="#__codelineno-0-460">460</a></span>
-<span class="normal"><a href="#__codelineno-0-461">461</a></span>
-<span class="normal"><a href="#__codelineno-0-462">462</a></span>
-<span class="normal"><a href="#__codelineno-0-463">463</a></span>
-<span class="normal"><a href="#__codelineno-0-464">464</a></span>
-<span class="normal"><a href="#__codelineno-0-465">465</a></span>
-<span class="normal"><a href="#__codelineno-0-466">466</a></span>
-<span class="normal"><a href="#__codelineno-0-467">467</a></span>
-<span class="normal"><a href="#__codelineno-0-468">468</a></span>
-<span class="normal"><a href="#__codelineno-0-469">469</a></span>
-<span class="normal"><a href="#__codelineno-0-470">470</a></span>
-<span class="normal"><a href="#__codelineno-0-471">471</a></span>
-<span class="normal"><a href="#__codelineno-0-472">472</a></span>
-<span class="normal"><a href="#__codelineno-0-473">473</a></span>
-<span class="normal"><a href="#__codelineno-0-474">474</a></span>
-<span class="normal"><a href="#__codelineno-0-475">475</a></span>
-<span class="normal"><a href="#__codelineno-0-476">476</a></span>
-<span class="normal"><a href="#__codelineno-0-477">477</a></span>
-<span class="normal"><a href="#__codelineno-0-478">478</a></span>
-<span class="normal"><a href="#__codelineno-0-479">479</a></span>
-<span class="normal"><a href="#__codelineno-0-480">480</a></span>
-<span class="normal"><a href="#__codelineno-0-481">481</a></span>
-<span class="normal"><a href="#__codelineno-0-482">482</a></span>
-<span class="normal"><a href="#__codelineno-0-483">483</a></span>
-<span class="normal"><a href="#__codelineno-0-484">484</a></span>
-<span class="normal"><a href="#__codelineno-0-485">485</a></span>
-<span class="normal"><a href="#__codelineno-0-486">486</a></span>
-<span class="normal"><a href="#__codelineno-0-487">487</a></span>
-<span class="normal"><a href="#__codelineno-0-488">488</a></span>
-<span class="normal"><a href="#__codelineno-0-489">489</a></span>
-<span class="normal"><a href="#__codelineno-0-490">490</a></span>
-<span class="normal"><a href="#__codelineno-0-491">491</a></span>
-<span class="normal"><a href="#__codelineno-0-492">492</a></span>
-<span class="normal"><a href="#__codelineno-0-493">493</a></span>
-<span class="normal"><a href="#__codelineno-0-494">494</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-452" name="__codelineno-0-452"></a><span class="k">def</span><span class="w"> </span><span class="nf">configure</span><span class="p">(</span>
-<a id="__codelineno-0-453" name="__codelineno-0-453"></a>    <span class="bp">self</span><span class="p">,</span>
-<a id="__codelineno-0-454" name="__codelineno-0-454"></a>    <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<a id="__codelineno-0-455" name="__codelineno-0-455"></a>    <span class="n">log_level</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<a id="__codelineno-0-456" name="__codelineno-0-456"></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-<a id="__codelineno-0-457" name="__codelineno-0-457"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BuildMCPServer&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-458" name="__codelineno-0-458"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Configure the server.</span>
-<a id="__codelineno-0-459" name="__codelineno-0-459"></a>
-<a id="__codelineno-0-460" name="__codelineno-0-460"></a><span class="sd">    Args:</span>
-<a id="__codelineno-0-461" name="__codelineno-0-461"></a><span class="sd">        port: Server port (for network transports)</span>
-<a id="__codelineno-0-462" name="__codelineno-0-462"></a><span class="sd">        log_level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)</span>
-<a id="__codelineno-0-463" name="__codelineno-0-463"></a><span class="sd">        **kwargs: Additional configuration options</span>
-<a id="__codelineno-0-464" name="__codelineno-0-464"></a>
-<a id="__codelineno-0-465" name="__codelineno-0-465"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-466" name="__codelineno-0-466"></a><span class="sd">        Self for method chaining</span>
-<a id="__codelineno-0-467" name="__codelineno-0-467"></a>
-<a id="__codelineno-0-468" name="__codelineno-0-468"></a><span class="sd">    Example:</span>
-<a id="__codelineno-0-469" name="__codelineno-0-469"></a><span class="sd">        &gt;&gt;&gt; mcp.configure(port=3000, log_level=&quot;DEBUG&quot;)</span>
-<a id="__codelineno-0-470" name="__codelineno-0-470"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-471" name="__codelineno-0-471"></a>    <span class="c1"># Update transport config if port provided</span>
-<a id="__codelineno-0-472" name="__codelineno-0-472"></a>    <span class="k">if</span> <span class="n">port</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-473" name="__codelineno-0-473"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
-<a id="__codelineno-0-474" name="__codelineno-0-474"></a>
-<a id="__codelineno-0-475" name="__codelineno-0-475"></a>    <span class="c1"># Update logging config if log_level provided</span>
-<a id="__codelineno-0-476" name="__codelineno-0-476"></a>    <span class="k">if</span> <span class="n">log_level</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-477" name="__codelineno-0-477"></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">cast</span>
-<a id="__codelineno-0-478" name="__codelineno-0-478"></a>
-<a id="__codelineno-0-479" name="__codelineno-0-479"></a>        <span class="c1"># Validate log level</span>
-<a id="__codelineno-0-480" name="__codelineno-0-480"></a>        <span class="n">valid_levels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">]</span>
-<a id="__codelineno-0-481" name="__codelineno-0-481"></a>        <span class="k">if</span> <span class="n">log_level</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_levels</span><span class="p">:</span>
-<a id="__codelineno-0-482" name="__codelineno-0-482"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-<a id="__codelineno-0-483" name="__codelineno-0-483"></a>                <span class="sa">f</span><span class="s2">&quot;Invalid log level: </span><span class="si">{</span><span class="n">log_level</span><span class="si">}</span><span class="s2">. Must be one of </span><span class="si">{</span><span class="n">valid_levels</span><span class="si">}</span><span class="s2">&quot;</span>
-<a id="__codelineno-0-484" name="__codelineno-0-484"></a>            <span class="p">)</span>
-<a id="__codelineno-0-485" name="__codelineno-0-485"></a>        <span class="c1"># Cast to the appropriate type (LogLevel) which accepts these strings</span>
-<a id="__codelineno-0-486" name="__codelineno-0-486"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="s2">&quot;Any&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
-<a id="__codelineno-0-487" name="__codelineno-0-487"></a>
-<a id="__codelineno-0-488" name="__codelineno-0-488"></a>    <span class="c1"># Handle additional kwargs (extend as needed)</span>
-<a id="__codelineno-0-489" name="__codelineno-0-489"></a>    <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<a id="__codelineno-0-490" name="__codelineno-0-490"></a>        <span class="c1"># You can add more configuration options here</span>
-<a id="__codelineno-0-491" name="__codelineno-0-491"></a>        <span class="c1"># For now, we&#39;ll just ignore unknown options</span>
-<a id="__codelineno-0-492" name="__codelineno-0-492"></a>        <span class="k">pass</span>
-<a id="__codelineno-0-493" name="__codelineno-0-493"></a>
-<a id="__codelineno-0-494" name="__codelineno-0-494"></a>    <span class="k">return</span> <span class="bp">self</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-550">550</a></span>
+<span class="normal"><a href="#__codelineno-0-551">551</a></span>
+<span class="normal"><a href="#__codelineno-0-552">552</a></span>
+<span class="normal"><a href="#__codelineno-0-553">553</a></span>
+<span class="normal"><a href="#__codelineno-0-554">554</a></span>
+<span class="normal"><a href="#__codelineno-0-555">555</a></span>
+<span class="normal"><a href="#__codelineno-0-556">556</a></span>
+<span class="normal"><a href="#__codelineno-0-557">557</a></span>
+<span class="normal"><a href="#__codelineno-0-558">558</a></span>
+<span class="normal"><a href="#__codelineno-0-559">559</a></span>
+<span class="normal"><a href="#__codelineno-0-560">560</a></span>
+<span class="normal"><a href="#__codelineno-0-561">561</a></span>
+<span class="normal"><a href="#__codelineno-0-562">562</a></span>
+<span class="normal"><a href="#__codelineno-0-563">563</a></span>
+<span class="normal"><a href="#__codelineno-0-564">564</a></span>
+<span class="normal"><a href="#__codelineno-0-565">565</a></span>
+<span class="normal"><a href="#__codelineno-0-566">566</a></span>
+<span class="normal"><a href="#__codelineno-0-567">567</a></span>
+<span class="normal"><a href="#__codelineno-0-568">568</a></span>
+<span class="normal"><a href="#__codelineno-0-569">569</a></span>
+<span class="normal"><a href="#__codelineno-0-570">570</a></span>
+<span class="normal"><a href="#__codelineno-0-571">571</a></span>
+<span class="normal"><a href="#__codelineno-0-572">572</a></span>
+<span class="normal"><a href="#__codelineno-0-573">573</a></span>
+<span class="normal"><a href="#__codelineno-0-574">574</a></span>
+<span class="normal"><a href="#__codelineno-0-575">575</a></span>
+<span class="normal"><a href="#__codelineno-0-576">576</a></span>
+<span class="normal"><a href="#__codelineno-0-577">577</a></span>
+<span class="normal"><a href="#__codelineno-0-578">578</a></span>
+<span class="normal"><a href="#__codelineno-0-579">579</a></span>
+<span class="normal"><a href="#__codelineno-0-580">580</a></span>
+<span class="normal"><a href="#__codelineno-0-581">581</a></span>
+<span class="normal"><a href="#__codelineno-0-582">582</a></span>
+<span class="normal"><a href="#__codelineno-0-583">583</a></span>
+<span class="normal"><a href="#__codelineno-0-584">584</a></span>
+<span class="normal"><a href="#__codelineno-0-585">585</a></span>
+<span class="normal"><a href="#__codelineno-0-586">586</a></span>
+<span class="normal"><a href="#__codelineno-0-587">587</a></span>
+<span class="normal"><a href="#__codelineno-0-588">588</a></span>
+<span class="normal"><a href="#__codelineno-0-589">589</a></span>
+<span class="normal"><a href="#__codelineno-0-590">590</a></span>
+<span class="normal"><a href="#__codelineno-0-591">591</a></span>
+<span class="normal"><a href="#__codelineno-0-592">592</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-550" name="__codelineno-0-550"></a><span class="k">def</span><span class="w"> </span><span class="nf">configure</span><span class="p">(</span>
+<a id="__codelineno-0-551" name="__codelineno-0-551"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-552" name="__codelineno-0-552"></a>    <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-553" name="__codelineno-0-553"></a>    <span class="n">log_level</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-554" name="__codelineno-0-554"></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<a id="__codelineno-0-555" name="__codelineno-0-555"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BuildMCPServer&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-556" name="__codelineno-0-556"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Configure the server.</span>
+<a id="__codelineno-0-557" name="__codelineno-0-557"></a>
+<a id="__codelineno-0-558" name="__codelineno-0-558"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-559" name="__codelineno-0-559"></a><span class="sd">        port: Server port (for network transports)</span>
+<a id="__codelineno-0-560" name="__codelineno-0-560"></a><span class="sd">        log_level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)</span>
+<a id="__codelineno-0-561" name="__codelineno-0-561"></a><span class="sd">        **kwargs: Additional configuration options</span>
+<a id="__codelineno-0-562" name="__codelineno-0-562"></a>
+<a id="__codelineno-0-563" name="__codelineno-0-563"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-564" name="__codelineno-0-564"></a><span class="sd">        Self for method chaining</span>
+<a id="__codelineno-0-565" name="__codelineno-0-565"></a>
+<a id="__codelineno-0-566" name="__codelineno-0-566"></a><span class="sd">    Example:</span>
+<a id="__codelineno-0-567" name="__codelineno-0-567"></a><span class="sd">        &gt;&gt;&gt; mcp.configure(port=3000, log_level=&quot;DEBUG&quot;)</span>
+<a id="__codelineno-0-568" name="__codelineno-0-568"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-569" name="__codelineno-0-569"></a>    <span class="c1"># Update transport config if port provided</span>
+<a id="__codelineno-0-570" name="__codelineno-0-570"></a>    <span class="k">if</span> <span class="n">port</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-571" name="__codelineno-0-571"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+<a id="__codelineno-0-572" name="__codelineno-0-572"></a>
+<a id="__codelineno-0-573" name="__codelineno-0-573"></a>    <span class="c1"># Update logging config if log_level provided</span>
+<a id="__codelineno-0-574" name="__codelineno-0-574"></a>    <span class="k">if</span> <span class="n">log_level</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-575" name="__codelineno-0-575"></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">cast</span>
+<a id="__codelineno-0-576" name="__codelineno-0-576"></a>
+<a id="__codelineno-0-577" name="__codelineno-0-577"></a>        <span class="c1"># Validate log level</span>
+<a id="__codelineno-0-578" name="__codelineno-0-578"></a>        <span class="n">valid_levels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">]</span>
+<a id="__codelineno-0-579" name="__codelineno-0-579"></a>        <span class="k">if</span> <span class="n">log_level</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_levels</span><span class="p">:</span>
+<a id="__codelineno-0-580" name="__codelineno-0-580"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<a id="__codelineno-0-581" name="__codelineno-0-581"></a>                <span class="sa">f</span><span class="s2">&quot;Invalid log level: </span><span class="si">{</span><span class="n">log_level</span><span class="si">}</span><span class="s2">. Must be one of </span><span class="si">{</span><span class="n">valid_levels</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-582" name="__codelineno-0-582"></a>            <span class="p">)</span>
+<a id="__codelineno-0-583" name="__codelineno-0-583"></a>        <span class="c1"># Cast to the appropriate type (LogLevel) which accepts these strings</span>
+<a id="__codelineno-0-584" name="__codelineno-0-584"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="s2">&quot;Any&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+<a id="__codelineno-0-585" name="__codelineno-0-585"></a>
+<a id="__codelineno-0-586" name="__codelineno-0-586"></a>    <span class="c1"># Handle additional kwargs (extend as needed)</span>
+<a id="__codelineno-0-587" name="__codelineno-0-587"></a>    <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-0-588" name="__codelineno-0-588"></a>        <span class="c1"># You can add more configuration options here</span>
+<a id="__codelineno-0-589" name="__codelineno-0-589"></a>        <span class="c1"># For now, we&#39;ll just ignore unknown options</span>
+<a id="__codelineno-0-590" name="__codelineno-0-590"></a>        <span class="k">pass</span>
+<a id="__codelineno-0-591" name="__codelineno-0-591"></a>
+<a id="__codelineno-0-592" name="__codelineno-0-592"></a>    <span class="k">return</span> <span class="bp">self</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -5358,31 +5993,31 @@ def get_config() -&gt; dict:
 
             <details class="quote">
               <summary>Source code in <code>src/simply_mcp/api/programmatic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-498">498</a></span>
-<span class="normal"><a href="#__codelineno-0-499">499</a></span>
-<span class="normal"><a href="#__codelineno-0-500">500</a></span>
-<span class="normal"><a href="#__codelineno-0-501">501</a></span>
-<span class="normal"><a href="#__codelineno-0-502">502</a></span>
-<span class="normal"><a href="#__codelineno-0-503">503</a></span>
-<span class="normal"><a href="#__codelineno-0-504">504</a></span>
-<span class="normal"><a href="#__codelineno-0-505">505</a></span>
-<span class="normal"><a href="#__codelineno-0-506">506</a></span>
-<span class="normal"><a href="#__codelineno-0-507">507</a></span>
-<span class="normal"><a href="#__codelineno-0-508">508</a></span>
-<span class="normal"><a href="#__codelineno-0-509">509</a></span>
-<span class="normal"><a href="#__codelineno-0-510">510</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-498" name="__codelineno-0-498"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BuildMCPServer&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-499" name="__codelineno-0-499"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the server.</span>
-<a id="__codelineno-0-500" name="__codelineno-0-500"></a>
-<a id="__codelineno-0-501" name="__codelineno-0-501"></a><span class="sd">    Must be called before running the server.</span>
-<a id="__codelineno-0-502" name="__codelineno-0-502"></a>
-<a id="__codelineno-0-503" name="__codelineno-0-503"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-504" name="__codelineno-0-504"></a><span class="sd">        Self for method chaining</span>
-<a id="__codelineno-0-505" name="__codelineno-0-505"></a>
-<a id="__codelineno-0-506" name="__codelineno-0-506"></a><span class="sd">    Example:</span>
-<a id="__codelineno-0-507" name="__codelineno-0-507"></a><span class="sd">        &gt;&gt;&gt; await mcp.initialize()</span>
-<a id="__codelineno-0-508" name="__codelineno-0-508"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-509" name="__codelineno-0-509"></a>    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
-<a id="__codelineno-0-510" name="__codelineno-0-510"></a>    <span class="k">return</span> <span class="bp">self</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-596">596</a></span>
+<span class="normal"><a href="#__codelineno-0-597">597</a></span>
+<span class="normal"><a href="#__codelineno-0-598">598</a></span>
+<span class="normal"><a href="#__codelineno-0-599">599</a></span>
+<span class="normal"><a href="#__codelineno-0-600">600</a></span>
+<span class="normal"><a href="#__codelineno-0-601">601</a></span>
+<span class="normal"><a href="#__codelineno-0-602">602</a></span>
+<span class="normal"><a href="#__codelineno-0-603">603</a></span>
+<span class="normal"><a href="#__codelineno-0-604">604</a></span>
+<span class="normal"><a href="#__codelineno-0-605">605</a></span>
+<span class="normal"><a href="#__codelineno-0-606">606</a></span>
+<span class="normal"><a href="#__codelineno-0-607">607</a></span>
+<span class="normal"><a href="#__codelineno-0-608">608</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-596" name="__codelineno-0-596"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BuildMCPServer&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-597" name="__codelineno-0-597"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the server.</span>
+<a id="__codelineno-0-598" name="__codelineno-0-598"></a>
+<a id="__codelineno-0-599" name="__codelineno-0-599"></a><span class="sd">    Must be called before running the server.</span>
+<a id="__codelineno-0-600" name="__codelineno-0-600"></a>
+<a id="__codelineno-0-601" name="__codelineno-0-601"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-602" name="__codelineno-0-602"></a><span class="sd">        Self for method chaining</span>
+<a id="__codelineno-0-603" name="__codelineno-0-603"></a>
+<a id="__codelineno-0-604" name="__codelineno-0-604"></a><span class="sd">    Example:</span>
+<a id="__codelineno-0-605" name="__codelineno-0-605"></a><span class="sd">        &gt;&gt;&gt; await mcp.initialize()</span>
+<a id="__codelineno-0-606" name="__codelineno-0-606"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-607" name="__codelineno-0-607"></a>    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+<a id="__codelineno-0-608" name="__codelineno-0-608"></a>    <span class="k">return</span> <span class="bp">self</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -5487,45 +6122,45 @@ await mcp.run("stdio")</p>
 
             <details class="quote">
               <summary>Source code in <code>src/simply_mcp/api/programmatic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-512">512</a></span>
-<span class="normal"><a href="#__codelineno-0-513">513</a></span>
-<span class="normal"><a href="#__codelineno-0-514">514</a></span>
-<span class="normal"><a href="#__codelineno-0-515">515</a></span>
-<span class="normal"><a href="#__codelineno-0-516">516</a></span>
-<span class="normal"><a href="#__codelineno-0-517">517</a></span>
-<span class="normal"><a href="#__codelineno-0-518">518</a></span>
-<span class="normal"><a href="#__codelineno-0-519">519</a></span>
-<span class="normal"><a href="#__codelineno-0-520">520</a></span>
-<span class="normal"><a href="#__codelineno-0-521">521</a></span>
-<span class="normal"><a href="#__codelineno-0-522">522</a></span>
-<span class="normal"><a href="#__codelineno-0-523">523</a></span>
-<span class="normal"><a href="#__codelineno-0-524">524</a></span>
-<span class="normal"><a href="#__codelineno-0-525">525</a></span>
-<span class="normal"><a href="#__codelineno-0-526">526</a></span>
-<span class="normal"><a href="#__codelineno-0-527">527</a></span>
-<span class="normal"><a href="#__codelineno-0-528">528</a></span>
-<span class="normal"><a href="#__codelineno-0-529">529</a></span>
-<span class="normal"><a href="#__codelineno-0-530">530</a></span>
-<span class="normal"><a href="#__codelineno-0-531">531</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-512" name="__codelineno-0-512"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transport</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;stdio&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-513" name="__codelineno-0-513"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the server with specified transport.</span>
-<a id="__codelineno-0-514" name="__codelineno-0-514"></a>
-<a id="__codelineno-0-515" name="__codelineno-0-515"></a><span class="sd">    Args:</span>
-<a id="__codelineno-0-516" name="__codelineno-0-516"></a><span class="sd">        transport: Transport type (stdio, http, sse)</span>
-<a id="__codelineno-0-517" name="__codelineno-0-517"></a>
-<a id="__codelineno-0-518" name="__codelineno-0-518"></a><span class="sd">    Raises:</span>
-<a id="__codelineno-0-519" name="__codelineno-0-519"></a><span class="sd">        RuntimeError: If server is not initialized</span>
-<a id="__codelineno-0-520" name="__codelineno-0-520"></a><span class="sd">        ValueError: If transport type is unsupported</span>
-<a id="__codelineno-0-521" name="__codelineno-0-521"></a>
-<a id="__codelineno-0-522" name="__codelineno-0-522"></a><span class="sd">    Example:</span>
-<a id="__codelineno-0-523" name="__codelineno-0-523"></a><span class="sd">        &gt;&gt;&gt; await mcp.run()  # stdio</span>
-<a id="__codelineno-0-524" name="__codelineno-0-524"></a><span class="sd">        &gt;&gt;&gt; await mcp.run(&quot;stdio&quot;)</span>
-<a id="__codelineno-0-525" name="__codelineno-0-525"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-526" name="__codelineno-0-526"></a>    <span class="k">if</span> <span class="n">transport</span> <span class="o">==</span> <span class="s2">&quot;stdio&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-527" name="__codelineno-0-527"></a>        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">run_stdio</span><span class="p">()</span>
-<a id="__codelineno-0-528" name="__codelineno-0-528"></a>    <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-0-529" name="__codelineno-0-529"></a>        <span class="c1"># For now, only stdio is implemented</span>
-<a id="__codelineno-0-530" name="__codelineno-0-530"></a>        <span class="c1"># Future: support http, sse</span>
-<a id="__codelineno-0-531" name="__codelineno-0-531"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported transport: </span><span class="si">{</span><span class="n">transport</span><span class="si">}</span><span class="s2">. Only &#39;stdio&#39; is currently supported.&quot;</span><span class="p">)</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-610">610</a></span>
+<span class="normal"><a href="#__codelineno-0-611">611</a></span>
+<span class="normal"><a href="#__codelineno-0-612">612</a></span>
+<span class="normal"><a href="#__codelineno-0-613">613</a></span>
+<span class="normal"><a href="#__codelineno-0-614">614</a></span>
+<span class="normal"><a href="#__codelineno-0-615">615</a></span>
+<span class="normal"><a href="#__codelineno-0-616">616</a></span>
+<span class="normal"><a href="#__codelineno-0-617">617</a></span>
+<span class="normal"><a href="#__codelineno-0-618">618</a></span>
+<span class="normal"><a href="#__codelineno-0-619">619</a></span>
+<span class="normal"><a href="#__codelineno-0-620">620</a></span>
+<span class="normal"><a href="#__codelineno-0-621">621</a></span>
+<span class="normal"><a href="#__codelineno-0-622">622</a></span>
+<span class="normal"><a href="#__codelineno-0-623">623</a></span>
+<span class="normal"><a href="#__codelineno-0-624">624</a></span>
+<span class="normal"><a href="#__codelineno-0-625">625</a></span>
+<span class="normal"><a href="#__codelineno-0-626">626</a></span>
+<span class="normal"><a href="#__codelineno-0-627">627</a></span>
+<span class="normal"><a href="#__codelineno-0-628">628</a></span>
+<span class="normal"><a href="#__codelineno-0-629">629</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-610" name="__codelineno-0-610"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transport</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;stdio&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-611" name="__codelineno-0-611"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the server with specified transport.</span>
+<a id="__codelineno-0-612" name="__codelineno-0-612"></a>
+<a id="__codelineno-0-613" name="__codelineno-0-613"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-614" name="__codelineno-0-614"></a><span class="sd">        transport: Transport type (stdio, http, sse)</span>
+<a id="__codelineno-0-615" name="__codelineno-0-615"></a>
+<a id="__codelineno-0-616" name="__codelineno-0-616"></a><span class="sd">    Raises:</span>
+<a id="__codelineno-0-617" name="__codelineno-0-617"></a><span class="sd">        RuntimeError: If server is not initialized</span>
+<a id="__codelineno-0-618" name="__codelineno-0-618"></a><span class="sd">        ValueError: If transport type is unsupported</span>
+<a id="__codelineno-0-619" name="__codelineno-0-619"></a>
+<a id="__codelineno-0-620" name="__codelineno-0-620"></a><span class="sd">    Example:</span>
+<a id="__codelineno-0-621" name="__codelineno-0-621"></a><span class="sd">        &gt;&gt;&gt; await mcp.run()  # stdio</span>
+<a id="__codelineno-0-622" name="__codelineno-0-622"></a><span class="sd">        &gt;&gt;&gt; await mcp.run(&quot;stdio&quot;)</span>
+<a id="__codelineno-0-623" name="__codelineno-0-623"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-624" name="__codelineno-0-624"></a>    <span class="k">if</span> <span class="n">transport</span> <span class="o">==</span> <span class="s2">&quot;stdio&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-625" name="__codelineno-0-625"></a>        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">run_stdio</span><span class="p">()</span>
+<a id="__codelineno-0-626" name="__codelineno-0-626"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-627" name="__codelineno-0-627"></a>        <span class="c1"># For now, only stdio is implemented</span>
+<a id="__codelineno-0-628" name="__codelineno-0-628"></a>        <span class="c1"># Future: support http, sse</span>
+<a id="__codelineno-0-629" name="__codelineno-0-629"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported transport: </span><span class="si">{</span><span class="n">transport</span><span class="si">}</span><span class="s2">. Only &#39;stdio&#39; is currently supported.&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -5589,29 +6224,29 @@ await mcp.run("stdio")</p>
 
             <details class="quote">
               <summary>Source code in <code>src/simply_mcp/api/programmatic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-533">533</a></span>
-<span class="normal"><a href="#__codelineno-0-534">534</a></span>
-<span class="normal"><a href="#__codelineno-0-535">535</a></span>
-<span class="normal"><a href="#__codelineno-0-536">536</a></span>
-<span class="normal"><a href="#__codelineno-0-537">537</a></span>
-<span class="normal"><a href="#__codelineno-0-538">538</a></span>
-<span class="normal"><a href="#__codelineno-0-539">539</a></span>
-<span class="normal"><a href="#__codelineno-0-540">540</a></span>
-<span class="normal"><a href="#__codelineno-0-541">541</a></span>
-<span class="normal"><a href="#__codelineno-0-542">542</a></span>
-<span class="normal"><a href="#__codelineno-0-543">543</a></span>
-<span class="normal"><a href="#__codelineno-0-544">544</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-533" name="__codelineno-0-533"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run_stdio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-534" name="__codelineno-0-534"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the server with stdio transport.</span>
-<a id="__codelineno-0-535" name="__codelineno-0-535"></a>
-<a id="__codelineno-0-536" name="__codelineno-0-536"></a><span class="sd">    Convenience method for run(&quot;stdio&quot;).</span>
-<a id="__codelineno-0-537" name="__codelineno-0-537"></a>
-<a id="__codelineno-0-538" name="__codelineno-0-538"></a><span class="sd">    Raises:</span>
-<a id="__codelineno-0-539" name="__codelineno-0-539"></a><span class="sd">        RuntimeError: If server is not initialized</span>
-<a id="__codelineno-0-540" name="__codelineno-0-540"></a>
-<a id="__codelineno-0-541" name="__codelineno-0-541"></a><span class="sd">    Example:</span>
-<a id="__codelineno-0-542" name="__codelineno-0-542"></a><span class="sd">        &gt;&gt;&gt; await mcp.run_stdio()</span>
-<a id="__codelineno-0-543" name="__codelineno-0-543"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-544" name="__codelineno-0-544"></a>    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">run_stdio</span><span class="p">()</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-631">631</a></span>
+<span class="normal"><a href="#__codelineno-0-632">632</a></span>
+<span class="normal"><a href="#__codelineno-0-633">633</a></span>
+<span class="normal"><a href="#__codelineno-0-634">634</a></span>
+<span class="normal"><a href="#__codelineno-0-635">635</a></span>
+<span class="normal"><a href="#__codelineno-0-636">636</a></span>
+<span class="normal"><a href="#__codelineno-0-637">637</a></span>
+<span class="normal"><a href="#__codelineno-0-638">638</a></span>
+<span class="normal"><a href="#__codelineno-0-639">639</a></span>
+<span class="normal"><a href="#__codelineno-0-640">640</a></span>
+<span class="normal"><a href="#__codelineno-0-641">641</a></span>
+<span class="normal"><a href="#__codelineno-0-642">642</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-631" name="__codelineno-0-631"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run_stdio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-632" name="__codelineno-0-632"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the server with stdio transport.</span>
+<a id="__codelineno-0-633" name="__codelineno-0-633"></a>
+<a id="__codelineno-0-634" name="__codelineno-0-634"></a><span class="sd">    Convenience method for run(&quot;stdio&quot;).</span>
+<a id="__codelineno-0-635" name="__codelineno-0-635"></a>
+<a id="__codelineno-0-636" name="__codelineno-0-636"></a><span class="sd">    Raises:</span>
+<a id="__codelineno-0-637" name="__codelineno-0-637"></a><span class="sd">        RuntimeError: If server is not initialized</span>
+<a id="__codelineno-0-638" name="__codelineno-0-638"></a>
+<a id="__codelineno-0-639" name="__codelineno-0-639"></a><span class="sd">    Example:</span>
+<a id="__codelineno-0-640" name="__codelineno-0-640"></a><span class="sd">        &gt;&gt;&gt; await mcp.run_stdio()</span>
+<a id="__codelineno-0-641" name="__codelineno-0-641"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-642" name="__codelineno-0-642"></a>    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">run_stdio</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -5671,27 +6306,27 @@ print(server.config.server.name)</p>
 
             <details class="quote">
               <summary>Source code in <code>src/simply_mcp/api/programmatic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-548">548</a></span>
-<span class="normal"><a href="#__codelineno-0-549">549</a></span>
-<span class="normal"><a href="#__codelineno-0-550">550</a></span>
-<span class="normal"><a href="#__codelineno-0-551">551</a></span>
-<span class="normal"><a href="#__codelineno-0-552">552</a></span>
-<span class="normal"><a href="#__codelineno-0-553">553</a></span>
-<span class="normal"><a href="#__codelineno-0-554">554</a></span>
-<span class="normal"><a href="#__codelineno-0-555">555</a></span>
-<span class="normal"><a href="#__codelineno-0-556">556</a></span>
-<span class="normal"><a href="#__codelineno-0-557">557</a></span>
-<span class="normal"><a href="#__codelineno-0-558">558</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-548" name="__codelineno-0-548"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_server</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimplyMCPServer</span><span class="p">:</span>
-<a id="__codelineno-0-549" name="__codelineno-0-549"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the underlying server instance.</span>
-<a id="__codelineno-0-550" name="__codelineno-0-550"></a>
-<a id="__codelineno-0-551" name="__codelineno-0-551"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-552" name="__codelineno-0-552"></a><span class="sd">        The underlying SimplyMCPServer instance</span>
-<a id="__codelineno-0-553" name="__codelineno-0-553"></a>
-<a id="__codelineno-0-554" name="__codelineno-0-554"></a><span class="sd">    Example:</span>
-<a id="__codelineno-0-555" name="__codelineno-0-555"></a><span class="sd">        &gt;&gt;&gt; server = mcp.get_server()</span>
-<a id="__codelineno-0-556" name="__codelineno-0-556"></a><span class="sd">        &gt;&gt;&gt; print(server.config.server.name)</span>
-<a id="__codelineno-0-557" name="__codelineno-0-557"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-558" name="__codelineno-0-558"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-646">646</a></span>
+<span class="normal"><a href="#__codelineno-0-647">647</a></span>
+<span class="normal"><a href="#__codelineno-0-648">648</a></span>
+<span class="normal"><a href="#__codelineno-0-649">649</a></span>
+<span class="normal"><a href="#__codelineno-0-650">650</a></span>
+<span class="normal"><a href="#__codelineno-0-651">651</a></span>
+<span class="normal"><a href="#__codelineno-0-652">652</a></span>
+<span class="normal"><a href="#__codelineno-0-653">653</a></span>
+<span class="normal"><a href="#__codelineno-0-654">654</a></span>
+<span class="normal"><a href="#__codelineno-0-655">655</a></span>
+<span class="normal"><a href="#__codelineno-0-656">656</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-646" name="__codelineno-0-646"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_server</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimplyMCPServer</span><span class="p">:</span>
+<a id="__codelineno-0-647" name="__codelineno-0-647"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the underlying server instance.</span>
+<a id="__codelineno-0-648" name="__codelineno-0-648"></a>
+<a id="__codelineno-0-649" name="__codelineno-0-649"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-650" name="__codelineno-0-650"></a><span class="sd">        The underlying SimplyMCPServer instance</span>
+<a id="__codelineno-0-651" name="__codelineno-0-651"></a>
+<a id="__codelineno-0-652" name="__codelineno-0-652"></a><span class="sd">    Example:</span>
+<a id="__codelineno-0-653" name="__codelineno-0-653"></a><span class="sd">        &gt;&gt;&gt; server = mcp.get_server()</span>
+<a id="__codelineno-0-654" name="__codelineno-0-654"></a><span class="sd">        &gt;&gt;&gt; print(server.config.server.name)</span>
+<a id="__codelineno-0-655" name="__codelineno-0-655"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-656" name="__codelineno-0-656"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -5752,31 +6387,31 @@ print(tools)
 
             <details class="quote">
               <summary>Source code in <code>src/simply_mcp/api/programmatic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-562">562</a></span>
-<span class="normal"><a href="#__codelineno-0-563">563</a></span>
-<span class="normal"><a href="#__codelineno-0-564">564</a></span>
-<span class="normal"><a href="#__codelineno-0-565">565</a></span>
-<span class="normal"><a href="#__codelineno-0-566">566</a></span>
-<span class="normal"><a href="#__codelineno-0-567">567</a></span>
-<span class="normal"><a href="#__codelineno-0-568">568</a></span>
-<span class="normal"><a href="#__codelineno-0-569">569</a></span>
-<span class="normal"><a href="#__codelineno-0-570">570</a></span>
-<span class="normal"><a href="#__codelineno-0-571">571</a></span>
-<span class="normal"><a href="#__codelineno-0-572">572</a></span>
-<span class="normal"><a href="#__codelineno-0-573">573</a></span>
-<span class="normal"><a href="#__codelineno-0-574">574</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-562" name="__codelineno-0-562"></a><span class="k">def</span><span class="w"> </span><span class="nf">list_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<a id="__codelineno-0-563" name="__codelineno-0-563"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;List registered tool names.</span>
-<a id="__codelineno-0-564" name="__codelineno-0-564"></a>
-<a id="__codelineno-0-565" name="__codelineno-0-565"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-566" name="__codelineno-0-566"></a><span class="sd">        List of tool names</span>
-<a id="__codelineno-0-567" name="__codelineno-0-567"></a>
-<a id="__codelineno-0-568" name="__codelineno-0-568"></a><span class="sd">    Example:</span>
-<a id="__codelineno-0-569" name="__codelineno-0-569"></a><span class="sd">        &gt;&gt;&gt; tools = mcp.list_tools()</span>
-<a id="__codelineno-0-570" name="__codelineno-0-570"></a><span class="sd">        &gt;&gt;&gt; print(tools)</span>
-<a id="__codelineno-0-571" name="__codelineno-0-571"></a><span class="sd">        [&#39;add&#39;, &#39;multiply&#39;]</span>
-<a id="__codelineno-0-572" name="__codelineno-0-572"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-573" name="__codelineno-0-573"></a>    <span class="n">tool_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_tools</span><span class="p">()</span>
-<a id="__codelineno-0-574" name="__codelineno-0-574"></a>    <span class="k">return</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">tool_configs</span><span class="p">]</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-660">660</a></span>
+<span class="normal"><a href="#__codelineno-0-661">661</a></span>
+<span class="normal"><a href="#__codelineno-0-662">662</a></span>
+<span class="normal"><a href="#__codelineno-0-663">663</a></span>
+<span class="normal"><a href="#__codelineno-0-664">664</a></span>
+<span class="normal"><a href="#__codelineno-0-665">665</a></span>
+<span class="normal"><a href="#__codelineno-0-666">666</a></span>
+<span class="normal"><a href="#__codelineno-0-667">667</a></span>
+<span class="normal"><a href="#__codelineno-0-668">668</a></span>
+<span class="normal"><a href="#__codelineno-0-669">669</a></span>
+<span class="normal"><a href="#__codelineno-0-670">670</a></span>
+<span class="normal"><a href="#__codelineno-0-671">671</a></span>
+<span class="normal"><a href="#__codelineno-0-672">672</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-660" name="__codelineno-0-660"></a><span class="k">def</span><span class="w"> </span><span class="nf">list_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<a id="__codelineno-0-661" name="__codelineno-0-661"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;List registered tool names.</span>
+<a id="__codelineno-0-662" name="__codelineno-0-662"></a>
+<a id="__codelineno-0-663" name="__codelineno-0-663"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-664" name="__codelineno-0-664"></a><span class="sd">        List of tool names</span>
+<a id="__codelineno-0-665" name="__codelineno-0-665"></a>
+<a id="__codelineno-0-666" name="__codelineno-0-666"></a><span class="sd">    Example:</span>
+<a id="__codelineno-0-667" name="__codelineno-0-667"></a><span class="sd">        &gt;&gt;&gt; tools = mcp.list_tools()</span>
+<a id="__codelineno-0-668" name="__codelineno-0-668"></a><span class="sd">        &gt;&gt;&gt; print(tools)</span>
+<a id="__codelineno-0-669" name="__codelineno-0-669"></a><span class="sd">        [&#39;add&#39;, &#39;multiply&#39;]</span>
+<a id="__codelineno-0-670" name="__codelineno-0-670"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-671" name="__codelineno-0-671"></a>    <span class="n">tool_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_tools</span><span class="p">()</span>
+<a id="__codelineno-0-672" name="__codelineno-0-672"></a>    <span class="k">return</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">tool_configs</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -5837,31 +6472,31 @@ print(prompts)
 
             <details class="quote">
               <summary>Source code in <code>src/simply_mcp/api/programmatic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-576">576</a></span>
-<span class="normal"><a href="#__codelineno-0-577">577</a></span>
-<span class="normal"><a href="#__codelineno-0-578">578</a></span>
-<span class="normal"><a href="#__codelineno-0-579">579</a></span>
-<span class="normal"><a href="#__codelineno-0-580">580</a></span>
-<span class="normal"><a href="#__codelineno-0-581">581</a></span>
-<span class="normal"><a href="#__codelineno-0-582">582</a></span>
-<span class="normal"><a href="#__codelineno-0-583">583</a></span>
-<span class="normal"><a href="#__codelineno-0-584">584</a></span>
-<span class="normal"><a href="#__codelineno-0-585">585</a></span>
-<span class="normal"><a href="#__codelineno-0-586">586</a></span>
-<span class="normal"><a href="#__codelineno-0-587">587</a></span>
-<span class="normal"><a href="#__codelineno-0-588">588</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-576" name="__codelineno-0-576"></a><span class="k">def</span><span class="w"> </span><span class="nf">list_prompts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<a id="__codelineno-0-577" name="__codelineno-0-577"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;List registered prompt names.</span>
-<a id="__codelineno-0-578" name="__codelineno-0-578"></a>
-<a id="__codelineno-0-579" name="__codelineno-0-579"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-580" name="__codelineno-0-580"></a><span class="sd">        List of prompt names</span>
-<a id="__codelineno-0-581" name="__codelineno-0-581"></a>
-<a id="__codelineno-0-582" name="__codelineno-0-582"></a><span class="sd">    Example:</span>
-<a id="__codelineno-0-583" name="__codelineno-0-583"></a><span class="sd">        &gt;&gt;&gt; prompts = mcp.list_prompts()</span>
-<a id="__codelineno-0-584" name="__codelineno-0-584"></a><span class="sd">        &gt;&gt;&gt; print(prompts)</span>
-<a id="__codelineno-0-585" name="__codelineno-0-585"></a><span class="sd">        [&#39;greet&#39;, &#39;code_review&#39;]</span>
-<a id="__codelineno-0-586" name="__codelineno-0-586"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-587" name="__codelineno-0-587"></a>    <span class="n">prompt_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_prompts</span><span class="p">()</span>
-<a id="__codelineno-0-588" name="__codelineno-0-588"></a>    <span class="k">return</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">prompt_configs</span><span class="p">]</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-674">674</a></span>
+<span class="normal"><a href="#__codelineno-0-675">675</a></span>
+<span class="normal"><a href="#__codelineno-0-676">676</a></span>
+<span class="normal"><a href="#__codelineno-0-677">677</a></span>
+<span class="normal"><a href="#__codelineno-0-678">678</a></span>
+<span class="normal"><a href="#__codelineno-0-679">679</a></span>
+<span class="normal"><a href="#__codelineno-0-680">680</a></span>
+<span class="normal"><a href="#__codelineno-0-681">681</a></span>
+<span class="normal"><a href="#__codelineno-0-682">682</a></span>
+<span class="normal"><a href="#__codelineno-0-683">683</a></span>
+<span class="normal"><a href="#__codelineno-0-684">684</a></span>
+<span class="normal"><a href="#__codelineno-0-685">685</a></span>
+<span class="normal"><a href="#__codelineno-0-686">686</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-674" name="__codelineno-0-674"></a><span class="k">def</span><span class="w"> </span><span class="nf">list_prompts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<a id="__codelineno-0-675" name="__codelineno-0-675"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;List registered prompt names.</span>
+<a id="__codelineno-0-676" name="__codelineno-0-676"></a>
+<a id="__codelineno-0-677" name="__codelineno-0-677"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-678" name="__codelineno-0-678"></a><span class="sd">        List of prompt names</span>
+<a id="__codelineno-0-679" name="__codelineno-0-679"></a>
+<a id="__codelineno-0-680" name="__codelineno-0-680"></a><span class="sd">    Example:</span>
+<a id="__codelineno-0-681" name="__codelineno-0-681"></a><span class="sd">        &gt;&gt;&gt; prompts = mcp.list_prompts()</span>
+<a id="__codelineno-0-682" name="__codelineno-0-682"></a><span class="sd">        &gt;&gt;&gt; print(prompts)</span>
+<a id="__codelineno-0-683" name="__codelineno-0-683"></a><span class="sd">        [&#39;greet&#39;, &#39;code_review&#39;]</span>
+<a id="__codelineno-0-684" name="__codelineno-0-684"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-685" name="__codelineno-0-685"></a>    <span class="n">prompt_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_prompts</span><span class="p">()</span>
+<a id="__codelineno-0-686" name="__codelineno-0-686"></a>    <span class="k">return</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">prompt_configs</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -5922,31 +6557,31 @@ print(resources)
 
             <details class="quote">
               <summary>Source code in <code>src/simply_mcp/api/programmatic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-590">590</a></span>
-<span class="normal"><a href="#__codelineno-0-591">591</a></span>
-<span class="normal"><a href="#__codelineno-0-592">592</a></span>
-<span class="normal"><a href="#__codelineno-0-593">593</a></span>
-<span class="normal"><a href="#__codelineno-0-594">594</a></span>
-<span class="normal"><a href="#__codelineno-0-595">595</a></span>
-<span class="normal"><a href="#__codelineno-0-596">596</a></span>
-<span class="normal"><a href="#__codelineno-0-597">597</a></span>
-<span class="normal"><a href="#__codelineno-0-598">598</a></span>
-<span class="normal"><a href="#__codelineno-0-599">599</a></span>
-<span class="normal"><a href="#__codelineno-0-600">600</a></span>
-<span class="normal"><a href="#__codelineno-0-601">601</a></span>
-<span class="normal"><a href="#__codelineno-0-602">602</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-590" name="__codelineno-0-590"></a><span class="k">def</span><span class="w"> </span><span class="nf">list_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<a id="__codelineno-0-591" name="__codelineno-0-591"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;List registered resource URIs.</span>
-<a id="__codelineno-0-592" name="__codelineno-0-592"></a>
-<a id="__codelineno-0-593" name="__codelineno-0-593"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-594" name="__codelineno-0-594"></a><span class="sd">        List of resource URIs</span>
-<a id="__codelineno-0-595" name="__codelineno-0-595"></a>
-<a id="__codelineno-0-596" name="__codelineno-0-596"></a><span class="sd">    Example:</span>
-<a id="__codelineno-0-597" name="__codelineno-0-597"></a><span class="sd">        &gt;&gt;&gt; resources = mcp.list_resources()</span>
-<a id="__codelineno-0-598" name="__codelineno-0-598"></a><span class="sd">        &gt;&gt;&gt; print(resources)</span>
-<a id="__codelineno-0-599" name="__codelineno-0-599"></a><span class="sd">        [&#39;config://app&#39;, &#39;data://stats&#39;]</span>
-<a id="__codelineno-0-600" name="__codelineno-0-600"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-601" name="__codelineno-0-601"></a>    <span class="n">resource_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_resources</span><span class="p">()</span>
-<a id="__codelineno-0-602" name="__codelineno-0-602"></a>    <span class="k">return</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">uri</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">resource_configs</span><span class="p">]</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-688">688</a></span>
+<span class="normal"><a href="#__codelineno-0-689">689</a></span>
+<span class="normal"><a href="#__codelineno-0-690">690</a></span>
+<span class="normal"><a href="#__codelineno-0-691">691</a></span>
+<span class="normal"><a href="#__codelineno-0-692">692</a></span>
+<span class="normal"><a href="#__codelineno-0-693">693</a></span>
+<span class="normal"><a href="#__codelineno-0-694">694</a></span>
+<span class="normal"><a href="#__codelineno-0-695">695</a></span>
+<span class="normal"><a href="#__codelineno-0-696">696</a></span>
+<span class="normal"><a href="#__codelineno-0-697">697</a></span>
+<span class="normal"><a href="#__codelineno-0-698">698</a></span>
+<span class="normal"><a href="#__codelineno-0-699">699</a></span>
+<span class="normal"><a href="#__codelineno-0-700">700</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-688" name="__codelineno-0-688"></a><span class="k">def</span><span class="w"> </span><span class="nf">list_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<a id="__codelineno-0-689" name="__codelineno-0-689"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;List registered resource URIs.</span>
+<a id="__codelineno-0-690" name="__codelineno-0-690"></a>
+<a id="__codelineno-0-691" name="__codelineno-0-691"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-692" name="__codelineno-0-692"></a><span class="sd">        List of resource URIs</span>
+<a id="__codelineno-0-693" name="__codelineno-0-693"></a>
+<a id="__codelineno-0-694" name="__codelineno-0-694"></a><span class="sd">    Example:</span>
+<a id="__codelineno-0-695" name="__codelineno-0-695"></a><span class="sd">        &gt;&gt;&gt; resources = mcp.list_resources()</span>
+<a id="__codelineno-0-696" name="__codelineno-0-696"></a><span class="sd">        &gt;&gt;&gt; print(resources)</span>
+<a id="__codelineno-0-697" name="__codelineno-0-697"></a><span class="sd">        [&#39;config://app&#39;, &#39;data://stats&#39;]</span>
+<a id="__codelineno-0-698" name="__codelineno-0-698"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-699" name="__codelineno-0-699"></a>    <span class="n">resource_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_resources</span><span class="p">()</span>
+<a id="__codelineno-0-700" name="__codelineno-0-700"></a>    <span class="k">return</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">uri</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">resource_configs</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
