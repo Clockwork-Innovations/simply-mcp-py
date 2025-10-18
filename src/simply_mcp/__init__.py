@@ -76,6 +76,22 @@ from simply_mcp.core.errors import (
 )
 from simply_mcp.core.server import SimplyMCPServer
 
+# MCP-UI Types and Helpers
+from simply_mcp.core.ui_resource import (
+    create_external_url_resource,
+    create_inline_html_resource,
+    create_remote_dom_resource,
+    is_ui_resource,
+)
+from simply_mcp.core.ui_types import (
+    PreferredFrameSize,
+    UIContentType,
+    UIResource,
+    UIResourceMetadata,
+    UIResourceOptions,
+    UIResourcePayload,
+)
+
 __version__ = "0.1.0b4"
 
 __all__ = [
@@ -111,6 +127,17 @@ __all__ = [
     "HandlerError",
     "HandlerNotFoundError",
     "HandlerExecutionError",
+    # MCP-UI Types and Helpers
+    "UIResource",
+    "UIResourcePayload",
+    "UIResourceOptions",
+    "UIResourceMetadata",
+    "PreferredFrameSize",
+    "UIContentType",
+    "create_inline_html_resource",
+    "create_external_url_resource",
+    "create_remote_dom_resource",
+    "is_ui_resource",
     # Metadata
     "__version__",
 ]

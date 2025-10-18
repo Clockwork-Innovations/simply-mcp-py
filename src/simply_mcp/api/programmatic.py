@@ -447,6 +447,104 @@ class BuildMCPServer:
 
         return decorator
 
+    # UI Resource Management (MCP-UI)
+
+    def add_ui_resource(
+        self,
+        uri: str,
+        name: str,
+        description: str,
+        mime_type: str,
+        content: str | Callable[..., str] | Callable[..., Any],
+    ) -> "BuildMCPServer":
+        """Add a UI resource to the server (convenience method for MCP-UI).
+
+        This is syntactic sugar for add_resource() that automatically
+        validates UI resource URIs and MIME types. Mirrors the TypeScript
+        implementation's addUIResource method.
+
+        UI resources are special resources with specific MIME types that
+        indicate they should be rendered as interactive UI elements:
+        - text/html: Inline HTML content (Foundation Layer)
+        - text/uri-list: External URLs (Feature Layer)
+        - application/vnd.mcp-ui.remote-dom+javascript: Remote DOM (Layer 3)
+
+        Args:
+            uri: UI resource URI (must start with "ui://")
+            name: Display name for the resource
+            description: Human-readable description
+            mime_type: MIME type (text/html, text/uri-list, or application/vnd.mcp-ui.remote-dom+*)
+            content: HTML/URL/script content or function that returns it
+
+        Returns:
+            Self for method chaining
+
+        Raises:
+            ValueError: If URI doesn't start with "ui://"
+            ValueError: If MIME type is not a valid UI resource MIME type
+
+        Example:
+            Inline HTML resource:
+            >>> server.add_ui_resource(
+            ...     'ui://product-card/v1',
+            ...     'Product Card',
+            ...     'Displays a product selector',
+            ...     'text/html',
+            ...     '<div><h2>Select a product</h2><button>Widget A</button></div>'
+            ... )
+
+            External URL resource:
+            >>> server.add_ui_resource(
+            ...     'ui://analytics/dashboard',
+            ...     'Analytics Dashboard',
+            ...     'External analytics dashboard',
+            ...     'text/uri-list',
+            ...     'https://example.com/dashboard'
+            ... )
+
+            Dynamic content with handler:
+            >>> def get_html() -> str:
+            ...     return '<div>Dynamic HTML</div>'
+            ...
+            >>> server.add_ui_resource(
+            ...     'ui://dynamic/card',
+            ...     'Dynamic Card',
+            ...     'Dynamically generated UI',
+            ...     'text/html',
+            ...     get_html
+            ... )
+        """
+        # Validate URI starts with ui://
+        if not uri.startswith("ui://"):
+            raise ValueError(f'UI resource URI must start with "ui://", got: "{uri}"')
+
+        # Validate MIME type
+        valid_mime_types = ["text/html", "text/uri-list"]
+        is_remote_dom = mime_type.startswith("application/vnd.mcp-ui.remote-dom+")
+
+        if mime_type not in valid_mime_types and not is_remote_dom:
+            raise ValueError(
+                f'Invalid UI resource MIME type: "{mime_type}". '
+                f"Must be one of: text/html, text/uri-list, "
+                f"or application/vnd.mcp-ui.remote-dom+<framework>"
+            )
+
+        # Wrap string content in a lambda if needed
+        # add_resource expects a callable, so we need to convert strings
+        if isinstance(content, str):
+            handler = lambda: content  # noqa: E731
+        else:
+            handler = content
+
+        # Delegate to add_resource
+        return self.add_resource(
+            uri=uri,
+            handler=handler,
+            name=name,
+            description=description,
+            mime_type=mime_type,
+        )
+
     # Configuration
 
     def configure(
