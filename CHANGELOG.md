@@ -26,12 +26,132 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **🎉 STABLE RELEASE** - Production ready. No breaking changes since 0.1.0b4.
 
 ### Added
-- **MCP-UI Resource Support**: Full support for UI resources with helper functions
-  - `create_inline_html_resource()` - Create inline HTML UI resources
-  - `create_external_url_resource()` - Create external URL resources
-  - `create_remote_dom_resource()` - Create remote DOM resources
-  - `UIResource`, `UIResourcePayload`, `UIResourceOptions` types
-  - Complete validation and error handling for UI resource URIs and MIME types
+
+#### MCP-UI Resource Support (Complete Implementation)
+Comprehensive support for interactive UI resources with three foundation layers:
+
+**UI Type System** (`src/simply_mcp/core/ui_types.py`):
+- `UIContentType` - Literal type supporting "rawHtml", "externalUrl", "remoteDom"
+- `UIResourcePayload` - Core payload with uri, mime_type, text, blob, and metadata
+- `UIResource` - Complete resource envelope for MCP responses
+- `PreferredFrameSize` - Rendering hints for iframe sizing
+- `UIResourceMetadata` - Metadata for UI rendering and interactive data
+- `UIResourceOptions` - Configuration with metadata and custom annotations
+
+**UI Helper Functions** (`src/simply_mcp/core/ui_resource.py`):
+- `create_inline_html_resource(uri, html, options)` - Foundation layer HTML resources
+  - Renders complete HTML in sandboxed iframes
+  - Supports full CSS styling and JavaScript
+  - Example use cases: product cards, status displays, forms
+- `create_external_url_resource(uri, url, options)` - Feature layer URL embedding
+  - Embeds external URLs in iframes with HTTPS validation
+  - Supports same-origin API calls with permissive sandbox settings
+  - Example use cases: analytics dashboards, embedded widgets
+- `create_remote_dom_resource(uri, script, framework, options)` - Layer 3 remote execution
+  - JavaScript/Web Components executed in Web Worker sandbox
+  - Supports frameworks: "javascript", "react", "web-components"
+  - MIME type: `application/vnd.mcp-ui.remote-dom+{framework}`
+  - Security: Web Worker execution with controlled postMessage protocol
+  - Example use cases: interactive counters, dashboard widgets
+- `is_ui_resource(resource)` - Type guard and validation
+  - Validates resource structure and MIME types
+  - Supports duck typing for flexibility
+
+**UI Resource Integration**:
+- `BuildMCPServer.add_ui_resource()` - Convenience method for adding UI resources
+- Full integration with resource registry
+- Method chaining support for builder API
+- Dynamic content support via callable handlers
+
+**UI Resource Examples** (`examples/ui_inline_html_demo.py`, `examples/ui_helper_functions_demo.py`):
+- 349-line comprehensive HTML demo with product cards, configuration panels, terminal UI
+- 244-line helper functions demo showcasing all three UI layers
+- Metadata and annotation examples with iframe sizing hints
+- Dynamic HTML generation with template variables
+
+**Metadata Convention**:
+- MCP-UI namespaced keys: "mcpui.dev/ui-preferred-frame-size", "mcpui.dev/ui-initial-render-data"
+- Custom annotations use app-namespaced keys: "myapp.com/custom-field"
+- Initial render data for interactive component initialization
+
+#### Tool Routing and Handler Execution System
+Production-grade tool routing with performance optimization:
+
+**Handler Routing Architecture** (`src/simply_mcp/core/server.py` lines 314-425):
+- O(1) registry-based tool lookup for fast handler dispatch
+- Request context tracking with unique request IDs
+- Comprehensive structured logging with context propagation
+- Handler signature inspection for automatic parameter matching
+- Support for both sync and async handlers with transparent awaiting
+- Automatic result type conversion to MCP content types
+
+**Routing Flow**:
+1. Tool request arrives with name and arguments
+2. Unique request ID generated for tracing
+3. Logger context setup for request tracking
+4. Registry lookup returns tool configuration in O(1)
+5. Handler signature inspection
+6. Parameter validation and passing
+7. Handler execution (sync or async auto-detected)
+8. Progress tracking integration (optional)
+9. Result conversion to MCP content
+10. Performance timing recorded
+
+**Component Registry** (`src/simply_mcp/core/registry.py`):
+- Thread-safe O(1) tool lookups via dictionary-based storage
+- Case-insensitive tool name matching
+- Duplicate registration detection
+- Lock-protected concurrent access
+- Registry methods: `register_tool()`, `get_tool()`, `list_tools()`
+
+**Handler Features**:
+- Progress tracking support via optional `progress` parameter
+- Auto-detection with signature inspection
+- Progress reporter lifecycle management (complete/fail/cleanup)
+- Automatic progress cleanup after handler execution
+- Error tracking and failure reporting
+
+**Result Type Conversion**:
+- String types → TextContent
+- Dict types → JSON TextContent
+- List types → Individual TextContent items
+- Custom types → str() as TextContent
+
+**Performance Metrics**:
+- Registry lookup: O(1) - negligible overhead
+- Request ID generation: 8-character hex strings
+- Timing: Per-request elapsed time in milliseconds
+- Logging overhead: Minimal with structured context
+
+#### Multiple Transport Support
+Complete transport abstraction layer with three implementations:
+
+**Transport Architecture** (`src/simply_mcp/transports/`):
+- Factory pattern for transport creation
+- Common interface for all transport types
+- Request routing at transport layer
+- Health check endpoints
+- Root endpoint discovery
+
+**Stdio Transport** (Default):
+- Stream-based communication
+- Minimal overhead
+- Perfect for local integration
+
+**HTTP Transport** (`transports/http.py`):
+- RESTful JSON endpoints
+- CORS support with configurable origins
+- Middleware stack (auth, rate limiting, metrics)
+- Health check endpoint (`/health`)
+- Root endpoint for discovery (`/`)
+- Tool call endpoint (`/mcp`)
+
+**SSE Transport** (`transports/sse.py`):
+- Server-Sent Events for real-time communication
+- Connection management
+- Keep-alive pings
+- Client connection tracking
+- Graceful disconnection handling
 
 ### Changed
 - **Release Status**: Transitioned from beta (0.1.0b4) to stable production release
